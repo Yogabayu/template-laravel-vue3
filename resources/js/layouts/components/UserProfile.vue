@@ -1,5 +1,6 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
+import LogoutBtn from '@/pages/auth/logout.vue';
+import avatar1 from '@images/avatars/avatar-1.png';
 </script>
 
 <template>
@@ -118,8 +119,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
                 size="22"
               />
             </template>
-
-            <VListItemTitle>Logout</VListItemTitle>
+            <LogoutBtn/>
           </VListItem>
         </VList>
       </VMenu>
