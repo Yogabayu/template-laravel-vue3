@@ -62,9 +62,7 @@ const login = async () => {
 
       <VCardText class="pt-2">
         <h5 class="text-h5 mb-1">Welcome to sneat! 👋🏻</h5>
-        <p class="mb-0">
-          Please sign-in to your account and start the adventure
-        </p>
+        <p class="mb-0">Please sign-in to your account</p>
       </VCardText>
 
       <VCardText>
@@ -121,7 +119,7 @@ const login = async () => {
 </style>
 <script>
 import mainURL from "@/axios";
-import Swal from "sweetalert2";
+import logo from "@images/logo.svg?raw";
 
 export default {
   data() {
@@ -134,32 +132,13 @@ export default {
         remember: false,
       },
       isPasswordVisible: false,
+      logo: logo,
     };
   },
   methods: {
     saveUserDataAndToken(data) {
       localStorage.setItem("userData", JSON.stringify(data.user));
       localStorage.setItem("userToken", data.token.token);
-    },
-
-    showErrorToast(message) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      });
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: message
-      });
     },
 
     async login() {
@@ -171,20 +150,22 @@ export default {
 
         if (response.status === 200) {
           this.saveUserDataAndToken(response.data);
+
+          this.$showToast("success", "Yeay", "Selamat anda berhasil login");
           this.$router.push("/dashboard");
         } else {
           const errorMessage =
             response && response.data && response.data.message
               ? response.data.message
               : "Gagal login. Silakan coba lagi.";
-          this.showErrorToast(errorMessage);
+          this.$showToast("error", "Sorry", errorMessage);
         }
       } catch (error) {
         const errorMessage =
           error.response && error.response.data && error.response.data.message
             ? error.response.data.message
             : "Gagal login. Silakan coba lagi.";
-        this.showErrorToast(errorMessage);
+        this.$showToast("error", "Sorry", errorMessage);
       }
     },
   },

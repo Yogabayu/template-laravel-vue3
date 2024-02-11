@@ -8,6 +8,7 @@ import '@core-scss/template/index.scss'
 import '@layouts/styles/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
+import Swal from 'sweetalert2'
 import { createApp } from 'vue'
 
 loadFonts()
@@ -24,3 +25,27 @@ app.use(router)
 
 // Mount vue app
 app.mount('#app')
+
+// Define the showToast method
+const showToast = (icon, title, text) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+
+  Toast.fire({
+    icon: icon,
+    title: title,
+    text: text
+  })
+}
+
+// Make showToast method globally available
+app.config.globalProperties.$showToast = showToast

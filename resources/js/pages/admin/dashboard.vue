@@ -1,5 +1,4 @@
 <template>
-  masuk
   <VRow>
     <!-- 👉 Congratulations -->
     <VCol cols="12" md="8">
@@ -124,6 +123,10 @@ export default {
       },
       userData: null,
       userToken: null,
+      chart: chart,
+      card: card,
+      paypal: paypal,
+      wallet: wallet,
     };
   },
   methods: {

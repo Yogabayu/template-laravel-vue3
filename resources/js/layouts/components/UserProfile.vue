@@ -1,8 +1,3 @@
-<script setup>
-import LogoutBtn from '@/pages/auth/logout.vue';
-import avatar1 from '@images/avatars/avatar-1.png';
-</script>
-
 <template>
   <VBadge
     dot
@@ -49,14 +44,14 @@ import avatar1 from '@images/avatars/avatar-1.png';
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ this.userData.name }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <!-- <VListItemSubtitle>Admin</VListItemSubtitle> -->
           </VListItem>
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link>
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -66,10 +61,10 @@ import avatar1 from '@images/avatars/avatar-1.png';
             </template>
 
             <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
+          </VListItem> -->
 
           <!-- 👉 Settings -->
-          <VListItem link>
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -79,10 +74,10 @@ import avatar1 from '@images/avatars/avatar-1.png';
             </template>
 
             <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
+          </VListItem> -->
 
           <!-- 👉 Pricing -->
-          <VListItem link>
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -92,10 +87,10 @@ import avatar1 from '@images/avatars/avatar-1.png';
             </template>
 
             <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
+          </VListItem> -->
 
           <!-- 👉 FAQ -->
-          <VListItem link>
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -105,7 +100,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
             </template>
 
             <VListItemTitle>FAQ</VListItemTitle>
-          </VListItem>
+          </VListItem> -->
 
           <!-- Divider -->
           <VDivider class="my-2" />
@@ -127,3 +122,31 @@ import avatar1 from '@images/avatars/avatar-1.png';
     </VAvatar>
   </VBadge>
 </template>
+
+<script>
+import LogoutBtn from '@/pages/auth/logout.vue';
+import avatar1 from '@images/avatars/avatar-1.png';
+
+export default {
+  components: {
+    LogoutBtn
+  },
+  data() {
+    return {
+      avatar1: avatar1,
+      userData: null,
+    }
+  },
+  methods: {
+   getUserData() {
+      const userDataString = localStorage.getItem("userData");
+      if (userDataString) {
+        this.userData = JSON.parse(userDataString);
+      }
+    }
+  },
+  mounted() {
+    this.getUserData();
+  },
+}
+</script>

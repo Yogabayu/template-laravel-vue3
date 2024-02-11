@@ -7,17 +7,30 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      redirect: to => {
+        const userToken = localStorage.getItem("userToken");
+        // Redirect to dashboard if user is logged in, otherwise redirect to login
+        return userToken ? "/dashboard" : "/login";
+      }
     },
     {
       path: "/login",
       component: () => import("../layouts/blank.vue"),
       children: [
         {
-          path: "", // This will match /login itself
-          component: () => import("../pages/auth/login.vue"),
+          path: "",
+          component: () => import("../pages/auth/login.vue")
         },
       ],
+      beforeEnter: (to, from, next) => {
+        const userToken = localStorage.getItem("userToken");
+        // If user is already logged in, redirect to dashboard
+        if (userToken) {
+          next("/dashboard");
+        } else {
+          next(); // Proceed to login
+        }
+      },
     },
     {
       path: "/register",
@@ -34,8 +47,8 @@ const router = createRouter({
       component: () => import("../layouts/blank.vue"),
       children: [
         {
-          path: '',
-          component: () => import('../pages/[...all].vue'),
+          path: "",
+          component: () => import("../pages/[...all].vue"),
         },
       ],
     },
@@ -46,7 +59,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/account-settings.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -59,7 +72,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/typography.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -72,7 +85,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/icons.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -85,7 +98,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/cards.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -98,7 +111,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/tables.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -111,7 +124,7 @@ const router = createRouter({
       component: () => import("../layouts/default.vue"),
       children: [
         {
-          path: "", 
+          path: "",
           component: () => import("../pages/form-layouts.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
@@ -125,7 +138,7 @@ const router = createRouter({
       children: [
         {
           path: "",
-          component: () => import("../pages/dashboard.vue"),
+          component: () => import("../pages/admin/dashboard.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
           },
@@ -138,25 +151,27 @@ const router = createRouter({
 function checkLogin(next) {
   const userToken = localStorage.getItem("userToken");
   if (userToken) {
-    next(); 
+    next();
   } else {
     const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      });
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
 
-      Toast.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Anda perlu login terlebih dahulu'
-      });
+    Toast.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Anda perlu login terlebih dahulu",
+    });
+    
+        // this.$showToast('error', 'Sorry', 'Anda perlu login terlebih dahulu')
     next("/login");
   }
 }

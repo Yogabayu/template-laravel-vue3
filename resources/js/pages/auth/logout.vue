@@ -3,21 +3,36 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import { useRouter } from "vue-router";
+
 
 export default {
   setup() {
     const router = useRouter();
 
     const logout = () => {
-      // Clear user data and token from local storage
       localStorage.removeItem("userData");
       localStorage.removeItem("userToken");
 
-      // Optionally, clear user data and token from Vuex state
-      // commit('clearUserData');
+       const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      });
 
-      // Navigate to the login page
+      Toast.fire({
+        icon: 'success',
+        title: 'Yeay',
+        text: 'Berhasil logout'
+      });
+
       router.push("/login");
     };
 

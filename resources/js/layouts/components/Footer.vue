@@ -16,10 +16,16 @@
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary ms-1"
-      >ThemeSelection</a>
+      >ThemeSelection </a>
+      and customization by <a
+        href="https://yogabayuap.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary ms-1"
+      >Yoga Bayu AP </a>
     </span>
     <!-- 👉 Footer: right content -->
-    <span class="d-md-flex gap-x-4 text-primary d-none">
+    <!-- <span class="d-md-flex gap-x-4 text-primary d-none">
       <a
         href="https://themeselection.com/license/"
         target="noopener noreferrer"
@@ -32,6 +38,6 @@
         href="https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/documentation/guide/laravel-integration/folder-structure.html"
         target="noopener noreferrer"
       >Documentation</a>
-    </span>
+    </span> -->
   </div>
 </template>
