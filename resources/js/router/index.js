@@ -55,6 +55,19 @@ const router = createRouter({
 
     // authenticated
     {
+      path: "/account-profile",
+      component: () => import("../layouts/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/profile/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
       path: "/account-settings",
       component: () => import("../layouts/default.vue"),
       children: [

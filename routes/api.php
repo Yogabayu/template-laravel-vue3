@@ -26,5 +26,6 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::get('userProfile', [UserController::class, 'userProfile'])->name('userProfile');
+        Route::put('updateUserProfile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
     });
 });

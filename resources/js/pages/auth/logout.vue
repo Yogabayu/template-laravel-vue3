@@ -30,7 +30,7 @@ export default {
       Toast.fire({
         icon: 'success',
         title: 'Yeay',
-        text: 'Berhasil logout'
+        text: 'Berhasil update data silahkan login ulang'
       });
 
       router.push("/login");
