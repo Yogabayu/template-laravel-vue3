@@ -31,19 +31,21 @@ class UserController extends Controller
     public function updateUserProfile(Request $request)
     {
         try {
+            $message = '';
             $userData = User::where('id', auth()->user()->id)->first();
             $userData->name = $request->name;
             $userData->email = $request->email;
 
             if ($request->password) {
                 $userData->password = Hash::make($request->password);
+                $message = 'silahkan login ulang';
             }
 
             $userData->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Berhasil update data, silahkan login ulang',
+                'message' => 'Berhasil update data, ' . $message,
                 'data' => $userData,
             ]);
         } catch (\Exception $e) {
