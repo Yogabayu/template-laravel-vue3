@@ -21,6 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'photo',
+        'isActive',
+        'isAdmin',
+        'canDownload',
+        'canPrint',
+        'canComment',
+        'position_id',
+        'division_id',
+        'nik',
     ];
 
     /**
@@ -42,4 +51,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 }
