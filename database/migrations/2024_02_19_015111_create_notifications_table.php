@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userActivities', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_uuid');
-            $table->string('desc');
+            $table->enum('type', ['info', 'warning', 'error', 'file_upload', 'file_download', 'file_comment', 'file_update', 'device_verification']);
+            $table->string('message');
+            $table->boolean('isRead')->default(0);
             $table->timestamps();
 
             $table->foreign('user_uuid')->references('uuid')->on('users');
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userActivities');
+        Schema::dropIfExists('notifications');
     }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Division;
 use Illuminate\Http\Request;
@@ -72,10 +73,12 @@ class DivisionController extends Controller
                 // Jika 'name' adalah string tunggal
                 $this->validateDivisionName($request->name);
                 $division = $this->createDivision($request->name);
-                $positions[] = $division;
+                $divisions[] = $division;
             }
 
-            return $this->successRes('Successfully created division(s).', $positions);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Add new divisions(s)');
+
+            return $this->successRes('Successfully created division(s).', $divisions);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to create division(s). ' . $e->getMessage());
         }
@@ -137,6 +140,7 @@ class DivisionController extends Controller
             $division->name = $request->name;
             $division->save();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update division | ' . $division->id);
             return $this->successRes('Successfully updated division.', $division);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to update division. ' . $e->getMessage());
@@ -151,6 +155,7 @@ class DivisionController extends Controller
         try {
             $division = Division::findOrFail($id);
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User delete division | ' . $division->name);
             // Periksa apakah ada pengguna yang terkait dengan posisi
             if ($division->users()->exists()) {
                 return $this->errorRes('Failed to delete division. There are users associated with this division.');

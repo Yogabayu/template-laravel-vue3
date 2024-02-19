@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Position extends Model
+class Category extends Model
 {
     use HasFactory;
-    protected $table = 'positions';
-    protected $primaryKey = 'id'; // Change 'division_id' to your actual primary key column name
+    protected $table = 'categories';
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $fillable = ['id', 'name'];
 
+
     public function fileToPositions()
     {
-        return $this->hasMany(FileToPosition::class, 'position_uuid', 'id');
+        return $this->hasMany(FileToPosition::class, 'category_uuid', 'id');
     }
 
     public function files()
     {
-        return $this->belongsToMany(File::class, 'filetopositions', 'position_uuid', 'file_uuid');
+        return $this->belongsToMany(File::class, 'filetocategories', 'category_uuid', 'file_uuid');
     }
 
     public function users()

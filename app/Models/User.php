@@ -30,6 +30,7 @@ class User extends Authenticatable
         'position_id',
         'division_id',
         'nik',
+        'uuid'
     ];
 
     /**
@@ -60,5 +61,15 @@ class User extends Authenticatable
     public function division()
     {
         return $this->belongsTo(Division::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(UserActivity::class);
     }
 }

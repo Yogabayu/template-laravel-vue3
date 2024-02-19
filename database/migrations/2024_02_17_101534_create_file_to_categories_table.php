@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fileToCategories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('category_uuid')->unique();
-            $table->uuid('file_uuid')->unique();
+            $table->uuid('category_uuid');
+            $table->uuid('file_uuid');
             $table->timestamps();
 
 

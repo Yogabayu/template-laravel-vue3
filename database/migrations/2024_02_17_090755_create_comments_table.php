@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->uuid('user_uuid')->unique();
-            $table->uuid('file_uuid')->unique();
+            $table->uuid('user_uuid');
+            $table->uuid('file_uuid');
             $table->longText('desc');
             $table->timestamps();
 

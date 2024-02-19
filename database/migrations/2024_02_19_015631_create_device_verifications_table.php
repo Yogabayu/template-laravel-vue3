@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userActivities', function (Blueprint $table) {
+        Schema::create('deviceVerifications', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_uuid');
-            $table->string('desc');
+            $table->string('deviceName');
+            $table->string('deviceType')->nullable();
+            $table->string('verificationCode')->nullable();
+            $table->boolean('isVerified')->default(0);
             $table->timestamps();
 
             $table->foreign('user_uuid')->references('uuid')->on('users');
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userActivities');
+        Schema::dropIfExists('deviceVerifications');
     }
 };

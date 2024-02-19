@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fileToPositions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('file_uuid')->unique();
-            $table->uuid('position_uuid')->unique();
+            $table->uuid('file_uuid');
+            $table->uuid('position_uuid');
             $table->timestamps();
 
 

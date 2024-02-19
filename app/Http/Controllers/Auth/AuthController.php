@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +48,7 @@ class AuthController extends Controller
             $user = User::find(Auth::user()->id);
 
             $user_token['token'] = $user->createToken('appToken')->accessToken;
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
             return response()->json([
                 'success' => true,
@@ -64,6 +67,7 @@ class AuthController extends Controller
     public function destroy(Request $request)
     {
         if (Auth::user()) {
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Logout');
             $request->user()->token()->revoke();
 
             return response()->json([

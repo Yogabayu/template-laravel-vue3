@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Position;
 use Illuminate\Http\Request;
@@ -75,6 +76,8 @@ class PositionController extends Controller
                 $positions[] = $position;
             }
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User add new position(s)');
+
             return $this->successRes('Successfully created position(s).', $positions);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to create position(s). ' . $e->getMessage());
@@ -137,6 +140,7 @@ class PositionController extends Controller
             $position->name = $request->name;
             $position->save();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update position | ' . $position->id);
             return $this->successRes('Successfully updated position.', $position);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to update position. ' . $e->getMessage());
@@ -151,6 +155,7 @@ class PositionController extends Controller
         try {
             $position = Position::findOrFail($id);
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User delete position | ' . $position->name);
             // Periksa apakah ada pengguna yang terkait dengan posisi
             if ($position->users()->exists()) {
                 return $this->errorRes('Failed to delete position. There are users associated with this position.');

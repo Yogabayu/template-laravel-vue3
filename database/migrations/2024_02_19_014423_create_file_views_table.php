@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fileToDivisions', function (Blueprint $table) {
+        Schema::create('fileViews', function (Blueprint $table) {
             $table->id();
+            $table->uuid('user_uuid');
             $table->uuid('file_uuid');
-            $table->uuid('division_uuid');
+            $table->dateTime('startTime');
+            $table->dateTime('endTime')->nullable();
             $table->timestamps();
 
-
-            $table->foreign('division_uuid')->references('id')->on('divisions');
+            $table->foreign('user_uuid')->references('uuid')->on('users');
             $table->foreign('file_uuid')->references('id')->on('files');
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fileToDivisions');
+        Schema::dropIfExists('fileViews');
     }
 };

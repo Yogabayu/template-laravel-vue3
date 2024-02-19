@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
@@ -27,9 +29,14 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
+        //user
         Route::get('userProfile', [UserController::class, 'userProfile'])->name('userProfile');
-        // Route::put('updateUserProfile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
+        Route::put('updateUserProfile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
         Route::post('logout', [AuthController::class, 'destroy'])->name('logout');
+        Route::get('change-admin/{uuid}', [UserController::class, 'changeAdmin'])->name('user.changeAdmin');
+        Route::put('user-permission/{uuid}', [UserController::class, 'changePermision']);
+        Route::delete('user-delete/{uuid}', [UserController::class, 'deleteUser']);
+        Route::post('user-add', [UserController::class, 'addUser']);
 
         //division
         Route::get('division', [DivisionController::class, 'index'])->name('division.index');
@@ -44,5 +51,19 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('position/{id}', [PositionController::class, 'show'])->name('position.show');
         Route::put('position/{id}', [PositionController::class, 'update'])->name('position.update');
         Route::delete('position/{id}', [PositionController::class, 'destroy'])->name('position.destroy');
+
+        //category
+        Route::get('category', [CategoryController::class, 'index'])->name('category.index');
+        Route::post('category', [CategoryController::class, 'store'])->name('category.store');
+        Route::get('category/{id}', [CategoryController::class, 'show'])->name('category.show');
+        Route::put('category/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+        //file
+        Route::get('file', [FileController::class, 'index'])->name('file.index');
+        Route::post('file', [FileController::class, 'store'])->name('file.store');
+        Route::get('file/{id}', [FileController::class, 'show'])->name('file.show');
+        Route::put('file/{id}', [FileController::class, 'update'])->name('file.update');
+        Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
     });
 });
