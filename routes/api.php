@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\HelperController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
@@ -37,6 +38,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::put('user-permission/{uuid}', [UserController::class, 'changePermision']);
         Route::delete('user-delete/{uuid}', [UserController::class, 'deleteUser']);
         Route::post('user-add', [UserController::class, 'addUser']);
+        Route::get('all-user', [UserController::class, 'getAllUser']);
 
         //division
         Route::get('division', [DivisionController::class, 'index'])->name('division.index');
@@ -65,5 +67,9 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('file/{id}', [FileController::class, 'show'])->name('file.show');
         Route::put('file/{id}', [FileController::class, 'update'])->name('file.update');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
+
+        //helper
+        Route::get('total-file', [HelperController::class, 'totalFile']);
+        Route::get('total-user', [HelperController::class, 'totalUser']);
     });
 });

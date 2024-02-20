@@ -1,10 +1,14 @@
 <script setup>
-import { useTheme } from 'vuetify'
-import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
-import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+import illustrationJohnDark from '@images/cards/illustration-john-dark.png';
+import illustrationJohnLight from '@images/cards/illustration-john-light.png';
+
+import { useTheme } from 'vuetify';
 
 const { global } = useTheme()
+
+const savedUserData = JSON.parse(localStorage.getItem("userData")) || { name: "User" };
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
+// console.log(savedUserData);
 </script>
 
 <template>
@@ -18,24 +22,15 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
       >
         <VCardItem>
           <VCardTitle class="text-md-h5 text-primary">
-            Congratulations John! 🎉
+            Selamat Datang Kembali {{savedUserData.name}}! 🎉
           </VCardTitle>
         </VCardItem>
 
         <VCardText>
           <span>
-            You have done 72% 🤩 more sales today.
-            <br>
-            Check your new raising badge in your profile.
+            <br>            
           </span>
           <br>
-          <VBtn
-            variant="tonal"
-            class="mt-4"
-            size="small"
-          >
-            View Badges
-          </VBtn>
         </VCardText>
       </VCol>
 

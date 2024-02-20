@@ -183,7 +183,7 @@ class UserController extends Controller
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Update Profile | ' . $user->name);
             return ResponseHelper::successRes('berhasil update data user', $user);
         } catch (\Exception $e) {
-            return ResponseHelper::errorRes('Failed to authenticate. | ' . $e->getMessage());
+            return ResponseHelper::errorRes('Failed. | ' . $e->getMessage());
         }
     }
 
@@ -207,6 +207,17 @@ class UserController extends Controller
             return ResponseHelper::successRes('User and related data deleted successfully.', $user);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes('Failed to delete user. | ' . $e->getMessage());
+        }
+    }
+
+    public function getAllUser()
+    {
+        try {
+            $users = User::all();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $users);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
         }
     }
 }

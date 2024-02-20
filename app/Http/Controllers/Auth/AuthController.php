@@ -59,7 +59,7 @@ class AuthController extends Controller
             // failure to authenticate
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to authenticate.',
+                'message' => 'Failed | Email atau Password salah.',
             ], 401);
         }
     }

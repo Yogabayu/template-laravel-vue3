@@ -1,17 +1,15 @@
-import { createRouter, createWebHistory } from "vue-router";
-
 import Swal from "sweetalert2";
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      redirect: to => {
+      redirect: (to) => {
         const userToken = localStorage.getItem("userToken");
-        // Redirect to dashboard if user is logged in, otherwise redirect to login
         return userToken ? "/dashboard" : "/login";
-      }
+      },
     },
     {
       path: "/login",
@@ -19,16 +17,15 @@ const router = createRouter({
       children: [
         {
           path: "",
-          component: () => import("../pages/auth/login.vue")
+          component: () => import("../pages/auth/login.vue"),
         },
       ],
       beforeEnter: (to, from, next) => {
         const userToken = localStorage.getItem("userToken");
-        // If user is already logged in, redirect to dashboard
         if (userToken) {
           next("/dashboard");
         } else {
-          next(); // Proceed to login
+          next();
         }
       },
     },
@@ -52,6 +49,17 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/unauthorized",
+      component: () => import("../layouts/blank.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/auth/unauthorized.vue"),
+        },
+      ],
+    },
+
 
     // authenticated
     {
@@ -67,91 +75,57 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: "/account-settings",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/account-settings.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
-    {
-      path: "/typography",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/typography.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
-    {
-      path: "/icons",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/icons.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
-    {
-      path: "/cards",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/cards.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
-    {
-      path: "/tables",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/tables.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
-    {
-      path: "/form-layouts",
-      component: () => import("../layouts/default.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/form-layouts.vue"),
-          beforeEnter: (to, from, next) => {
-            checkLogin(next);
-          },
-        },
-      ],
-    },
+    
+    //admin
     {
       path: "/dashboard",
-      component: () => import("../layouts/default.vue"),
+      component: () => import("../layouts/admin/default.vue"),
       children: [
         {
           path: "",
           component: () => import("../pages/admin/dashboard.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-profile",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/profile/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-user",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/user/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+
+
+    //user
+    {
+      path: "/user-dashboard",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/dashboard.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
           },
@@ -183,9 +157,34 @@ function checkLogin(next) {
       title: "Oops...",
       text: "Anda perlu login terlebih dahulu",
     });
-    
-        // this.$showToast('error', 'Sorry', 'Anda perlu login terlebih dahulu')
+
     next("/login");
+  }
+}
+
+function checkAdminLogin(next) {
+  const userToken = localStorage.getItem("userToken");
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  if (userToken && userData && userData.isAdmin) {
+    next();
+  } else {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Unauthorized action",
+    });
+    next("/unauthorized"); // Redirect non-admin users to their dashboard
   }
 }
 

@@ -31,6 +31,7 @@ class FileController extends Controller
             'data' => null
         ], $statusCode);
     }
+
     /**
      * Display a listing of the resource.
      */

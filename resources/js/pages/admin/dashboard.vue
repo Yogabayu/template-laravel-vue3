@@ -1,7 +1,7 @@
 <template>
   <VRow>
     <!-- 👉 Congratulations -->
-    <VCol cols="12" md="8">
+    <VCol cols="12" md="12">
       <AnalyticsCongratulations />
     </VCol>
 
@@ -11,10 +11,9 @@
         <VCol cols="12" md="6">
           <CardStatisticsVertical
             v-bind="{
-              title: 'Profit',
-              image: chart,
-              stats: '$12,628',
-              change: 72.8,
+              title: 'Total File',
+              image: docs,
+              stats: `${tFile}`,
             }"
           />
         </VCol>
@@ -23,70 +22,15 @@
         <VCol cols="12" md="6">
           <CardStatisticsVertical
             v-bind="{
-              title: 'Sales',
-              image: wallet,
-              stats: '$4,679',
-              change: 28.42,
+              title: 'Total User',
+              image: user,
+              stats: `${tUser}`,
             }"
           />
         </VCol>
       </VRow>
     </VCol>
 
-    <!-- 👉 Total Revenue -->
-    <VCol cols="12" md="8" order="2" order-md="1">
-      <AnalyticsTotalRevenue />
-    </VCol>
-
-    <VCol cols="12" sm="8" md="4" order="1" order-md="2">
-      <VRow>
-        <!-- 👉 Payments -->
-        <VCol cols="12" sm="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Payments',
-              image: paypal,
-              stats: '$2,468',
-              change: -14.82,
-            }"
-          />
-        </VCol>
-
-        <!-- 👉 Revenue -->
-        <VCol cols="12" sm="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Transactions',
-              image: card,
-              stats: '$14,857',
-              change: 28.14,
-            }"
-          />
-        </VCol>
-      </VRow>
-
-      <VRow>
-        <!-- 👉 Profit Report -->
-        <VCol cols="12" sm="12">
-          <AnalyticsProfitReport />
-        </VCol>
-      </VRow>
-    </VCol>
-
-    <!-- 👉 Order Statistics -->
-    <VCol cols="12" md="4" sm="6" order="3">
-      <AnalyticsOrderStatistics />
-    </VCol>
-
-    <!-- 👉 Tabs chart -->
-    <VCol cols="12" md="4" sm="6" order="3">
-      <AnalyticsFinanceTabs />
-    </VCol>
-
-    <!-- 👉 Transactions -->
-    <VCol cols="12" md="4" sm="6" order="3">
-      <AnalyticsTransactions />
-    </VCol>
   </VRow>
 </template>
 
@@ -101,8 +45,13 @@ import AnalyticsTransactions from "@/views/dashboard/AnalyticsTransactions.vue";
 // Images
 import chart from "@images/cards/chart-success.png";
 import card from "@images/cards/credit-card-primary.png";
+import docs from "@images/cards/docs.png";
 import paypal from "@images/cards/paypal-error.png";
+import user from "@images/cards/user.png";
 import wallet from "@images/cards/wallet-info.png";
+
+
+import mainURL from "@/axios";
 
 export default {
   components: {
@@ -115,18 +64,16 @@ export default {
   },
   data() {
     return {
-      images: {
-        chart,
-        card,
-        paypal,
-        wallet,
-      },
       userData: null,
       userToken: null,
       chart: chart,
       card: card,
       paypal: paypal,
       wallet: wallet,
+      docs:docs,
+      user:user,
+      tFile: null,
+      tUser: null,
     };
   },
   methods: {
@@ -138,11 +85,54 @@ export default {
         this.userData = JSON.parse(savedUserData);
         this.userToken = savedUserToken;
       }
-      console.log(this.userToken);
     },
+
+    async getTotalFile() {
+      try {
+        const response = await mainURL.get("/total-file");
+
+        if (response.status === 200) {
+          this.tFile=response.data.data
+        } else {
+          const errorMessage =
+            response && response.data && response.data.message
+              ? response.data.message
+              : "Gagal. Silakan coba lagi.";
+          this.$showToast("error", "Sorry", errorMessage);
+        }
+      } catch (error) {
+        const errorMessage =
+          error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : "Gagal login. Silakan coba lagi.";
+        this.$showToast("error", "Sorry", errorMessage);
+      }
+    },
+    async getTotalUser() {
+      try {
+        const response = await mainURL.get("/total-user");
+
+        if (response.status === 200) {
+          this.tUser=response.data.data
+        } else {
+          const errorMessage =
+            response && response.data && response.data.message
+              ? response.data.message
+              : "Gagal. Silakan coba lagi.";
+          this.$showToast("error", "Sorry", errorMessage);
+        }
+      } catch (error) {
+        const errorMessage =
+          error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : "Gagal login. Silakan coba lagi.";
+        this.$showToast("error", "Sorry", errorMessage);
+      }
+    }
   },
   mounted() {
-    // this.getUserDataAndToken();
+    this.getTotalFile();
+    this.getTotalUser();
   },
 };
 </script>
