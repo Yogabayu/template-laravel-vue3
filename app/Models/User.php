@@ -70,6 +70,6 @@ class User extends Authenticatable
 
     public function activity()
     {
-        return $this->belongsTo(UserActivity::class);
+        return $this->hasMany(UserActivity::class, 'user_uuid', 'uuid');
     }
 }

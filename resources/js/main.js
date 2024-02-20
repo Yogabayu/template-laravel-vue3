@@ -10,16 +10,17 @@ import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import Swal from 'sweetalert2'
 import { createApp } from 'vue'
+import Vue3EasyDataTable from 'vue3-easy-data-table'
+import 'vue3-easy-data-table/dist/style.css'
 
 loadFonts()
-
 
 // Create vue app
 const app = createApp(App)
 
-
 // Use plugins
 app.use(vuetify)
+app.component('EasyDataTable', Vue3EasyDataTable);
 app.use(createPinia())
 app.use(router)
 
@@ -49,3 +50,4 @@ const showToast = (icon, title, text) => {
 
 // Make showToast method globally available
 app.config.globalProperties.$showToast = showToast
+app.config.globalProperties.$userPhotoUrl = 'http://localhost:8000/user/photo/';

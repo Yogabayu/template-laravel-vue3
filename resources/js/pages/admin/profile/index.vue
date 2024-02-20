@@ -91,7 +91,7 @@ export default {
     },
     async updateUserProfile() {
       try {
-        const formData = new FormData(); // Buat objek FormData
+        const formData = new FormData();
         formData.append('uuid', this.dataForm.uuid);
         formData.append('name', this.dataForm.name);
         formData.append('email', this.dataForm.email);
