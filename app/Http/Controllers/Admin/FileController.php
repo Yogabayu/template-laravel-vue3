@@ -38,7 +38,7 @@ class FileController extends Controller
     public function index()
     {
         try {
-            $files = File::all();
+            $files = File::with('author', 'divisions', 'positions', 'categories')->get();
             return $this->successRes('Successfully retrieved files.', $files);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve files. ' . $e->getMessage());

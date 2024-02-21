@@ -155,6 +155,19 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/a-useractivity",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/useractivity/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
 
 
     //user

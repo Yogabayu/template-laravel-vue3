@@ -48,7 +48,7 @@ const upgradeBanner = computed(() => {
         }"
       />
 
-      <!-- 👉 Pages -->
+      <!-- 👉 konfigurasi -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'Konfigurasi',
@@ -75,21 +75,48 @@ const upgradeBanner = computed(() => {
           icon: 'bx-area',
         }"
       />
-      <VerticalNavLink
+      
+      <!-- 👉 file -->
+      <VerticalNavSectionTitle
         :item="{
-          to:'/a-division',
-          title: 'Division',
-          icon: 'bx-area',
+          heading: 'File',
         }"
       />
       <VerticalNavLink
         :item="{
           to:'/a-file',
-          title: 'File',
+          title: 'Semua File',
+          icon: 'bx-file',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/',
+          title: 'File per Divisi',
+          icon: 'bx-file',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/',
+          title: 'File per Posisi',
           icon: 'bx-file',
         }"
       />
 
+      <!-- 👉 lain -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Lain-lain',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/a-useractivity',
+          title: 'Activitas User',
+          icon: 'bx-user',
+        }"
+      />
     </template>
 
 

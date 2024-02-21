@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\HelperController;
 use App\Http\Controllers\Admin\PositionController;
+use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
@@ -39,6 +40,8 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::delete('user-delete/{uuid}', [UserController::class, 'deleteUser']);
         Route::post('user-add', [UserController::class, 'addUser']);
         Route::get('all-user', [UserController::class, 'getAllUser']);
+        //activity
+        Route::get('useractivity', [UserActivityController::class, 'index']);
 
         //division
         Route::get('division', [DivisionController::class, 'index'])->name('division.index');

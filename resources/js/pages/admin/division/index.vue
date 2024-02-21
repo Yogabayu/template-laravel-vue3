@@ -1,32 +1,19 @@
 <template>
-    <div>
+  <div>
     <VCard class="auth-card pa-4 pt-5">
       <VCardItem class="align-left">
         <VCardTitle class="text-2xl font-weight-bold">
-          Daftar Posisi
+          Daftar Divisi
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">
-        <v-btn
-          color="primary"
-          size="small"
-          class="my-3 mx-3"
-          @click="openModal(1)"
-        >
+        <v-btn color="primary" size="small" class="my-3 mx-3" @click="openModal(1)">
           Tambah Data
         </v-btn>
 
         <div class="d-flex align-center pe-2 w-25">
-          <v-text-field
-            prepend-inner-icon="mdi-magnify"
-            density="compact"
-            label="Search"
-            single-line
-            flat
-            hide-details
-            variant="solo-filled"
-            v-model="searchValue"
-          ></v-text-field>
+          <v-text-field prepend-inner-icon="mdi-magnify" density="compact" label="Search" single-line flat hide-details
+            variant="solo-filled" v-model="searchValue"></v-text-field>
         </div>
       </div>
       <v-dialog v-model="insert" width="auto">
@@ -36,23 +23,13 @@
             <VForm @submit.prevent="insertData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField
-                    placeholder="Nama Divisi"
-                    label="Nama"
-                    v-model="dataForm.name"
-                    autofocus
-                    :rules="[rules.required]"
-                    prepend-icon="mdi-devide"
-                  />
+                  <VTextField placeholder="Nama Divisi" label="Nama" v-model="dataForm.name" autofocus
+                    :rules="[rules.required]" prepend-icon="mdi-devide" />
                 </VCol>
                 <VCol cols="12" class="d-flex flex-wrap gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button
-                    type="button"
-                    class="btn btn-blue"
-                    @click="closeModal(1)"
-                  >
+                  <button type="button" class="btn btn-blue" @click="closeModal(1)">
                     Batal
                   </button>
                 </VCol>
@@ -68,23 +45,13 @@
             <VForm @submit.prevent="updateData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField
-                    placeholder="Nama Divisi"
-                    label="Nama"
-                    v-model="dataForm.name"
-                    autofocus
-                    :rules="[rules.required]"
-                    prepend-icon="mdi-devide"
-                  />
+                  <VTextField placeholder="Nama Divisi" label="Nama" v-model="dataForm.name" autofocus
+                    :rules="[rules.required]" prepend-icon="mdi-devide" />
                 </VCol>
                 <VCol cols="12" class="d-flex flex-wrap gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button
-                    type="button"
-                    class="btn btn-blue"
-                    @click="closeModal(1)"
-                  >
+                  <button type="button" class="btn btn-blue" @click="closeModal(1)">
                     Batal
                   </button>
                 </VCol>
@@ -93,34 +60,22 @@
           </template>
         </v-card>
       </v-dialog>
-      <EasyDataTable
-        show-index
-        :headers="headers"
-        :items="items"
-        :search-field="searchField"
-        :search-value="searchValue"
-      >
+      <EasyDataTable show-index :headers="headers" :items="items" :search-field="searchField" :search-value="searchValue">
+        
+        <template #empty-message>
+          <p>Data Divisi Kosong</p>
+        </template>
         <template #loading>
           <p>loading data .....</p>
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
             <button>
-              <VIcon
-                size="20"
-                icon="bx-edit"
-                color="blue"
-                @click="openModal(2,item)"
-              />
+              <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
             </button>
             &nbsp;
             <button>
-              <VIcon
-                size="20"
-                icon="bx-trash"
-                color="red"
-                @click="deleteUser(item)"
-              />
+              <VIcon size="20" icon="bx-trash" color="red" @click="deleteUser(item)" />
             </button>
           </div>
         </template>
@@ -147,7 +102,7 @@ export default {
         { text: "Operation", value: "operation" },
       ],
       searchValue: "",
-      searchField: ["name","users_count"],
+      searchField: ["name", "users_count"],
       insert: false,
       edit: false,
     };
@@ -162,12 +117,12 @@ export default {
 
         const response = await mainURL.delete(`/division/${item.id}`);
 
-        if (response.status === 200) {            
+        if (response.status === 200) {
           this.getAllDivisions();
           this.$showToast("success", "Berhasil", response.data.message);
         } else {
           this.$showToast("error", "Sorry", response.data.message);
-          
+
         }
       } catch (error) {
         this.$showToast("error", "Sorry", error.response.data.message);
@@ -176,10 +131,10 @@ export default {
     async updateData() {
       try {
         const formData = new FormData();
-        formData.append('name',this.dataForm.name);
+        formData.append('name', this.dataForm.name);
         formData.append("_method", "PUT");
 
-        const response = await mainURL.post(`/division/${this.dataForm.id}`,formData);
+        const response = await mainURL.post(`/division/${this.dataForm.id}`, formData);
         if (response.status === 200) {
           this.closeModal(2);
           this.getAllDivisions();
@@ -203,10 +158,10 @@ export default {
         }
 
         const formData = new FormData();
-        formData.append('name',this.dataForm.name);
+        formData.append('name', this.dataForm.name);
         formData.append("_method", "POST");
 
-        const response = await mainURL.post("/division",formData);
+        const response = await mainURL.post("/division", formData);
         if (response.status === 200) {
           this.closeModal(1);
           this.getAllDivisions();
@@ -254,7 +209,7 @@ export default {
           this.$showToast("error", "Sorry", response.data.data.message);
         }
       } catch (error) {
-        this.$showToast("error", "Sorry", error.data.data.message);
+        this.$showToast("error", "Sorry",error.response.data.message);
       }
     },
   },

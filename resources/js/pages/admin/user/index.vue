@@ -168,7 +168,7 @@
                 <!-- 👉 photo -->
                 <VCol cols="12" md="6">
                   <v-file-input
-                    accept="image/png, image/jpeg, image/bmp"
+                    accept="image/png, image/jpeg, image/webp"
                     placeholder="Pick an photo"
                     prepend-icon="mdi-camera"
                     :rules="[rules.required]"
@@ -362,6 +362,9 @@
         :search-value="searchValue"
         show-index
       >
+        <template #empty-message>
+          <p>Data User Kosong</p>
+        </template>
         <template #loading>
           <p>loading data .....</p>
         </template>
@@ -563,7 +566,7 @@ export default defineComponent({
     },
     handlePhotoChange(event: { target: { files: any[]; value: null } }) {
       const selectedFile = event.target.files[0];
-      const allowedTypes = ["image/jpeg", "image/png"];
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
       if (selectedFile && allowedTypes.includes(selectedFile.type)) {
         this.dataForm.photo = selectedFile;
       } else {

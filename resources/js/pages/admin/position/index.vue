@@ -100,6 +100,9 @@
         :search-field="searchField"
         :search-value="searchValue"
       >
+      <template #empty-message>
+          <p>Data Posisi Kosong</p>
+        </template>
         <template #loading>
           <p>loading data .....</p>
         </template>
