@@ -7,9 +7,9 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 import { useTheme } from 'vuetify'
 
 // Components
-import Footer from '@/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
+import UserProfile from '@/layouts/user//components/UserProfile.vue'
+import Footer from '@/layouts/user/components/Footer.vue'
+import NavbarThemeSwitcher from '@/layouts/user/components/NavbarThemeSwitcher.vue'
 
 const vuetifyTheme = useTheme()
 

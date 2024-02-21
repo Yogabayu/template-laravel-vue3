@@ -18,18 +18,45 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $divisionIds = DB::table('divisions')->pluck('id');
+        // $divisionIds = DB::table('divisions')->pluck('id');
 
+        // $positionIds = DB::table('positions')->pluck('id');
+
+        // $users = [
+        //     [
+        //         'uuid' => Str::uuid(),
+        //         'division_id' => $divisionIds->random(),
+        //         'position_id' => $positionIds->random(), // Corrected line
+        //         'nik' => '11111111',
+        //         'name' => 'John Doe',
+        //         'email' => 'admin@gmail.com',
+        //         'password' => Hash::make('12345678'),
+        //         'photo' => 'admin.png',
+        //         'isActive' => 1,
+        //         'isAdmin' => 1,
+        //         'canDownload' => 1,
+        //         'canPrint' => 1,
+        //         'canComment' => 1,
+        //     ],
+        // ];
+
+        // foreach ($users as $user) {
+        //     User::create($user);
+        // }
+
+        $divisionIds = DB::table('divisions')->pluck('id');
         $positionIds = DB::table('positions')->pluck('id');
 
-        $users = [
-            [
+        $users = [];
+
+        for ($i = 0; $i < 26; $i++) {
+            $users[] = [
                 'uuid' => Str::uuid(),
                 'division_id' => $divisionIds->random(),
-                'position_id' => $positionIds->random(), // Corrected line
-                'nik' => '11111111',
-                'name' => 'John Doe',
-                'email' => 'admin@gmail.com',
+                'position_id' => $positionIds->random(),
+                'nik' => '11111119' . ($i + 1),
+                'name' => 'John Doe ' . ($i + 1),
+                'email' => 'admin' . ($i + 1) . '@gmail.com',
                 'password' => Hash::make('12345678'),
                 'photo' => 'admin.png',
                 'isActive' => 1,
@@ -37,8 +64,8 @@ class UserSeeder extends Seeder
                 'canDownload' => 1,
                 'canPrint' => 1,
                 'canComment' => 1,
-            ],
-        ];
+            ];
+        }
 
         foreach ($users as $user) {
             User::create($user);

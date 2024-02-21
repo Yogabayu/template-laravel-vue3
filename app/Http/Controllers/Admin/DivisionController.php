@@ -35,7 +35,7 @@ class DivisionController extends Controller
     public function index()
     {
         try {
-            $divisions = Division::all();
+            $divisions = Division::withCount('users')->get();
             return $this->successRes('Successfully retrieved divisions.', $divisions);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve divisions. ' . $e->getMessage());

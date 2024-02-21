@@ -7,9 +7,9 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 import { useTheme } from 'vuetify'
 
 // Components
-import Footer from '@/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
+import Footer from '@/layouts/admin/components/Footer.vue'
+import NavbarThemeSwitcher from '@/layouts/admin/components/NavbarThemeSwitcher.vue'
+import UserProfile from '@/layouts/admin/components/UserProfile.vue'
 
 const vuetifyTheme = useTheme()
 
@@ -51,14 +51,42 @@ const upgradeBanner = computed(() => {
       <!-- 👉 Pages -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'User',
+          heading: 'Konfigurasi',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Error',
+          title: 'User',
           icon: 'bx-user',
           to: '/a-user',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          title: 'Posisi',
+          icon: 'bx-area',
+          to: '/a-position',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/a-division',
+          title: 'Division',
+          icon: 'bx-area',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/a-division',
+          title: 'Division',
+          icon: 'bx-area',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/a-file',
+          title: 'File',
+          icon: 'bx-file',
         }"
       />
 

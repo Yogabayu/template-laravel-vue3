@@ -177,6 +177,12 @@ class UserController extends Controller
             if ($request->canComment) {
                 $user->canComment = $request->canComment;
             }
+            if ($request->division_id) {
+                $user->division_id = $request->division_id;
+            }
+            if ($request->position_id) {
+                $user->position_id = $request->position_id;
+            }
 
             $user->save();
 
@@ -213,7 +219,7 @@ class UserController extends Controller
     public function getAllUser()
     {
         try {
-            $users = User::all();
+            $users = User::with('position', 'division')->get();
 
             return ResponseHelper::successRes('Berhasil mendapatkan data', $users);
         } catch (\Exception $e) {

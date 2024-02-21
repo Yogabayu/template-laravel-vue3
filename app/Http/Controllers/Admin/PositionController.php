@@ -35,7 +35,8 @@ class PositionController extends Controller
     public function index()
     {
         try {
-            $positions = Position::all();
+            $positions = Position::withCount('users')->get();
+
             return $this->successRes('Successfully retrieved positions.', $positions);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve positions. ' . $e->getMessage());
@@ -166,7 +167,7 @@ class PositionController extends Controller
 
             return $this->successRes('Successfully delete position.', $position);
         } catch (\Exception $e) {
-            return $this->errorRes('Failed to delete position. ' . $e->getMessage());
+            return $this->errorRes('Failed to delete position. ' . $e->getMessage(), 402);
         }
     }
 }
