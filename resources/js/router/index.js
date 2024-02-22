@@ -130,6 +130,19 @@ const router = createRouter({
       ],
     },
     {
+      path: "/a-category",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/category/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
       path: "/a-division",
       component: () => import("../layouts/admin/default.vue"),
       children: [
@@ -152,6 +165,47 @@ const router = createRouter({
           beforeEnter: (to, from, next) => {
             checkAdminLogin(next);
           },
+        },
+      ],
+    },
+    {
+      path: "/a-filedivision",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/perdivision/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-filedivisionid/:divisionId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/perdivision/perdivisionid.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+          props:true,
+        },
+      ],
+    },
+    {
+      path: "/a-filedivisioniddetail/:fileId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/show.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+          props:true,
         },
       ],
     },

@@ -35,7 +35,7 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $categories = Category::all();
+            $categories = Category::withCount('files')->orderBy('files_count', 'desc')->get();
             return $this->successRes('Successfully retrieved categories.', $categories);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve categories. ' . $e->getMessage());

@@ -8,14 +8,24 @@
       </VCardItem>
 
       <div class="d-flex justify-space-between mb-6">
-        <v-btn
-          color="primary"
-          size="small"
-          class="my-3 mx-3"
-          @click="openModal(1)"
-        >
-          Tambah Data
-        </v-btn>
+        <div class="row">
+          <v-btn
+            color="primary"
+            size="small"
+            class="my-3 mx-3"
+            @click="openModal(1)"
+          >
+            Tambah Data
+          </v-btn>
+          <v-btn
+            color="primary"
+            size="small"
+            class="my-3 mx-3"
+            @click="toLink('a-filedivision')"
+          >
+            Filter: Divisi
+          </v-btn>
+        </div>
         <div class="d-flex align-center pe-2 w-25">
           <v-text-field
             prepend-inner-icon="mdi-magnify"
@@ -116,7 +126,7 @@
                 </VCol>
 
                 <!-- 👉 Form Actions -->
-                <VCol cols="12" class="d-flex flex-wrap gap-4">
+                <VCol cols="12" class="d-flex flex-wrap justify-end gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
                   <button
@@ -135,8 +145,127 @@
 
       <v-dialog v-model="edit" width="auto">
         <v-card>
-          <template v-slot:title>Tambah Data</template>
-          <template v-slot:text></template>
+          <template v-slot:title>Update Data</template>
+          <template v-slot:text>
+            <VForm @submit.prevent="updateData">
+              <VRow>
+                <VCol md="12" cols="12">
+                  <VTextField
+                    placeholder="Nama file"
+                    label="Nama"
+                    v-model="dataForm.name"
+                    autofocus
+                    prepend-icon="mdi-file"
+                  />
+                </VCol>
+
+                <VCol cols="12" md="12">
+                  <v-select
+                    label="Pilih Divisi"
+                    :items="divisions"
+                    v-model="dataForm.divisions"
+                    prepend-icon="mdi-file"
+                    multiple
+                    clearable
+                  ></v-select>
+
+                  <div v-if="selectedDivisions !== null">
+                    <p>Divisi saat ini:</p>
+                    <v-chip-group selected-class="text-primary" column>
+                      <div v-for="(x, index) in selectedDivisions" :key="index">
+                        <v-chip> {{ x.title }} </v-chip>
+                      </div>
+                    </v-chip-group>
+                  </div>
+                </VCol>
+
+                <VCol cols="12" md="12">
+                  <v-select
+                    label="Pilih Posisi"
+                    :items="positions"
+                    v-model="dataForm.positions"
+                    prepend-icon="mdi-file"
+                    multiple
+                    clearable
+                  ></v-select>
+
+                  <div v-if="selectedPositions !== null">
+                    <p>Posisi saat ini:</p>
+                    <v-chip-group selected-class="text-primary" column>
+                      <div v-for="(x, index) in selectedPositions" :key="index">
+                        <v-chip> {{ x.title }} </v-chip>
+                      </div>
+                    </v-chip-group>
+                  </div>
+                </VCol>
+
+                <VCol cols="12" md="12">
+                  <v-select
+                    label="Pilih Categories"
+                    :items="categories"
+                    v-model="dataForm.categories"
+                    prepend-icon="mdi-file"
+                    multiple
+                    clearable
+                  ></v-select>
+
+                  <div v-if="selectedCategories !== null">
+                    <p>Kategori saat ini:</p>
+                    <v-chip-group selected-class="text-primary" column>
+                      <div
+                        v-for="(x, index) in selectedCategories"
+                        :key="index"
+                      >
+                        <v-chip> {{ x.title }} </v-chip>
+                      </div>
+                    </v-chip-group>
+                  </div>
+                </VCol>
+
+                <VCol cols="12" md="12">
+                  <v-textarea
+                    counter
+                    label="Deskripsi Singkat"
+                    v-model="dataForm.summary"
+                    prepend-icon="mdi-comment"
+                  ></v-textarea>
+                </VCol>
+
+                <VCol cols="12" md="6">
+                  <v-file-input
+                    accept="image/png, image/jpeg, image/webp"
+                    placeholder="Pilih thumbnail"
+                    prepend-icon="mdi-camera"
+                    label="Thumbnail"
+                    @change="handleThumbnailChange"
+                  ></v-file-input>
+                </VCol>
+
+                <VCol cols="12" md="6">
+                  <v-file-input
+                    accept="application/pdf"
+                    placeholder="Pilih File"
+                    prepend-icon="mdi-file"
+                    label="File"
+                    @change="handlePathChange"
+                  ></v-file-input>
+                </VCol>
+
+                <!-- 👉 Form Actions -->
+                <VCol cols="12" class="d-flex flex-wrap justify-end gap-4">
+                  <VBtn type="submit">Update</VBtn>
+
+                  <button
+                    type="button"
+                    class="btn btn-blue"
+                    @click="closeModal(2)"
+                  >
+                    Batal
+                  </button>
+                </VCol>
+              </VRow>
+            </VForm>
+          </template>
         </v-card>
       </v-dialog>
 
@@ -165,14 +294,16 @@
         <template #item-divisions="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.divisions" :key="index">
-              <v-chip> {{ x.name }} </v-chip>
+              <v-chip style="color: blue" @click="toPerLink(x)"> {{ x.name }} </v-chip>
             </div>
           </v-chip-group>
         </template>
         <template #item-positions="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.positions" :key="index">
-              <v-chip> {{ x.name }} </v-chip>
+              <VChip style="color: rgb(6, 84, 107)" @click="testClick(x.id)">
+                {{ x.name }}
+              </VChip>
             </div>
           </v-chip-group>
         </template>
@@ -192,20 +323,37 @@
           </a>
         </template>
         <template #item-operation="item">
-          <div class="operation-wrapper">
+          <div class="d-flex justify-space-between">
             <button>
-              <VIcon size="20" icon="bx-edit" color="blue" />
+              <VIcon
+                size="20"
+                icon="bx-edit"
+                color="blue"
+                @click="openModal(2, item)"
+              />
             </button>
-            &nbsp;
             <button>
-              <VIcon size="20" icon="bx-trash" color="red" @click="deleteFile(item)" />
+              <VIcon
+                size="20"
+                icon="bx-trash"
+                color="red"
+                @click="deleteFile(item)"
+              />
+            </button>
+            <button>
+              <VIcon
+                size="20"
+                icon="bx-menu"
+                color="red"
+                @click="toDetailFileLink(item)"
+              />
             </button>
           </div>
         </template>
         <template #item-categories="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.categories" :key="index">
-              <v-chip> {{ x.name }} </v-chip>
+              <v-chip style="color: rgb(255, 153, 0)"> {{ x.name }} </v-chip>
             </div>
           </v-chip-group>
         </template>
@@ -226,19 +374,20 @@ export default {
       rules: {
         required: (value: any) => !!value || "Required",
       },
-      rulesTextArea: [(v) => v.length <= 255 || "Max 255 characters"],
+      rulesTextArea: [
+        (v: string | any[]) => v.length <= 255 || "Max 255 characters",
+      ],
       items: [],
       headers: [
         { text: "Pengunggah", value: "author.name", sortable: true },
         { text: "File Name", value: "name", sortable: true },
-        { text: "Pengunggah", value: "author.name", sortable: true },
         { text: "Thumbnail", value: "thumbnail", sortable: true },
         { text: "Divisi", value: "divisions", sortable: true },
         { text: "Posisi", value: "positions", sortable: true },
         { text: "Kategori", value: "categories", sortable: true },
         { text: "File", value: "path", sortable: true },
         { text: "Tanggal Diupload", value: "created_at", sortable: true },
-        { text: "Operation", value: "operation" },
+        { text: "Operation    ", value: "operation" },
       ],
       searchValue: "",
       searchField: [
@@ -263,9 +412,86 @@ export default {
       divisions: [],
       positions: [],
       categories: [],
+      selectedDivisions: [],
+      selectedPositions: [],
+      selectedCategories: [],
+      filter: [
+        { value: 1, title: "divisi" },
+        { value: 2, title: "posisi" },
+      ],
+      selectedFilter: null,
     };
   },
   methods: {
+    toPerLink(item: any){
+      this.$router.push(`/a-filedivisionid/${item.id}`)
+    },
+    toDetailFileLink(item: any) {
+      this.$router.push(`/a-filedivisioniddetail/${item.id}`);
+    },
+    toLink(link: string) {
+      this.$router.push(`/${link}`);
+    },
+    testClick(id: any) {
+      console.log(id);
+    },
+    async updateData() {
+      try {
+        const formData = new FormData();
+
+        formData.append("id", this.dataForm.id);
+        formData.append("name", this.dataForm.name);
+        formData.append("summary", this.dataForm.summary);
+        if (this.dataForm.thumbnail !== null) {
+          formData.append("thumbnail", this.dataForm.thumbnail);
+        }
+        if (this.dataForm.path !== null) {
+          formData.append("path", this.dataForm.path);
+        }
+
+        if (this.dataForm.divisions !== null) {
+          this.dataForm.divisions.forEach((division: string | Blob) => {
+            formData.append("divisions[]", division);
+          });
+        }
+        if (this.dataForm.positions !== null) {
+          this.dataForm.positions.forEach((position: string | Blob) => {
+            formData.append("positions[]", position);
+          });
+        }
+        if (this.dataForm.categories !== null) {
+          this.dataForm.categories.forEach((category: string | Blob) => {
+            formData.append("categories[]", category);
+          });
+        }
+
+        formData.append("_method", "PUT");
+
+        const response = await mainURL.post(
+          `/file/${this.dataForm.id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.closeModal(2);
+          this.getAllFiles();
+          this.$showToast("success", "Success", response.data.message);
+        } else {
+          this.closeModal(2);
+          this.getAllFiles();
+          this.$showToast("error", "Sorry", response.data.message);
+        }
+      } catch (error) {
+        this.closeModal(2);
+        this.getAllFiles();
+        this.$showToast("error", "Sorry", "error get data division");
+      }
+    },
     async deleteFile(item: { id: any }) {
       try {
         const confirmDelete = window.confirm(
@@ -286,49 +512,53 @@ export default {
       }
     },
     async insertData() {
-      for (let key in this.dataForm) {
-        if (key !== "id") {
-          if (this.dataForm[key] === null) {
-            this.closeModal(1);
-            this.$showToast("error", "Sorry", `Properti ${key} harus diisi.`);
+      try {
+        for (let key in this.dataForm) {
+          if (key !== "id") {
+            if (this.dataForm[key] === null) {
+              this.closeModal(1);
+              this.$showToast("error", "Sorry", `Properti ${key} harus diisi.`);
+            }
           }
         }
-      }
-      const formData = new FormData();
-      for (let key in this.dataForm) {
-        if (
-          key !== "id" &&
-          key !== "divisions" &&
-          key !== "positions" &&
-          key !== "categories"
-        ) {
-          formData.append(key, this.dataForm[key]);
+        const formData = new FormData();
+        for (let key in this.dataForm) {
+          if (
+            key !== "id" &&
+            key !== "divisions" &&
+            key !== "positions" &&
+            key !== "categories"
+          ) {
+            formData.append(key, this.dataForm[key]);
+          }
         }
-      }
-      this.dataForm.divisions.forEach((division) => {
-        formData.append("divisions[]", division);
-      });
-      this.dataForm.positions.forEach((position) => {
-        formData.append("positions[]", position);
-      });
-      this.dataForm.categories.forEach((category) => {
-        formData.append("categories[]", category);
-      });
+        this.dataForm.divisions.forEach((division: string | Blob) => {
+          formData.append("divisions[]", division);
+        });
+        this.dataForm.positions.forEach((position: string | Blob) => {
+          formData.append("positions[]", position);
+        });
+        this.dataForm.categories.forEach((category: string | Blob) => {
+          formData.append("categories[]", category);
+        });
 
-      formData.append("_method", "POST");
+        formData.append("_method", "POST");
 
-      const response = await mainURL.post("/file", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        const response = await mainURL.post("/file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-      if (response.status === 200) {
-        this.closeModal(1);
-        this.getAllFiles();
-        this.$showToast("success", "Success", response.data.message);
-      } else {
-        this.$showToast("error", "Sorry", response.data.message);
+        if (response.status === 200) {
+          this.closeModal(1);
+          this.getAllFiles();
+          this.$showToast("success", "Success", response.data.message);
+        } else {
+          this.$showToast("error", "Sorry", response.data.message);
+        }
+      } catch (error) {
+        this.$showToast("error", "Sorry", error.response.data.message);
       }
     },
     handlePathChange(event: { target: { files: any[]; value: null } }) {
@@ -450,19 +680,30 @@ export default {
         this.getCategories();
       } else if (type === 2) {
         if (item) {
-          // this.getDivisions();
-          // this.getPositions();
-          // this.dataForm.name = item.name;
-          // this.dataForm.email = item.email;
-          // this.dataForm.nik = item.nik;
-          // this.dataForm.uuid = item.uuid;
-          // this.dataForm.division_id = item.division_id;
-          // this.dataForm.position_id = item.position_id;
-          // this.dataForm.isActive = item.isActive;
-          // this.dataForm.isAdmin = item.isAdmin;
-          // this.dataForm.canDownload = item.canDownload;
-          // this.dataForm.canPrint = item.canPrint;
-          // this.dataForm.canComment = item.canComment;
+          this.getDivisions();
+          this.getPositions();
+          this.getCategories();
+          this.dataForm.id = item.id;
+          this.dataForm.name = item.name;
+          this.dataForm.summary = item.summary;
+          this.selectedDivisions = item.divisions.map(
+            (item: { id: any; name: any }) => ({
+              value: item.id,
+              title: item.name,
+            })
+          );
+          this.selectedPositions = item.positions.map(
+            (item: { id: any; name: any }) => ({
+              value: item.id,
+              title: item.name,
+            })
+          );
+          this.selectedCategories = item.categories.map(
+            (item: { id: any; name: any }) => ({
+              value: item.id,
+              title: item.name,
+            })
+          );
           this.edit = true;
         }
       }

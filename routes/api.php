@@ -70,6 +70,8 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('file/{id}', [FileController::class, 'show'])->name('file.show');
         Route::put('file/{id}', [FileController::class, 'update'])->name('file.update');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
+        Route::get('fileperdivision', [FileController::class, 'filePerDivision']);
+        Route::get('fileperdivisionid/{id}', [FileController::class, 'filePerDivisionId']);
 
         //helper
         Route::get('total-file', [HelperController::class, 'totalFile']);

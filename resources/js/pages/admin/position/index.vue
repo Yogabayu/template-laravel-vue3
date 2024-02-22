@@ -122,7 +122,7 @@
                 size="20"
                 icon="bx-trash"
                 color="red"
-                @click="deleteUser(item)"
+                @click="deletePosition(item)"
               />
             </button>
           </div>
@@ -157,7 +157,7 @@ export default {
     };
   },
   methods: {
-    async deleteUser(item: { id: any }) {
+    async deletePosition(item: { id: any }) {
       try {
         const confirmDelete = window.confirm(
           "Apakah Anda yakin ingin menghapus data?"

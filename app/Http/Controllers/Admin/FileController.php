@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ResponseHelper;
 use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Division;
 use App\Models\File;
 use App\Models\FileToCategory;
 use App\Models\FileToDivision;
@@ -30,6 +32,30 @@ class FileController extends Controller
             'message' => $message,
             'data' => null
         ], $statusCode);
+    }
+
+    public function filePerDivision()
+    {
+        try {
+            $datas = Division::withCount('files')->with('files')->get();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $datas);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function filePerDivisionId($id)
+    {
+        try {
+            $files = Division::with('files', 'files.positions', 'files.categories', 'files.author')
+                ->where('id', $id)
+                ->first();
+
+            return ResponseHelper::successRes('berhasil mendapatkan data', $files);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
     }
 
     /**
@@ -159,17 +185,21 @@ class FileController extends Controller
     {
         try {
             $file = File::findOrFail($id);
+            // dd($file);
 
             $request->validate([
-                'thumbnail' => 'max:2048|mimes:jpg,png',
-                'path'      => 'max:20480|mimes:pdf',
-                'divisions' => 'array',
-                'categories' => 'array',
-                'positions' => 'array',
-
+                'name'          => 'required',
+                'thumbnail'     => 'nullable|max:2048|mimes:jpg,png',
+                'path'          => 'nullable|max:20480|mimes:pdf',
+                'divisions'     => 'array',
+                'categories'    => 'array',
+                'positions'     => 'array',
+                'summary'       => 'required'
             ], [
+                'name.required'      => 'Name is required.',
                 'thumbnail.mimes'    => 'Thumbnail must be a JPG or PNG image.',
                 'path.mimes'         => 'File must be a PDF.',
+                'summary.required'   => 'Summary is required.',
             ]);
 
             // Update file details
@@ -178,7 +208,7 @@ class FileController extends Controller
 
             if ($request->hasFile('thumbnail')) {
                 $oldImage = $file->thumbnail;
-                if ($oldImage && File::exists(public_path('file/thumbnail/' . $oldImage))) {
+                if ($oldImage && FacadesFile::exists(public_path('file/thumbnail/' . $oldImage))) {
                     FacadesFile::delete(public_path('file/thumbnail/' . $oldImage));
                 }
 
@@ -193,7 +223,7 @@ class FileController extends Controller
 
             if ($request->hasFile('path')) {
                 $oldPath = $file->path;
-                if ($oldPath && File::exists(public_path('file/file/' . $oldPath))) {
+                if ($oldPath && FacadesFile::exists(public_path('file/file/' . $oldPath))) {
                     FacadesFile::delete(public_path('file/file/' . $oldPath));
                 }
 
@@ -207,16 +237,23 @@ class FileController extends Controller
             }
 
             $file->save();
-            // Sync divisions
-            $file->divisions()->sync($request->divisions);
 
-            // Sync categories
-            $file->categories()->sync($request->categories);
+            //division
+            if ($request->has('divisions')) {
+                $file->divisions()->sync($request->divisions);
+            }
 
-            // Sync positions
-            $file->positions()->sync($request->positions);
+            //positions
+            if ($request->has('positions')) {
+                $file->positions()->sync($request->positions);
+            }
 
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update file | ' . $file->id);
+            //categories
+            if ($request->has('categories')) {
+                $file->categories()->sync($request->categories);
+            }
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update file | ' . $file->name);
             return $this->successRes('File updated successfully.', $file);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to update file. ' . $e->getMessage());

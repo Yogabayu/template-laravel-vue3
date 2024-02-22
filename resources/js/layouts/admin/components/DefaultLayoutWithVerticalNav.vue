@@ -71,7 +71,14 @@ const upgradeBanner = computed(() => {
       <VerticalNavLink
         :item="{
           to:'/a-division',
-          title: 'Division',
+          title: 'Divisi',
+          icon: 'bx-area',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          to:'/a-category',
+          title: 'Kategori',
           icon: 'bx-area',
         }"
       />
@@ -86,20 +93,6 @@ const upgradeBanner = computed(() => {
         :item="{
           to:'/a-file',
           title: 'Semua File',
-          icon: 'bx-file',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          to:'/',
-          title: 'File per Divisi',
-          icon: 'bx-file',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          to:'/',
-          title: 'File per Posisi',
           icon: 'bx-file',
         }"
       />
