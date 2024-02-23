@@ -44,11 +44,11 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('useractivity', [UserActivityController::class, 'index']);
 
         //division
-        Route::get('division', [DivisionController::class, 'index'])->name('division.index');
-        Route::post('division', [DivisionController::class, 'store'])->name('division.store');
-        Route::get('division/{id}', [DivisionController::class, 'show'])->name('division.show');
-        Route::put('division/{id}', [DivisionController::class, 'update'])->name('division.update');
-        Route::delete('division/{id}', [DivisionController::class, 'destroy'])->name('division.destroy');
+        // Route::get('division', [DivisionController::class, 'index'])->name('division.index');
+        // Route::post('division', [DivisionController::class, 'store'])->name('division.store');
+        // Route::get('division/{id}', [DivisionController::class, 'show'])->name('division.show');
+        // Route::put('division/{id}', [DivisionController::class, 'update'])->name('division.update');
+        // Route::delete('division/{id}', [DivisionController::class, 'destroy'])->name('division.destroy');
 
         //position
         Route::get('position', [PositionController::class, 'index'])->name('position.index');

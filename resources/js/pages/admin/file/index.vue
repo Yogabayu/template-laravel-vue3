@@ -21,14 +21,6 @@
             color="primary"
             size="small"
             class="my-3 mx-3"
-            @click="toLink('a-filedivision')"
-          >
-            Filter: Divisi
-          </v-btn>
-          <v-btn
-            color="primary"
-            size="small"
-            class="my-3 mx-3"
             @click="toLink('a-filecategory')"
           >
             Filter: Kategori
@@ -67,18 +59,6 @@
 
                 <VCol cols="12" md="12">
                   <v-select
-                    label="Pilih Divisi"
-                    :items="divisions"
-                    v-model="dataForm.divisions"
-                    prepend-icon="mdi-file"
-                    :rules="[rules.required]"
-                    multiple
-                    clearable
-                  ></v-select>
-                </VCol>
-
-                <VCol cols="12" md="12">
-                  <v-select
                     label="Pilih Posisi"
                     :items="positions"
                     v-model="dataForm.positions"
@@ -109,17 +89,6 @@
                     v-model="dataForm.summary"
                     prepend-icon="mdi-comment"
                   ></v-textarea>
-                </VCol>
-
-                <VCol cols="12" md="6">
-                  <v-file-input
-                    accept="image/png, image/jpeg, image/webp"
-                    placeholder="Pilih thumbnail"
-                    prepend-icon="mdi-camera"
-                    :rules="[rules.required]"
-                    label="Thumbnail"
-                    @change="handleThumbnailChange"
-                  ></v-file-input>
                 </VCol>
 
                 <VCol cols="12" md="6">
@@ -165,26 +134,6 @@
                     autofocus
                     prepend-icon="mdi-file"
                   />
-                </VCol>
-
-                <VCol cols="12" md="12">
-                  <v-select
-                    label="Pilih Divisi"
-                    :items="divisions"
-                    v-model="dataForm.divisions"
-                    prepend-icon="mdi-file"
-                    multiple
-                    clearable
-                  ></v-select>
-
-                  <div v-if="selectedDivisions !== null">
-                    <p>Divisi saat ini:</p>
-                    <v-chip-group selected-class="text-primary" column>
-                      <div v-for="(x, index) in selectedDivisions" :key="index">
-                        <v-chip> {{ x.title }} </v-chip>
-                      </div>
-                    </v-chip-group>
-                  </div>
                 </VCol>
 
                 <VCol cols="12" md="12">
@@ -241,16 +190,6 @@
 
                 <VCol cols="12" md="6">
                   <v-file-input
-                    accept="image/png, image/jpeg, image/webp"
-                    placeholder="Pilih thumbnail"
-                    prepend-icon="mdi-camera"
-                    label="Thumbnail"
-                    @change="handleThumbnailChange"
-                  ></v-file-input>
-                </VCol>
-
-                <VCol cols="12" md="6">
-                  <v-file-input
                     accept="application/pdf"
                     placeholder="Pilih File"
                     prepend-icon="mdi-file"
@@ -289,27 +228,10 @@
         <template #loading>
           <p>loading data .....</p>
         </template>
-        <template #item-thumbnail="item">
-          <div class="player-wrapper">
-            <img
-              class="avator"
-              :src="fileThumbnail + item.thumbnail"
-              :alt="item.name"
-              :width="60"
-            />
-          </div>
-        </template>
-        <template #item-divisions="item">
-          <v-chip-group selected-class="text-primary" column>
-            <div v-for="(x, index) in item.divisions" :key="index">
-              <v-chip style="color: blue" @click="toPerLink(x)"> {{ x.name }} </v-chip>
-            </div>
-          </v-chip-group>
-        </template>
         <template #item-positions="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.positions" :key="index">
-              <VChip style="color: rgb(6, 84, 107)" @click="testClick(x.id)">
+              <VChip style="color: rgb(6, 84, 107)" >
                 {{ x.name }}
               </VChip>
             </div>
@@ -377,7 +299,6 @@ export default {
     return {
       insert: false,
       edit: false,
-      fileThumbnail: this.$fileThumbnail,
       filePath: this.$filePath,
       rules: {
         required: (value: any) => !!value || "Required",
@@ -389,8 +310,6 @@ export default {
       headers: [
         { text: "Pengunggah", value: "author.name", sortable: true },
         { text: "File Name", value: "name", sortable: true },
-        { text: "Thumbnail", value: "thumbnail", sortable: true },
-        { text: "Divisi", value: "divisions", sortable: true },
         { text: "Posisi", value: "positions", sortable: true },
         { text: "Kategori", value: "categories", sortable: true },
         { text: "File", value: "path", sortable: true },
@@ -402,7 +321,6 @@ export default {
         "name",
         "author.name",
         "email",
-        "thumbnail",
         "divisions",
         "positions",
         "categories",
@@ -410,38 +328,23 @@ export default {
       dataForm: {
         id: null,
         name: null,
-        thumbnail: null,
         path: null,
         summary: "",
-        divisions: [],
         positions: [],
         categories: [],
       },
-      divisions: [],
       positions: [],
       categories: [],
-      selectedDivisions: [],
       selectedPositions: [],
       selectedCategories: [],
-      filter: [
-        { value: 1, title: "divisi" },
-        { value: 2, title: "posisi" },
-      ],
-      selectedFilter: null,
     };
   },
   methods: {
-    toPerLink(item: any){
-      this.$router.push(`/a-filedivisionid/${item.id}`)
-    },
     toDetailFileLink(item: any) {
       this.$router.push(`/a-filedivisioniddetail/${item.id}`);
     },
     toLink(link: string) {
       this.$router.push(`/${link}`);
-    },
-    testClick(id: any) {
-      console.log(id);
     },
     async updateData() {
       try {
@@ -450,17 +353,8 @@ export default {
         formData.append("id", this.dataForm.id);
         formData.append("name", this.dataForm.name);
         formData.append("summary", this.dataForm.summary);
-        if (this.dataForm.thumbnail !== null) {
-          formData.append("thumbnail", this.dataForm.thumbnail);
-        }
         if (this.dataForm.path !== null) {
           formData.append("path", this.dataForm.path);
-        }
-
-        if (this.dataForm.divisions !== null) {
-          this.dataForm.divisions.forEach((division: string | Blob) => {
-            formData.append("divisions[]", division);
-          });
         }
         if (this.dataForm.positions !== null) {
           this.dataForm.positions.forEach((position: string | Blob) => {
@@ -533,16 +427,12 @@ export default {
         for (let key in this.dataForm) {
           if (
             key !== "id" &&
-            key !== "divisions" &&
             key !== "positions" &&
             key !== "categories"
           ) {
             formData.append(key, this.dataForm[key]);
           }
         }
-        this.dataForm.divisions.forEach((division: string | Blob) => {
-          formData.append("divisions[]", division);
-        });
         this.dataForm.positions.forEach((position: string | Blob) => {
           formData.append("positions[]", position);
         });
@@ -579,42 +469,11 @@ export default {
         event.target.value = null;
       }
     },
-    handleThumbnailChange(event: { target: { files: any[]; value: null } }) {
-      const selectedFile = event.target.files[0];
-      const allowedTypes = ["image/jpeg", "image/png"];
-      if (selectedFile && allowedTypes.includes(selectedFile.type)) {
-        this.dataForm.thumbnail = selectedFile;
-      } else {
-        this.$showToast(
-          "error",
-          "Error",
-          "Hanya file JPEG atau PNG yang diizinkan."
-        );
-        event.target.value = null;
-      }
-    },
     async getCategories() {
       try {
         const response = await mainURL.get("/category");
         if (response.status === 200) {
           this.categories = response.data.data.map(
-            (item: { id: any; name: any }) => ({
-              value: item.id,
-              title: item.name,
-            })
-          );
-        } else {
-          this.$showToast("error", "Sorry", "error get data division");
-        }
-      } catch (error) {
-        this.$showToast("error", "Sorry", "error get data division");
-      }
-    },
-    async getDivisions() {
-      try {
-        const response = await mainURL.get("/division");
-        if (response.status === 200) {
-          this.divisions = response.data.data.map(
             (item: { id: any; name: any }) => ({
               value: item.id,
               title: item.name,
@@ -663,10 +522,8 @@ export default {
     resetForm() {
       this.dataForm = {
         name: null,
-        thumbnail: null,
         path: null,
         summary: null,
-        divisions: null,
         positions: null,
         categories: null,
       };
@@ -683,23 +540,15 @@ export default {
     openModal(type: number, item = null) {
       if (type === 1) {
         this.insert = true;
-        this.getDivisions();
         this.getPositions();
         this.getCategories();
       } else if (type === 2) {
         if (item) {
-          this.getDivisions();
           this.getPositions();
           this.getCategories();
           this.dataForm.id = item.id;
           this.dataForm.name = item.name;
           this.dataForm.summary = item.summary;
-          this.selectedDivisions = item.divisions.map(
-            (item: { id: any; name: any }) => ({
-              value: item.id,
-              title: item.name,
-            })
-          );
           this.selectedPositions = item.positions.map(
             (item: { id: any; name: any }) => ({
               value: item.id,

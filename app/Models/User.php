@@ -58,10 +58,10 @@ class User extends Authenticatable
         return $this->belongsTo(Position::class);
     }
 
-    public function division()
-    {
-        return $this->belongsTo(Division::class);
-    }
+    // public function division()
+    // {
+    //     return $this->belongsTo(Division::class);
+    // }
 
     public function file()
     {

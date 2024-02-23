@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('password');
 
             $table->uuid('position_id');
-            $table->uuid('division_id');
             $table->string('nik')->unique();
             $table->string('photo');
             $table->boolean('isActive')->default(1);
@@ -32,7 +31,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('position_id')->references('id')->on('positions');
-            $table->foreign('division_id')->references('id')->on('divisions');
         });
     }
 

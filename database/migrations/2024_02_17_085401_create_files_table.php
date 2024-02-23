@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('author_uuid');
             $table->string('name');
-            $table->string('thumbnail');
             $table->string('path');
             $table->string('summary');
             $table->timestamps();

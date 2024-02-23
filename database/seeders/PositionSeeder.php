@@ -16,7 +16,7 @@ class PositionSeeder extends Seeder
         $positions = [
             ['id' => Str::uuid(), 'name' => 'IT Programmer'],
             ['id' => Str::uuid(), 'name' => 'IT Support'],
-            ['id' => Str::uuid(), 'name' => 'Account Officer'],
+            ['id' => Str::uuid(), 'name' => 'Account Officer Pusat'],
         ];
 
         foreach ($positions as $position) {

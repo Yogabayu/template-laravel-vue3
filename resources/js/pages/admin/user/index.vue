@@ -90,17 +90,7 @@
 
                 <VCol cols="12" md="6">
                   <v-select
-                    label="Divisi"
-                    :items="divisions"
-                    v-model="dataForm.division_id"
-                    :rules="[rules.required]"
-                    prepend-icon="mdi-divide"
-                  ></v-select>
-                </VCol>
-
-                <VCol cols="12" md="6">
-                  <v-select
-                    label="Posisi"
+                    label="Jabatan"
                     :items="positions"
                     v-model="dataForm.position_id"
                     :rules="[rules.required]"
@@ -252,16 +242,7 @@
 
                 <VCol cols="12" md="6">
                   <v-select
-                    label="Divisi"
-                    :items="divisions"
-                    v-model="dataForm.division_id"
-                    prepend-icon="mdi-divide"
-                  ></v-select>
-                </VCol>
-
-                <VCol cols="12" md="6">
-                  <v-select
-                    label="Posisi"
+                    label="Jabatan"
                     :items="positions"
                     v-model="dataForm.position_id"
                     prepend-icon="mdi-divide"
@@ -448,7 +429,6 @@ export default defineComponent({
         nik: null,
         uuid: null,
         photo: null,
-        division_id: null,
         position_id: null,
         isActive: 1,
         isAdmin: 0,
@@ -463,15 +443,12 @@ export default defineComponent({
         { text: "NIK", value: "nik", sortable: true },
         { text: "Email", value: "email", sortable: true },
         { text: "Posisi", value: "position", sortable: false },
-        { text: "Divisi", value: "division", sortable: false },
         { text: "Operation", value: "operation" },
       ],
-      divisions: [],
       positions: [],
       searchValue: "",
-      searchField: ["name", "nik", "email", "posision.name", "division.name"],
+      searchField: ["name", "nik", "email", "posision.name",],
       insert: false,
-      // update: false,
       btnInsert: true,
       isPasswordVisible: false,
       edit: false,
@@ -543,17 +520,15 @@ export default defineComponent({
     openModal(type: number, item = null) {
       if (type === 1) {
         this.insert = true;
-        this.getDivisions();
         this.getPositions();
       } else if (type === 2) {
         if (item) {
-          this.getDivisions();
+          this.resetForm();
           this.getPositions();
           this.dataForm.name = item.name;
           this.dataForm.email = item.email;
           this.dataForm.nik = item.nik;
           this.dataForm.uuid = item.uuid;
-          this.dataForm.division_id = item.division_id;
           this.dataForm.position_id = item.position_id;
           this.dataForm.isActive = item.isActive;
           this.dataForm.isAdmin = item.isAdmin;
@@ -595,23 +570,6 @@ export default defineComponent({
       } else if (type === 2) {
         this.resetForm();
         this.edit = false;
-      }
-    },
-    async getDivisions() {
-      try {
-        const response = await mainURL.get("/division");
-        if (response.status === 200) {
-          this.divisions = response.data.data.map(
-            (item: { id: any; name: any }) => ({
-              value: item.id,
-              title: item.name,
-            })
-          );
-        } else {
-          this.$showToast("error", "Sorry", "error get data division");
-        }
-      } catch (error) {
-        this.$showToast("error", "Sorry", "error get data division");
       }
     },
     async getPositions() {

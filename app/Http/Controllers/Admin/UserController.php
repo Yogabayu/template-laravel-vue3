@@ -72,7 +72,6 @@ class UserController extends Controller
                 'nik' => 'required|unique:users,nik,',
                 'photo' => 'required|mimes:jpg,png|max:2048',
                 'password' => 'required',
-                'division_id' => 'required',
                 'position_id' => 'required',
             ], [
                 'uuid.required' => 'UUID is required.',
@@ -87,6 +86,7 @@ class UserController extends Controller
                 'photo.mimes' => 'The photo must be a JPG or PNG image.',
                 'photo.max' => 'The photo may not be greater than 2048 kilobytes.',
                 'password.required' => 'Password is required.',
+                'position_id.required' => 'Jabatan Wajib Di isi',
             ]);
 
             $imageEXT = $request->file('photo')->getClientOriginalName();
@@ -97,8 +97,8 @@ class UserController extends Controller
 
             $user = User::create([
                 'uuid'          => Str::uuid(),
-                'division_id'   => $request->division_id,
-                'position_id'   => $request->position_id, // Corrected line
+                // 'division_id'   => $request->division_id,
+                'position_id'   => $request->position_id,
                 'nik'           => $request->nik,
                 'name'          => $request->name,
                 'email'         => $request->email,
@@ -144,7 +144,7 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->nik = $request->nik;
 
-            if ($request->password) {
+            if ($request->has('password')) {
                 $user->password = Hash::make($request->password);
             }
 
@@ -162,25 +162,25 @@ class UserController extends Controller
 
                 $user->photo = $thumbnailimage;
             }
-            if ($request->isActive) {
+            if ($request->has('isActive')) {
                 $user->isActive = $request->isActive;
             }
-            if ($request->isAdmin) {
+            if ($request->has('isAdmin')) {
                 $user->isAdmin = $request->isAdmin;
             }
-            if ($request->canDownload) {
+            if ($request->has('canDownload')) {
                 $user->canDownload = $request->canDownload;
             }
-            if ($request->canPrint) {
+            if ($request->has('canPrint')) {
                 $user->canPrint = $request->canPrint;
             }
-            if ($request->canComment) {
+            if ($request->has('canComment')) {
                 $user->canComment = $request->canComment;
             }
-            if ($request->division_id) {
-                $user->division_id = $request->division_id;
-            }
-            if ($request->position_id) {
+            // if ($request->division_id) {
+            //     $user->division_id = $request->division_id;
+            // }
+            if ($request->has('position_id')) {
                 $user->position_id = $request->position_id;
             }
 
@@ -219,7 +219,7 @@ class UserController extends Controller
     public function getAllUser()
     {
         try {
-            $users = User::with('position', 'division')->get();
+            $users = User::with('position')->get();
 
             return ResponseHelper::successRes('Berhasil mendapatkan data', $users);
         } catch (\Exception $e) {

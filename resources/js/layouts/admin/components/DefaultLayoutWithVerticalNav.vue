@@ -70,13 +70,6 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          to:'/a-division',
-          title: 'Divisi',
-          icon: 'bx-area',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
           to:'/a-category',
           title: 'Kategori',
           icon: 'bx-area',

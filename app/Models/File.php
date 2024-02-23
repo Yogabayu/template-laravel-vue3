@@ -15,7 +15,6 @@ class File extends Model
         'id',
         'author_uuid',
         'name',
-        'thumbnail',
         'path',
         'summary',
     ];
@@ -25,10 +24,10 @@ class File extends Model
         return $this->belongsTo(User::class, 'author_uuid', 'uuid');
     }
 
-    public function divisions()
-    {
-        return $this->belongsToMany(Division::class, 'filetodivisions', 'file_uuid', 'division_uuid');
-    }
+    // public function divisions()
+    // {
+    //     return $this->belongsToMany(Division::class, 'filetodivisions', 'file_uuid', 'division_uuid');
+    // }
 
     public function positions()
     {
