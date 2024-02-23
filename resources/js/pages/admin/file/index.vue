@@ -25,6 +25,14 @@
           >
             Filter: Divisi
           </v-btn>
+          <v-btn
+            color="primary"
+            size="small"
+            class="my-3 mx-3"
+            @click="toLink('a-filecategory')"
+          >
+            Filter: Kategori
+          </v-btn>
         </div>
         <div class="d-flex align-center pe-2 w-25">
           <v-text-field
