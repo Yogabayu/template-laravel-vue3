@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\HelperController as UserHelperController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +33,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
+        // route admin
         //user
         Route::get('userProfile', [UserController::class, 'userProfile'])->name('userProfile');
         Route::put('updateUserProfile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
@@ -40,6 +43,9 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::delete('user-delete/{uuid}', [UserController::class, 'deleteUser']);
         Route::post('user-add', [UserController::class, 'addUser']);
         Route::get('all-user', [UserController::class, 'getAllUser']);
+        Route::get('user-device/{uuid}', [UserController::class, 'userDevices']);
+        Route::post('user-device', [UserController::class, 'changeDevice']);
+        Route::delete('user-device/{id}', [UserController::class, 'deleteDevice']);
         //activity
         Route::get('useractivity', [UserActivityController::class, 'index']);
 
@@ -70,11 +76,25 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('file/{id}', [FileController::class, 'show'])->name('file.show');
         Route::put('file/{id}', [FileController::class, 'update'])->name('file.update');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
-        Route::get('fileperdivision', [FileController::class, 'filePerDivision']);
-        Route::get('fileperdivisionid/{id}', [FileController::class, 'filePerDivisionId']);
+        Route::get('fileperposition', [FileController::class, 'filePerPosition']);
+        // Route::get('fileperdivisionid/{id}', [FileController::class, 'filePerDivisionId']);
 
         //helper
         Route::get('total-file', [HelperController::class, 'totalFile']);
         Route::get('total-user', [HelperController::class, 'totalUser']);
+
+
+
+        //////// Route User \\\\\\\\\
+        Route::group(['prefix' => 'user'], function () {
+            //helper
+            Route::get('total-file', [UserHelperController::class, 'totalFile']);
+            Route::get('total-read', [UserHelperController::class, 'totalRead']);
+            Route::get('total-fav', [UserHelperController::class, 'totalFavorite']);
+
+            //dashboard
+            Route::get('index', [DashboardController::class, 'index']);
+            Route::get('fileFav', [DashboardController::class, 'fileFav']);
+        });
     });
 });

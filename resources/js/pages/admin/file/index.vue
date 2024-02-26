@@ -34,7 +34,7 @@
                 </VCol>
 
                 <VCol cols="12" md="12">
-                  <v-select label="Pilih Categories" :items="categories" v-model="dataForm.categories"
+                  <v-select label="Pilih Kategori" :items="categories" v-model="dataForm.categories"
                     prepend-icon="mdi-file" :rules="[rules.required]" multiple clearable></v-select>
                 </VCol>
 
@@ -239,13 +239,13 @@
         <template #item-operation="item">
           <div class="d-flex justify-space-between">
             <button>
+              <VIcon size="20" icon="bx-menu" color="red" @click="toDetailFile(item)" />
+            </button>
+            <button>
               <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
             </button>
             <button>
               <VIcon size="20" icon="bx-trash" color="red" @click="deleteFile(item)" />
-            </button>
-            <button>
-              <VIcon size="20" icon="bx-menu" color="red" @click="toDetailFileLink(item)" />
             </button>
           </div>
         </template>
@@ -283,7 +283,7 @@ export default {
         required: (value: any) => !!value || "Required",
       },
       rulesTextArea: [
-        (v: string | any[]) => v.length <= 512 || "Max 512 characters",
+        (v: string | any[]) => v.length <= 2048 || "Max 2048 characters",
       ],
       items: [],
       headers: [
@@ -319,8 +319,8 @@ export default {
     };
   },
   methods: {
-    toDetailFileLink(item: any) {
-      this.$router.push(`/a-filedivisioniddetail/${item.id}`);
+    toDetailFile(item: any) {
+      this.$router.push(`/a-filedetail/${item.id}`);
     },
     toLink(link: string) {
       this.$router.push(`/${link}`);

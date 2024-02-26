@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Models\FileToCategory;
 use App\Models\FileToDivision;
 use App\Models\FileToPosition;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File as FacadesFile;
 use Illuminate\Support\Str;
@@ -34,16 +35,16 @@ class FileController extends Controller
         ], $statusCode);
     }
 
-    // public function filePerDivision()
-    // {
-    //     try {
-    //         $datas = Division::withCount('files')->with('files')->get();
+    public function filePerPosition()
+    {
+        try {
+            $datas = Position::withCount('files')->with('files')->get();
 
-    //         return ResponseHelper::successRes('Berhasil mendapatkan data', $datas);
-    //     } catch (\Exception $e) {
-    //         return ResponseHelper::errorRes($e->getMessage());
-    //     }
-    // }
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $datas);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
 
     // public function filePerDivisionId($id)
     // {

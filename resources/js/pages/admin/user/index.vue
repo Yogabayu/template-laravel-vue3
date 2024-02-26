@@ -371,23 +371,45 @@
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
-            <button>
-              <VIcon
-                size="20"
-                icon="bx-edit"
-                color="blue"
-                @click="openModal(2, item)"
-              />
-            </button>
+            <v-tooltip location="top" text="Lihat Device User">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon
+                    size="20"
+                    icon="bx-devices"
+                    color="blue"
+                    @click="toUserDevice(item)"
+                  />
+                </button>
+              </template>
+            </v-tooltip>
             &nbsp;
-            <button>
-              <VIcon
-                size="20"
-                icon="bx-trash"
-                color="red"
-                @click="deleteUser(item)"
-              />
-            </button>
+            <v-tooltip location="top" text="Edit User">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon
+                    size="20"
+                    icon="bx-edit"
+                    color="#adad82"
+                    @click="openModal(2, item)"
+                  />
+                </button>
+              </template>
+            </v-tooltip>
+            &nbsp;
+
+            <v-tooltip location="top" text="Hapus User">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon
+                    size="20"
+                    icon="bx-trash"
+                    color="#f33"
+                    @click="deleteUser(item)"
+                  />
+                </button>
+              </template>
+            </v-tooltip>
           </div>
         </template>
       </EasyDataTable>
@@ -447,7 +469,7 @@ export default defineComponent({
       ],
       positions: [],
       searchValue: "",
-      searchField: ["name", "nik", "email", "posision.name",],
+      searchField: ["name", "nik", "email", "posision.name"],
       insert: false,
       btnInsert: true,
       isPasswordVisible: false,
@@ -455,6 +477,9 @@ export default defineComponent({
     };
   },
   methods: {
+    toUserDevice(item: any) {
+      this.$router.push(`/a-deviceuser/${item.uuid}`);
+    },
     async insertData() {
       try {
         for (let key in this.dataForm) {

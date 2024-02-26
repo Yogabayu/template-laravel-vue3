@@ -168,54 +168,41 @@ const router = createRouter({
         },
       ],
     },
-    // {
-    //   path: "/a-filedivision",
-    //   component: () => import("../layouts/admin/default.vue"),
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: () => import("../pages/admin/file/perdivision/index.vue"),
-    //       beforeEnter: (to, from, next) => {
-    //         checkAdminLogin(next);
-    //       },
-    //     },
-    //   ],
-    // },
-    // {
-    //   path: "/a-filedivisionid/:divisionId",
-    //   component: () => import("../layouts/admin/default.vue"),
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: () => import("../pages/admin/file/perdivision/perdivisionid.vue"),
-    //       beforeEnter: (to, from, next) => {
-    //         checkAdminLogin(next);
-    //       },
-    //       props:true,
-    //     },
-    //   ],
-    // },
-    // {
-    //   path: "/a-filedivisioniddetail/:fileId",
-    //   component: () => import("../layouts/admin/default.vue"),
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: () => import("../pages/admin/file/show.vue"),
-    //       beforeEnter: (to, from, next) => {
-    //         checkAdminLogin(next);
-    //       },
-    //       props:true,
-    //     },
-    //   ],
-    // },
     {
-      path: "/a-filecategory",
+      path: "/a-filedetail/:fileId",
       component: () => import("../layouts/admin/default.vue"),
       children: [
         {
           path: "",
-          component: () => import("../pages/admin/file/perposition/index.vue"),
+          component: () => import("../pages/admin/file/show.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+          props:true,
+        },
+      ],
+    },
+    {
+      path: "/a-filedetail/:fileId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/show.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+          props:true,
+        },
+      ],
+    },
+    {
+      path: "/a-deviceuser/:userUuid",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/device/index.vue"),
           beforeEnter: (to, from, next) => {
             checkAdminLogin(next);
           },

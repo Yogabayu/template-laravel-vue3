@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') {
       <div class="d-flex h-100 align-center">
         <!-- 👉 Vertical nav toggle in overlay mode -->
         <IconBtn v-if="!isPhone" class="ms-n3 d-lg-none" @click="toggleVerticalOverlayNavActive(true)">
-          <VIcon icon="bx-menu" />
+          <VIcon icon="bx-menu"/>
         </IconBtn>
 
         <VSpacer />

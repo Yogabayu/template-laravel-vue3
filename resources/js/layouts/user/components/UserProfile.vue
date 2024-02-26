@@ -12,7 +12,7 @@
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="photoURL" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -37,7 +37,7 @@
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="photoURL" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -95,7 +95,8 @@ export default {
   data() {
     return {
       avatar1: avatar1,
-      userData: null,
+      userData: null,      
+      photoURL: this.$userPhotoUrl + JSON.parse(localStorage.getItem("userData")).photo,
     }
   },
   methods: {

@@ -5,22 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeviceVerification extends Model
+class FileFavorite extends Model
 {
     use HasFactory;
-    protected $table = "deviceVerifications";
+    protected $table = 'filefavorites';
     protected $fillable = [
-        'id',
         'user_uuid',
-        'nameDev',
-        'deviceName',
-        'ip',
-        'verificationCode',
-        'isVerified',
+        'file_uuid'
     ];
 
-    public function author()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'file_uuid', 'uuid');
     }
 }

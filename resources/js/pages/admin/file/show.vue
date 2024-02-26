@@ -12,16 +12,6 @@
 
         <v-divider inset></v-divider>
 
-        <div class="col d-flex flex-column justify-center align-center">
-          <img
-            class="avator align-center my-2"
-            :src="fileThumbnail + detail.thumbnail"
-            :alt="detail.name"
-            style="width: 50%"
-          />
-          <!-- <span class="text-center">sa</span> -->
-        </div>
-
         <v-table>
           <tbody>
             <tr>
@@ -53,7 +43,21 @@
                 </div>
               </td>
             </tr>
-
+            <tr v-if="detail.positions">
+              <td>Jabatan</td>
+              <td>:</td>
+              <td>
+                <div class="row d-flex align-center">
+                  <v-chip-group selected-class="text-primary" column>
+                    <div v-for="(x, index) in detail.positions" :key="index">
+                      <VChip style="color: rgb(6, 84, 107)">
+                        {{ x.name }}
+                      </VChip>
+                    </div>
+                  </v-chip-group>
+                </div>
+              </td>
+            </tr>
             <tr>
               <td>File</td>
               <td>:</td>
@@ -82,7 +86,6 @@ export default {
     return {
       detail: {},
       fileId: this.$route.params.fileId,
-      fileThumbnail: this.$fileThumbnail,
       fileUser: this.$userPhotoUrl,
       filePath: this.$filePath,
     };

@@ -5,14 +5,83 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ResponseHelper;
 use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DeviceVerification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function deleteDevice($id)
+    {
+        try {
+            DB::beginTransaction();
+            $device = DeviceVerification::findOrFail($id);
+            $device->delete();
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil hapus data',
+                'data' => $device
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed Delete | Data not found'
+            ], 404);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed Delete | ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function changeDevice(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $device = DeviceVerification::findOrFail($request->id);
+
+            if ($request->has('nameDev')) {
+                $device->nameDev = $request->nameDev;
+            }
+            if ($request->has('isVerified')) {
+                $device->isVerified = $request->isVerified;
+            }
+            $device->save();
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil update data',
+                'data' => $device
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed Update | ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function userDevices($uuid)
+    {
+        try {
+            $userData = User::with('devices')->where('uuid', $uuid)->first();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $userData);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes('Failed to authenticate. | ' . $e->getMessage());
+        }
+    }
     public function userProfile()
     {
         try {

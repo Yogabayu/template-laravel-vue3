@@ -39,7 +39,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
     </VCardText>
 
     <VCardText>
-      <p class="mb-1">
+      <p class="mb-1" style="font-size: 0.9rem;">
         {{ props.title }}
       </p>
       <h5 class="text-h5 text-no-wrap mb-3">
