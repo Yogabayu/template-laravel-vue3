@@ -90,9 +90,12 @@ export default {
 
     async login() {
       try {
+        const userAgent = navigator.userAgent;
+        console.log(userAgent);
         const response = await mainURL.post("/login", {
           email: this.form.email,
           password: this.form.password,
+          device: userAgent,
         });
 
         if (response.status === 200) {
@@ -104,7 +107,6 @@ export default {
           }
 
           this.$showToast("success", "Yeay", "Selamat anda berhasil login, mengarahkan ke dashboard.....");
-          //  window.location.reload();
         } else {
           const errorMessage =
             response && response.data && response.data.message

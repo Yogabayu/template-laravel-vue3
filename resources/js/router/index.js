@@ -251,6 +251,19 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/user-category",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/category/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
   ],
 });
 

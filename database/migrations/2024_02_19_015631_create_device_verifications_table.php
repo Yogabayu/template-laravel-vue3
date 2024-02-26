@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('user_uuid');
             $table->string('deviceName');
-            $table->string('deviceType')->nullable();
+            $table->string('ip')->nullable();
             $table->string('verificationCode')->nullable();
             $table->boolean('isVerified')->default(0);
             $table->timestamps();

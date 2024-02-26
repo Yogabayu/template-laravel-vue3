@@ -63,7 +63,7 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          title: 'Posisi',
+          title: 'Jabatan',
           icon: 'bx-area',
           to: '/a-position',
         }"

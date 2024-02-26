@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DeviceVerification;
 use App\Models\User;
 use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -44,10 +46,62 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            // successfull authentication
-            $user = User::find(Auth::user()->id);
 
+            $user = User::find(Auth::user()->id);
             $user_token['token'] = $user->createToken('appToken')->accessToken;
+
+            if (!$user->isAdmin) {
+                $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
+
+                if (!$deviceUser->isEmpty()) {
+                    $deviceMatched = false;
+
+                    foreach ($deviceUser as $dv) {
+                        if ($dv->deviceName == request('device') || $dv->ip == $request->ip()) {
+                            if ($dv->isVerified == 1) {
+                                $deviceMatched = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!$deviceMatched) {
+                        $deviceDifferent = false;
+
+                        foreach ($deviceUser as $dv) {
+                            if ($dv->isVerified != 0 && ($dv->ip != $request->ip() || $dv->deviceName != request('device'))) {
+                                $deviceDifferent = true;
+                                break;
+                            }
+                        }
+
+                        if ($deviceDifferent) {
+
+                            DeviceVerification::create([
+                                'user_uuid' => auth()->user()->uuid,
+                                'deviceName' => request('device'),
+                                'ip' => $request->ip(),
+                                'isVerified' => 0,
+                            ]);
+                        }
+
+                        UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User gagal login karena device / ip terdeteksi berbeda dari yang didaftarkan');
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Failed | Device tidak memiliki akses',
+                        ], 401);
+                    }
+                } else {
+                    DeviceVerification::create([
+                        'user_uuid' => auth()->user()->uuid,
+                        'deviceName' => request('device'),
+                        'ip' => $request->ip(),
+                        'isVerified' => 1,
+                    ]);
+                }
+            }
+
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
             return response()->json([
