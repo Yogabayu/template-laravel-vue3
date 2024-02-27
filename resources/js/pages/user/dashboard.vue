@@ -98,9 +98,10 @@
             <v-card
               :title="item.file.name"
               :subtitle="item.file.author.name"
-              :text="item.file.summary.substring(0, 70) + '...'"
+              :text="item.file.summary.substring(0, 40) + '...'"
               class="mb-2"
-              @click="toLink(item.file.id)"
+              height="200px"
+              @click="toDetailFile(item.file.id)"
             ></v-card>
           </VCol>
         </v-row>
@@ -134,7 +135,8 @@
               :subtitle="'dilihat: ' + item.views_count + 'x'"
               :text="item.summary.substring(0, 70) + '...'"
               class="mb-2"
-              @click="toLink(item.id)"
+              max-height="300px"
+              @click="toDetailFile(item.id)"
             ></v-card>
           </VCol>
         </v-row>
@@ -183,8 +185,8 @@ export default {
     };
   },
   methods: {
-    toLink(id) {
-      console.log(id);
+    toDetailFile(item) {
+      this.$router.push(`/u-filedetail/${item}`);
     },
     getUserDataAndToken() {
       const savedUserData = localStorage.getItem("userData");

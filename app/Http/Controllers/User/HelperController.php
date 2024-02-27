@@ -28,7 +28,11 @@ class HelperController extends Controller
     public function totalRead()
     {
         try {
-            $total = FileView::where('user_uuid', auth()->user()->uuid)->count();
+            $total = DB::table('fileviews')
+                ->join('files', 'fileviews.file_uuid', '=', 'files.id')
+                ->where('fileviews.user_uuid', '1e9d5c33-1c69-4d93-97ce-7ded3bc07e66')
+                ->distinct()
+                ->count('files.id');
 
             return ResponseHelper::successRes('Berhasil Mendapatkan data', $total);
         } catch (\Exception $e) {

@@ -38,6 +38,24 @@ if (typeof window !== 'undefined') {
         icon: 'bx-home',
         to: '/user-dashboard',
       }" />
+      
+      <VerticalNavLink :item="{
+        title: 'Cari File',
+        icon: 'bx-file-find',
+        to:'/u-search'
+      }" />
+
+      <VerticalNavLink :item="{
+        title: 'Favorite',
+        icon: 'bx-heart',
+        to: '/u-favorite'
+      }" />
+
+      <VerticalNavLink :item="{
+        title: 'Dibaca',
+        icon: 'bx-show',
+        to: '/u-read'
+      }" />
 
     </template>
 
@@ -56,17 +74,24 @@ if (typeof window !== 'undefined') {
           <span>Home</span>
         </v-btn>
 
-        <v-btn value="kategori" :to="'/user-category'">
-          <v-icon>mdi-gear</v-icon>
+        <v-btn value="search" :to="'/u-search'">
+          <v-icon>mdi-text-box-search</v-icon>
 
-          <span>Kategori</span>
+          <span>Cari File</span>
         </v-btn>
 
-        <v-btn value="nearby">
-          <v-icon>mdi-map-marker</v-icon>
+        <v-btn value="favorite" :to="'/u-favorite'">
+          <v-icon>mdi-heart</v-icon>
 
-          <span>Nearby</span>
+          <span>Favorite</span>
         </v-btn>
+
+        <v-btn value="nearby" :to="'/u-read'">
+          <v-icon>mdi-eye-outline</v-icon>
+
+          <span>Dibaca</span>
+        </v-btn>
+
       </v-bottom-navigation>
     </template>
   </VerticalNavLayout>

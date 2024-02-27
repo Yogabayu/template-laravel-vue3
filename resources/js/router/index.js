@@ -239,12 +239,51 @@ const router = createRouter({
       ],
     },
     {
-      path: "/user-category",
+      path: "/u-filedetail/:fileId",
       component: () => import("../layouts/user/default.vue"),
       children: [
         {
           path: "",
-          component: () => import("../pages/user/category/index.vue"),
+          component: () => import("../pages/user/file/detail.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/u-favorite",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/favorites/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/u-read",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/read/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/u-search",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/search/index.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
           },

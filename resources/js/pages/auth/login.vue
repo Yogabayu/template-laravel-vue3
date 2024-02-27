@@ -91,6 +91,7 @@ export default {
     async login() {
       try {
         const userAgent = navigator.userAgent;
+        console.log(userAgent);
         const response = await mainURL.post("/login", {
           email: this.form.email,
           password: this.form.password,

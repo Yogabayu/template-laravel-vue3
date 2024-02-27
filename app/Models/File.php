@@ -24,6 +24,15 @@ class File extends Model
         return $this->belongsTo(User::class, 'author_uuid', 'uuid');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'file_uuid', 'id');
+    }
+    public function favorite()
+    {
+        return $this->hasOne(FileFav::class, 'file_uuid', 'id');
+    }
+
     // public function divisions()
     // {
     //     return $this->belongsToMany(Division::class, 'filetodivisions', 'file_uuid', 'division_uuid');

@@ -9,7 +9,10 @@ use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\FavoritePageController;
+use App\Http\Controllers\User\FileController as UserFileController;
 use App\Http\Controllers\User\HelperController as UserHelperController;
+use App\Http\Controllers\User\ReadPageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -92,9 +95,23 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             Route::get('total-read', [UserHelperController::class, 'totalRead']);
             Route::get('total-fav', [UserHelperController::class, 'totalFavorite']);
 
-            //dashboard
+            //page: dashboard
             Route::get('index', [DashboardController::class, 'index']);
             Route::get('fileFav', [DashboardController::class, 'fileFav']);
+
+            //page: file
+            Route::get('file/{id}', [UserFileController::class, 'detailFile']);
+            Route::get('commentfile/{id}', [UserFileController::class, 'getFileComment']);
+            Route::post('sendcomment', [UserFileController::class, 'sendComment']);
+            Route::delete('deletecomment/{id}', [UserFileController::class, 'deleteComment']);
+            Route::put('editcomment/{id}', [UserFileController::class, 'editComment']);
+            Route::get('setfavfile/{id}', [UserFileController::class, 'setFavFile']);
+
+            //page: favorite
+            Route::get('fav', [FavoritePageController::class, 'favFiles']);
+
+            //page: view
+            Route::get('read', [ReadPageController::class, 'getFileView']);
         });
     });
 });
