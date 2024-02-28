@@ -10,8 +10,10 @@ use App\Models\File;
 use App\Models\FileToCategory;
 use App\Models\FileToDivision;
 use App\Models\FileToPosition;
+use App\Models\FileView;
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File as FacadesFile;
 use Illuminate\Support\Str;
 
@@ -251,6 +253,51 @@ class FileController extends Controller
             return $this->successRes('File deleted successfully.', null);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to delete file. ' . $e->getMessage());
+        }
+    }
+
+    public function mostView()
+    {
+        try {
+            $most = DB::table('fileViews')
+                ->select('files.id', 'files.name', 'files.summary', 'users.name as username', 'files.path', DB::raw('COUNT(fileViews.id) AS views_count'))
+                ->join('files', 'fileViews.file_uuid', '=', 'files.id')
+                ->join('users', 'files.author_uuid', '=', 'users.uuid')
+                ->join('positions', 'users.position_id', '=', 'positions.id')
+                ->groupBy('files.id', 'files.name', 'users.name', 'files.summary', 'users.name')
+                ->orderByDesc('views_count')
+                ->take(6)
+                ->get();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $most);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function fileViewsByid($id)
+    {
+        try {
+            $userList = DB::table('fileviews')
+                ->join('users', 'fileviews.user_uuid', '=', 'users.uuid')
+                ->join('files', 'fileviews.file_uuid', '=', 'files.id')
+                ->join('positions', 'users.position_id', '=', 'positions.id')
+                ->select('users.name', 'positions.name as posname', DB::raw('COUNT(fileviews.id) AS count_views'), DB::raw('MAX(fileviews.created_at) AS latest_view'))
+                ->where('fileviews.file_uuid', $id)
+                ->groupBy('users.name', 'positions.name')
+                ->get();
+
+            $file = File::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mendapatkan data',
+                'data' => [
+                    'detailFile' => $file,
+                    'userList' => $userList,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
         }
     }
 }

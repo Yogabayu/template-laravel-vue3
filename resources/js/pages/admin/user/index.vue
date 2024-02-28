@@ -371,6 +371,19 @@
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
+            <v-tooltip location="top" text="Reset Password">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon
+                    size="20"
+                    icon="bx-reset"
+                    color="#6c42f5"
+                    @click="resetPassword(item)"
+                  />
+                </button>
+              </template>
+            </v-tooltip>
+            &nbsp;
             <v-tooltip location="top" text="Lihat Device User">
               <template v-slot:activator="{ props }">
                 <button v-bind="props">
@@ -646,6 +659,19 @@ export default defineComponent({
         this.$showToast("error", "Sorry", error.response.data.message);
       }
     },
+    async resetPassword(item: any){
+      try {
+        const response = await mainURL.get(`/reset-password/${item.uuid}`);
+
+        if (response.status === 200) {
+          this.$showToast("success", "Berhasil", response.data.message);
+        } else {
+          this.$showToast("error", "Sorry", response.data.data.message);
+        }
+      } catch (error) {
+        this.$showToast("error", "Sorry", error.response.data.message);
+      }
+    }
   },
   mounted() {
     this.getAllUser();

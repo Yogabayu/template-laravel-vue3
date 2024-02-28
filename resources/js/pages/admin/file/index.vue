@@ -238,15 +238,27 @@
         </template>
         <template #item-operation="item">
           <div class="d-flex justify-space-between">
-            <button>
-              <VIcon size="20" icon="bx-menu" color="red" @click="toDetailFile(item)" />
-            </button>
-            <button>
-              <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
-            </button>
-            <button>
-              <VIcon size="20" icon="bx-trash" color="red" @click="deleteFile(item)" />
-            </button>
+            <v-tooltip location="top" text="Lihat Detail File">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon size="20" icon="bx-file-find" color="red" @click="toDetailFile(item)" />
+                </button>
+              </template>
+            </v-tooltip>
+            <v-tooltip location="top" text="Edit File">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
+                </button>
+              </template>
+            </v-tooltip>
+            <v-tooltip location="top" text="Hapus File">
+              <template v-slot:activator="{ props }">
+                <button v-bind="props">
+                  <VIcon size="20" icon="bx-trash" color="red" @click="deleteFile(item)" />
+                </button>
+              </template>
+            </v-tooltip>
           </div>
         </template>
         <template #item-categories="item">
@@ -335,7 +347,7 @@ export default {
         if (this.dataForm.path !== null) {
           formData.append("path", this.dataForm.path);
         }
-        
+
         this.dataForm.positions = this.selectedPositions.map((item: { value: any; }) => item.value);
         if (this.dataForm.positions !== null) {
           this.dataForm.positions.forEach((position: string | Blob) => {
@@ -535,7 +547,7 @@ export default {
 
           this.positions.forEach((position: { checked: any; value: any; }) => {
             position.checked = itemPositionIds.includes(position.value);
-          });          
+          });
 
           this.selectedCategories = item.categories.map(
             (item: { id: any; name: any }) => ({

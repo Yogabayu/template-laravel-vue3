@@ -50,6 +50,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('user-device/{uuid}', [UserController::class, 'userDevices']);
         Route::post('user-device', [UserController::class, 'changeDevice']);
         Route::delete('user-device/{id}', [UserController::class, 'deleteDevice']);
+        Route::get('reset-password/{id}', [UserController::class, 'resetPassword']);
         //activity
         Route::get('useractivity', [UserActivityController::class, 'index']);
 
@@ -81,11 +82,15 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::put('file/{id}', [FileController::class, 'update'])->name('file.update');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
         Route::get('fileperposition', [FileController::class, 'filePerPosition']);
+        Route::get('mostfileviews', [FileController::class, 'mostView']);
+        Route::get('fileviewsbyid/{id}', [FileController::class, 'fileViewsByid']);
         // Route::get('fileperdivisionid/{id}', [FileController::class, 'filePerDivisionId']);
 
         //helper
         Route::get('total-file', [HelperController::class, 'totalFile']);
         Route::get('total-user', [HelperController::class, 'totalUser']);
+        Route::get('total-category', [HelperController::class, 'totalCategory']);
+        Route::get('total-position', [HelperController::class, 'totalPosition']);
 
 
 

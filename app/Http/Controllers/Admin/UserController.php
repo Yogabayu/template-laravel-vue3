@@ -15,6 +15,18 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function resetPassword($id)
+    {
+        try {
+            $user = User::where('uuid', $id)->firstOrFail();
+            $user->password = Hash::make('12345678');
+            $user->save();
+
+            return ResponseHelper::successRes('Berhasil reset password, password user sekarang: 12345678', $user);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
     public function deleteDevice($id)
     {
         try {

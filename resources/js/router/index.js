@@ -169,6 +169,32 @@ const router = createRouter({
       ],
     },
     {
+      path: "/a-popular",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/popular/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-popular-list/:fileId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/popular/listuser.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
       path: "/a-filedetail/:fileId",
       component: () => import("../layouts/admin/default.vue"),
       children: [

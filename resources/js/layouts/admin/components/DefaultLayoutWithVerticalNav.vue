@@ -89,6 +89,13 @@ const upgradeBanner = computed(() => {
           icon: 'bx-file',
         }"
       />
+      <VerticalNavLink
+        :item="{
+          to:'/a-popular',
+          title: 'File Populer',
+          icon: 'bxs-hot',
+        }"
+      />
 
       <!-- 👉 lain -->
       <VerticalNavSectionTitle
