@@ -316,6 +316,8 @@ function checkLogin(next) {
       text: "Anda perlu login terlebih dahulu",
     });
 
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userData");
     next("/login");
   }
 }
@@ -340,9 +342,11 @@ function checkAdminLogin(next) {
     Toast.fire({
       icon: "error",
       title: "Oops...",
-      text: "Unauthorized action",
+      text: "Silahkan Login ulang",
     });
-    next("/unauthorized"); // Redirect non-admin users to their dashboard
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userData");
+    next("/login"); // Redirect non-admin users to their dashboard
   }
 }
 

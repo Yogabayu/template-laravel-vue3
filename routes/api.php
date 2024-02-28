@@ -13,6 +13,7 @@ use App\Http\Controllers\User\FavoritePageController;
 use App\Http\Controllers\User\FileController as UserFileController;
 use App\Http\Controllers\User\HelperController as UserHelperController;
 use App\Http\Controllers\User\ReadPageController;
+use App\Http\Controllers\User\SearchPageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +113,10 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
 
             //page: view
             Route::get('read', [ReadPageController::class, 'getFileView']);
+
+            //page: search
+            Route::get('search', [SearchPageController::class, 'index']);
+            Route::get('category', [SearchPageController::class, 'category']);
         });
     });
 });

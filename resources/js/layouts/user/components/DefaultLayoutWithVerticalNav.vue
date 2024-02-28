@@ -52,7 +52,7 @@ if (typeof window !== 'undefined') {
       }" />
 
       <VerticalNavLink :item="{
-        title: 'Dibaca',
+        title: 'Riwayat',
         icon: 'bx-show',
         to: '/u-read'
       }" />
@@ -89,7 +89,7 @@ if (typeof window !== 'undefined') {
         <v-btn value="nearby" :to="'/u-read'">
           <v-icon>mdi-eye-outline</v-icon>
 
-          <span>Dibaca</span>
+          <span>Riwayat</span>
         </v-btn>
 
       </v-bottom-navigation>

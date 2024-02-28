@@ -8,26 +8,28 @@
       </VCardItem>
       <v-container>
         <v-row>
-          <v-col cols="12" md="6" v-if="items == null">
-            Getting Data ...<v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
+          <v-col cols="12" md="12" v-if="items == null">
+            <v-row class="text-center">
+              <v-col cols="12">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </v-col>
+              <v-col cols="12">
+                <span class="subtitle-1">Getting Data ...</span>
+              </v-col>
+            </v-row>
           </v-col>
-          <v-col
-            v-if="items != null"
-            v-for="(item, index) in items"
-            :key="index"
-            cols="12"
-            md="6"
-          >
-            <v-card
-              class="mx-auto"
-              max-width="344"
-              height="200px"
-              color="primary"
-              variant="tonal"
-            >
+          <v-col cols="12" md="6" v-if="items != null && items.length == 0">
+            <v-row class="text-center">
+              <v-col cols="12">
+                <v-icon size="64" color="grey lighten-2">mdi-folder-search-outline</v-icon>
+              </v-col>
+              <v-col cols="12">
+                <span class="subtitle-1">Tidak ada file favorite</span>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col v-if="items != null && items.length > 0" v-for="(item, index) in items" :key="index" cols="12" md="6">
+            <v-card class="mx-auto" max-width="344" height="200px" color="primary" variant="tonal">
               <v-card-item>
                 <div>
                   <div class="text-overline mb-1">
@@ -41,21 +43,11 @@
               </v-card-item>
 
               <v-card-actions class="d-flex justify-end">
-                <v-btn
-                  class="ma-2"
-                  variant="text"
-                  icon="mdi-open-in-new"
-                  color="blue-lighten-2"
-                  @click="toDetail(item.file.id)"
-                ></v-btn>
-                <v-btn
-                  class="ma-2"
-                  variant="text"
-                  icon="mdi-trash"
-                  color="blue-lighten-2"
-                  @click="favorite(item.file.id)"
-                ></v-btn>
-                
+                <v-btn class="ma-2" variant="text" icon="mdi-open-in-new" color="blue-lighten-2"
+                  @click="toDetail(item.file.id)"></v-btn>
+                <v-btn class="ma-2" variant="text" icon="mdi-trash" color="blue-lighten-2"
+                  @click="favorite(item.file.id)"></v-btn>
+
               </v-card-actions>
             </v-card>
           </v-col>
@@ -75,7 +67,7 @@ export default {
     };
   },
   methods: {
-    toDetail(id){
+    toDetail(id) {
       this.$router.push(`/u-filedetail/${id}`);
     },
     async favorite(id) {
