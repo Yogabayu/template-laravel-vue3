@@ -7,7 +7,7 @@
           Back
         </router-link>
         <VCardTitle class="text-2xl font-weight-bold">
-          Daftar File Berdasarkan Posisi
+          Daftar File Berdasarkan Posisi : {{ positionProfile.name ?? "-" }}
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">
@@ -137,7 +137,7 @@
                   <button
                     type="button"
                     class="btn btn-blue"
-                    @click="closeModal(1)"
+                    @click="closeModal()"
                   >
                     Batal
                   </button>
@@ -154,37 +154,49 @@
         :search-value="searchValue"
       >
         <template #empty-message>
-          <p>Data File Posisi Kosong</p>
+          <p>Data File Jabatan Kosong</p>
         </template>
         <template #loading>
           <p>loading data .....</p>
         </template>
-        <template #item-files="item">
+        <template #item-file.path="item">
+          <a
+            :href="filePath + item.file.path"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="cursor: pointer !important"
+          >
+            <v-chip color="primary">
+              <v-icon start icon="mdi-file"></v-icon> lihat
+            </v-chip>
+          </a>
+        </template>
+        <template #item-file.categories="item">
           <v-chip-group selected-class="text-primary" column>
-            <div v-for="(x, index) in item.files" :key="index">
-              <a
-                :href="filePath + x.path"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="cursor: pointer !important"
-              >
-                <v-chip color="primary">
-                  <v-icon start icon="mdi-file"></v-icon> {{ x.name }}
-                </v-chip>
-              </a>
+            <div v-for="(x, index) in item.file.categories" :key="index">
+              <v-chip style="color: rgb(255, 153, 0)"> {{ x.name }} </v-chip>
             </div>
           </v-chip-group>
         </template>
+        <template #item-file.created_at="item">
+          <p>{{ formatDate(item.file.created_at) }}</p>
+        </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
-            <button>
-              <VIcon
-                size="20"
-                icon="bx-menu"
-                color="red"
-                @click="toLink(item)"
-              />
-            </button>
+            <div class="d-flex justify-space-between">
+              <v-tooltip location="top" text="Lihat Detail File">
+                <template v-slot:activator="{ props }">
+                  <button v-bind="props">
+                    <VIcon
+                      size="20"
+                      icon="bx-file-find"
+                      color="red"
+                      @click="toDetailFile(item)"
+                    />
+                  </button>
+                </template>
+              </v-tooltip>
+            </div>
           </div>
         </template>
       </EasyDataTable>
@@ -206,6 +218,10 @@ export default {
   },
   data() {
     return {
+      positionId: this.$route.params.posId,
+      positionProfile: {
+        name: null,
+      },
       filePath: this.$filePath,
       rules: {
         required: (value: any) => !!value || "Required",
@@ -225,9 +241,11 @@ export default {
       categories: [],
       items: [],
       headers: [
-        { text: "Nama Posisi", value: "name", sortable: true },
-        { text: "Total File", value: "files_count", sortable: true },
-        { text: "File(s)", value: "files", sortable: true },
+        { text: "Pengunggah", value: "file.author.name", sortable: true },
+        { text: "Nama File", value: "file.name", sortable: true },
+        { text: "Kategori", value: "file.categories", sortable: true },
+        { text: "File", value: "file.path", sortable: true },
+        { text: "Tanggal Diupload", value: "file.created_at", sortable: true },
         { text: "Operation", value: "operation" },
       ],
       searchValue: "",
@@ -237,15 +255,22 @@ export default {
     };
   },
   methods: {
+    formatDate(dateString: string | number | Date) {
+      const date = new Date(dateString);
+      return date.toLocaleString("id-ID");
+    },
     toLink(item: any) {
       this.$router.push(`/a-filedetail/${item.files[0].id}`);
+    },
+    toDetailFile(item: any) {
+      this.$router.push(`/a-filedetail/${item.file.id}`);
     },
     async insertData() {
       try {
         for (let key in this.dataForm) {
           if (key !== "id") {
             if (this.dataForm[key] === null) {
-              this.closeModal(1);
+              this.closeModal();
               this.$showToast("error", "Sorry", `Properti ${key} harus diisi.`);
             }
           }
@@ -276,8 +301,8 @@ export default {
         });
 
         if (response.status === 200) {
-          this.closeModal(1);
-          this.getAllFilePerPosition();
+          this.closeModal();
+          this.getAllFilePerPosition(this.positionId);
           this.$showToast("success", "Success", response.data.message);
         } else {
           this.$showToast("error", "Sorry", response.data.message);
@@ -296,7 +321,8 @@ export default {
         positions: null,
         categories: null,
       };
-      this.selectedPositions;
+      this.selectedPositions = [];
+      this.selectedCategories =  [];
     },
     async getCategories() {
       try {
@@ -342,21 +368,7 @@ export default {
         event.target.value = null;
       }
     },
-    handleThumbnailChange(event: { target: { files: any[]; value: null } }) {
-      const selectedFile = event.target.files[0];
-      const allowedTypes = ["image/jpeg", "image/png"];
-      if (selectedFile && allowedTypes.includes(selectedFile.type)) {
-        this.dataForm.thumbnail = selectedFile;
-      } else {
-        this.$showToast(
-          "error",
-          "Error",
-          "Hanya file JPEG atau PNG yang diizinkan."
-        );
-        event.target.value = null;
-      }
-    },
-    closeModal(type: number) {
+    closeModal() {
       this.resetForm();
       this.insert = false;
     },
@@ -365,11 +377,12 @@ export default {
       this.getCategories();
       this.insert = true;
     },
-    async getAllFilePerPosition() {
+    async getAllFilePerPosition(id: any) {
       try {
-        const response = await mainURL.get("/fileperposition");
+        const response = await mainURL.get(`/fileperpositionid/${id}`);
         if (response.status === 200) {
-          this.items = response.data.data;
+          this.items = response.data.data.file;
+          this.positionProfile = response.data.data.position;
         } else {
           this.$showToast("error", "Sorry", response.data.data.message);
         }
@@ -379,7 +392,7 @@ export default {
     },
   },
   mounted() {
-    this.getAllFilePerPosition();
+    this.getAllFilePerPosition(this.positionId);
   },
 };
 </script>

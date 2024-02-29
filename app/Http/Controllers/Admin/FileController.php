@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ResponseHelper;
 use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Division;
 use App\Models\File;
@@ -45,6 +46,44 @@ class FileController extends Controller
             $datas = Position::withCount('files')->with('files')->get();
 
             return ResponseHelper::successRes('Berhasil mendapatkan data', $datas);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function filePerPositionId($id)
+    {
+        try {
+            $file = FileToPosition::with('file', 'file.author', 'file.categories', 'position')->where('position_uuid', $id)->get();
+            $position = Position::where('id', $id)->first();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mendapatkan data',
+                'data' => [
+                    'file' => $file,
+                    'position' => $position
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function filePerCategoryId($id)
+    {
+        try {
+            $file = FileToCategory::with('file', 'file.author', 'file.positions', 'category')->where('category_uuid', $id)->get();
+            $category = Category::where('id', $id)->first();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mendapatkan data',
+                'data' => [
+                    'file' => $file,
+                    'category' => $category
+                ]
+            ]);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes($e->getMessage());
         }

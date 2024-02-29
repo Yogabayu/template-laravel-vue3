@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -168,6 +167,33 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/a-perposition/:posId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/perposition/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-percategory/:catId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/file/percategory/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+
     {
       path: "/a-popular",
       component: () => import("../layouts/admin/default.vue"),

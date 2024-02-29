@@ -9,13 +9,26 @@
 
       <div class="d-flex justify-space-between mb-6">
         <div class="row">
-          <v-btn color="primary" size="small" class="my-3 mx-3" @click="openModal(1)">
+          <v-btn
+            color="primary"
+            size="small"
+            class="my-3 mx-3"
+            @click="openModal(1)"
+          >
             Tambah Data
           </v-btn>
         </div>
         <div class="d-flex align-center pe-2 w-25">
-          <v-text-field prepend-inner-icon="mdi-magnify" density="compact" label="Search" single-line flat hide-details
-            variant="solo-filled" v-model="searchValue"></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-magnify"
+            density="compact"
+            label="Search"
+            single-line
+            flat
+            hide-details
+            variant="solo-filled"
+            v-model="searchValue"
+          ></v-text-field>
         </div>
       </div>
 
@@ -26,23 +39,47 @@
             <VForm @submit.prevent="insertData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField placeholder="Nama file" label="Nama" v-model="dataForm.name" autofocus
-                    :rules="[rules.required]" prepend-icon="mdi-file" />
+                  <VTextField
+                    placeholder="Nama file"
+                    label="Nama"
+                    v-model="dataForm.name"
+                    autofocus
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
                 </VCol>
 
                 <VCol cols="12" md="12">
-                  <v-select label="Pilih Kategori" :items="categories" v-model="dataForm.categories"
-                    prepend-icon="mdi-file" :rules="[rules.required]" multiple clearable></v-select>
+                  <v-select
+                    label="Pilih Kategori"
+                    :items="categories"
+                    v-model="dataForm.categories"
+                    prepend-icon="mdi-file"
+                    :rules="[rules.required]"
+                    multiple
+                    clearable
+                  ></v-select>
                 </VCol>
 
                 <VCol cols="12" md="12">
-                  <v-textarea counter label="Deskripsi Singkat" :rules="rulesTextArea" v-model="dataForm.summary"
-                    prepend-icon="mdi-comment"></v-textarea>
+                  <v-textarea
+                    counter
+                    label="Deskripsi Singkat"
+                    :rules="rulesTextArea"
+                    v-model="dataForm.summary"
+                    prepend-icon="mdi-comment"
+                  ></v-textarea>
                 </VCol>
 
                 <VCol cols="12" md="6">
-                  <v-file-input accept="application/pdf" placeholder="Pilih File" prepend-icon="mdi-file"
-                    :rules="[rules.required]" label="File" @change="handlePathChange"></v-file-input>
+                  <v-file-input
+                    accept="application/pdf"
+                    placeholder="Pilih File"
+                    prepend-icon="mdi-file"
+                    :rules="[rules.required]"
+                    label="File"
+                    @change="handlePathChange"
+                  ></v-file-input>
                 </VCol>
                 <v-divider :thickness="5"></v-divider>
 
@@ -71,14 +108,20 @@
                 <v-row>
                   <v-col cols="6">
                     <v-card>
-                      <template v-slot:title>
-                        Pilih Jabatan :
-                      </template>
+                      <template v-slot:title> Pilih Jabatan : </template>
 
                       <template v-slot:text>
                         <v-row>
-                          <v-col v-for="(item, index) in positions" :key="index" cols="4">
-                            <v-checkbox v-model="item.checked" :label="item.title" :value="item.value"></v-checkbox>
+                          <v-col
+                            v-for="(item, index) in positions"
+                            :key="index"
+                            cols="4"
+                          >
+                            <v-checkbox
+                              v-model="item.checked"
+                              :label="item.title"
+                              :value="item.value"
+                            ></v-checkbox>
                           </v-col>
                         </v-row>
                       </template>
@@ -86,18 +129,22 @@
                   </v-col>
                   <v-col cols="6">
                     <v-card>
-                      <template v-slot:title>
-                        Jabatan yang dipilih :
-                      </template>
+                      <template v-slot:title> Jabatan yang dipilih : </template>
 
                       <template v-slot:text>
                         <v-row>
-                          <v-col v-for="(item, index) in selectedPositions" :key="index" cols="6">
+                          <v-col
+                            v-for="(item, index) in selectedPositions"
+                            :key="index"
+                            cols="6"
+                          >
                             <v-list-item>
                               <template v-slot:prepend>
                                 <v-icon icon="mdi-check"></v-icon>
                               </template>
-                              <v-list-item-title v-text="item.title"></v-list-item-title>
+                              <v-list-item-title
+                                v-text="item.title"
+                              ></v-list-item-title>
                             </v-list-item>
                           </v-col>
                         </v-row>
@@ -110,7 +157,11 @@
                 <VCol cols="12" class="d-flex flex-wrap justify-end gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button type="button" class="btn btn-blue" @click="closeModal(1)">
+                  <button
+                    type="button"
+                    class="btn btn-blue"
+                    @click="closeModal(1)"
+                  >
                     Batal
                   </button>
                 </VCol>
@@ -127,18 +178,33 @@
             <VForm @submit.prevent="updateData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField placeholder="Nama file" label="Nama" v-model="dataForm.name" autofocus
-                    :rules="[rules.required]" prepend-icon="mdi-file" />
+                  <VTextField
+                    placeholder="Nama file"
+                    label="Nama"
+                    v-model="dataForm.name"
+                    autofocus
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
                 </VCol>
 
                 <VCol cols="12" md="12">
-                  <v-select label="Pilih Categories" :items="categories" v-model="dataForm.categories"
-                    prepend-icon="mdi-file" multiple clearable></v-select>
+                  <v-select
+                    label="Pilih Categories"
+                    :items="categories"
+                    v-model="dataForm.categories"
+                    prepend-icon="mdi-file"
+                    multiple
+                    clearable
+                  ></v-select>
 
                   <div v-if="selectedCategories !== null">
                     <p>Kategori saat ini:</p>
                     <v-chip-group selected-class="text-primary" column>
-                      <div v-for="(x, index) in selectedCategories" :key="index">
+                      <div
+                        v-for="(x, index) in selectedCategories"
+                        :key="index"
+                      >
                         <v-chip> {{ x.title }} </v-chip>
                       </div>
                     </v-chip-group>
@@ -146,27 +212,44 @@
                 </VCol>
 
                 <VCol cols="12" md="12">
-                  <v-textarea counter label="Deskripsi Singkat" :rules="rulesTextArea" v-model="dataForm.summary"
-                    prepend-icon="mdi-comment"></v-textarea>
+                  <v-textarea
+                    counter
+                    label="Deskripsi Singkat"
+                    :rules="rulesTextArea"
+                    v-model="dataForm.summary"
+                    prepend-icon="mdi-comment"
+                  ></v-textarea>
                 </VCol>
 
                 <VCol cols="12" md="6">
-                  <v-file-input accept="application/pdf" placeholder="Pilih File" prepend-icon="mdi-file"
-                    :rules="[rules.required]" label="File" @change="handlePathChange"></v-file-input>
+                  <v-file-input
+                    accept="application/pdf"
+                    placeholder="Pilih File"
+                    prepend-icon="mdi-file"
+                    :rules="[rules.required]"
+                    label="File"
+                    @change="handlePathChange"
+                  ></v-file-input>
                 </VCol>
                 <v-divider :thickness="5"></v-divider>
 
                 <v-row>
                   <v-col cols="6">
                     <v-card>
-                      <template v-slot:title>
-                        Pilih Jabatan :
-                      </template>
+                      <template v-slot:title> Pilih Jabatan : </template>
 
                       <template v-slot:text>
                         <v-row>
-                          <v-col v-for="(item, index) in positions" :key="index" cols="4">
-                            <v-checkbox v-model="item.checked" :label="item.title" :value="item.value"></v-checkbox>
+                          <v-col
+                            v-for="(item, index) in positions"
+                            :key="index"
+                            cols="4"
+                          >
+                            <v-checkbox
+                              v-model="item.checked"
+                              :label="item.title"
+                              :value="item.value"
+                            ></v-checkbox>
                           </v-col>
                         </v-row>
                       </template>
@@ -174,18 +257,22 @@
                   </v-col>
                   <v-col cols="6">
                     <v-card>
-                      <template v-slot:title>
-                        Jabatan yang dipilih :
-                      </template>
+                      <template v-slot:title> Jabatan yang dipilih : </template>
 
                       <template v-slot:text>
                         <v-row>
-                          <v-col v-for="(item, index) in selectedPositions" :key="index" cols="6">
+                          <v-col
+                            v-for="(item, index) in selectedPositions"
+                            :key="index"
+                            cols="6"
+                          >
                             <v-list-item>
                               <template v-slot:prepend>
                                 <v-icon icon="mdi-check"></v-icon>
                               </template>
-                              <v-list-item-title v-text="item.title"></v-list-item-title>
+                              <v-list-item-title
+                                v-text="item.title"
+                              ></v-list-item-title>
                             </v-list-item>
                           </v-col>
                         </v-row>
@@ -197,7 +284,11 @@
                 <VCol cols="12" class="d-flex flex-wrap justify-end gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button type="button" class="btn btn-blue" @click="closeModal(2)">
+                  <button
+                    type="button"
+                    class="btn btn-blue"
+                    @click="closeModal(2)"
+                  >
                     Batal
                   </button>
                 </VCol>
@@ -207,7 +298,12 @@
         </v-card>
       </v-dialog>
 
-      <EasyDataTable show-index :headers="headers" :items="items" :search-value="searchValue">
+      <EasyDataTable
+        show-index
+        :headers="headers"
+        :items="items"
+        :search-value="searchValue"
+      >
         <template #empty-message>
           <p>Data file Kosong</p>
         </template>
@@ -217,7 +313,7 @@
         <template #item-positions="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.positions" :key="index">
-              <VChip style="color: rgb(6, 84, 107)">
+              <VChip style="color: rgb(6, 84, 107)" @click="toPositionId(x.id)">
                 {{ x.name }}
               </VChip>
             </div>
@@ -227,7 +323,12 @@
           <p>{{ formatDate(item.created_at) }}</p>
         </template>
         <template #item-path="item">
-          <a :href="filePath + item.path" target="_blank" rel="noopener noreferrer" style="cursor: pointer !important">
+          <a
+            :href="filePath + item.path"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="cursor: pointer !important"
+          >
             <v-chip color="primary">
               <v-icon start icon="mdi-file"></v-icon> lihat
             </v-chip>
@@ -238,21 +339,36 @@
             <v-tooltip location="top" text="Lihat Detail File">
               <template v-slot:activator="{ props }">
                 <button v-bind="props">
-                  <VIcon size="20" icon="bx-file-find" color="red" @click="toDetailFile(item)" />
+                  <VIcon
+                    size="20"
+                    icon="bx-file-find"
+                    color="red"
+                    @click="toDetailFile(item)"
+                  />
                 </button>
               </template>
             </v-tooltip>
             <v-tooltip location="top" text="Edit File">
               <template v-slot:activator="{ props }">
                 <button v-bind="props">
-                  <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
+                  <VIcon
+                    size="20"
+                    icon="bx-edit"
+                    color="blue"
+                    @click="openModal(2, item)"
+                  />
                 </button>
               </template>
             </v-tooltip>
             <v-tooltip location="top" text="Hapus File">
               <template v-slot:activator="{ props }">
                 <button v-bind="props">
-                  <VIcon size="20" icon="bx-trash" color="red" @click="deleteFile(item)" />
+                  <VIcon
+                    size="20"
+                    icon="bx-trash"
+                    color="red"
+                    @click="deleteFile(item)"
+                  />
                 </button>
               </template>
             </v-tooltip>
@@ -261,7 +377,12 @@
         <template #item-categories="item">
           <v-chip-group selected-class="text-primary" column>
             <div v-for="(x, index) in item.categories" :key="index">
-              <v-chip style="color: rgb(255, 153, 0)"> {{ x.name }} </v-chip>
+              <v-chip
+                style="color: rgb(255, 153, 0)"
+                @click="toCategoryId(x.id)"
+              >
+                {{ x.name }}
+              </v-chip>
             </div>
           </v-chip-group>
         </template>
@@ -277,7 +398,7 @@ export default {
     positions: {
       handler(newVal) {
         this.selectedPositions = newVal
-          .filter((item: { checked: any; }) => item.checked)
+          .filter((item: { checked: any }) => item.checked)
           .map(({ title, value }) => ({ title, value }));
       },
       deep: true,
@@ -328,6 +449,12 @@ export default {
     };
   },
   methods: {
+    toCategoryId(id: any) {
+      this.$router.push(`/a-percategory/${id}`);
+    },
+    toPositionId(id: any) {
+      this.$router.push(`/a-perposition/${id}`);
+    },
     toDetailFile(item: any) {
       this.$router.push(`/a-filedetail/${item.id}`);
     },
@@ -345,7 +472,9 @@ export default {
           formData.append("path", this.dataForm.path);
         }
 
-        this.dataForm.positions = this.selectedPositions.map((item: { value: any; }) => item.value);
+        this.dataForm.positions = this.selectedPositions.map(
+          (item: { value: any }) => item.value
+        );
         if (this.dataForm.positions !== null) {
           this.dataForm.positions.forEach((position: string | Blob) => {
             formData.append("positions[]", position);
@@ -419,7 +548,9 @@ export default {
             formData.append(key, this.dataForm[key]);
           }
         }
-        this.dataForm.positions = this.selectedPositions.map((item: { value: any; }) => item.value);
+        this.dataForm.positions = this.selectedPositions.map(
+          (item: { value: any }) => item.value
+        );
 
         this.dataForm.positions.forEach((position: string | Blob) => {
           formData.append("positions[]", position);
@@ -485,7 +616,6 @@ export default {
               checked: false,
             })
           );
-
         } else {
           this.$showToast("error", "Sorry", "error get data position");
         }
@@ -540,9 +670,11 @@ export default {
           this.dataForm.id = item.id;
           this.dataForm.name = item.name;
           this.dataForm.summary = item.summary;
-          const itemPositionIds = item.positions.map((pos: { id: any; }) => pos.id);
+          const itemPositionIds = item.positions.map(
+            (pos: { id: any }) => pos.id
+          );
 
-          this.positions.forEach((position: { checked: any; value: any; }) => {
+          this.positions.forEach((position: { checked: any; value: any }) => {
             position.checked = itemPositionIds.includes(position.value);
           });
 

@@ -3,7 +3,7 @@
     <VCard class="auth-card pa-4 pt-5">
       <VCardItem class="align-left">
         <VCardTitle class="text-2xl font-weight-bold">
-          Daftar Posisi
+          Daftar Jabatan
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">

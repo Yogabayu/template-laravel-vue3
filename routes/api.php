@@ -88,6 +88,8 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('fileviewsbyid/{id}', [FileController::class, 'fileViewsByid']);
         Route::get('fileviewbyuser/{id}', [FileController::class, 'historyFilePerUser']);
         Route::post('listhistoryfilebyuser', [FileController::class, 'getHistoryAccessUser']);
+        Route::get('fileperpositionid/{id}', [FileController::class, 'filePerPositionId']);
+        Route::get('filepercategoryid/{id}', [FileController::class, 'filePerCategoryId']);
         //->comment
         Route::get('comment/{id}', [FileController::class, 'getFileComment']);
         Route::post('comment', [FileController::class, 'sendComment']);
