@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\FileFavorite;
 use App\Models\FileToPosition;
@@ -14,6 +15,7 @@ class DashboardController extends Controller
     public function index()
     {
         try {
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Mengakses user dashboard');
             $random = FileToPosition::with('file', 'file.author')
                 ->where('position_uuid', auth()->user()->position_id)
                 ->inRandomOrder()

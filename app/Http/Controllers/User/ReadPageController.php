@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\FileView;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ class ReadPageController extends Controller
                 ->where('users.uuid', auth()->user()->uuid)
                 ->orderByDesc('fileViews.created_at')
                 ->get();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User melihat file terbaca');
 
             return ResponseHelper::successRes('berhasil mendapatkan data', $files);
         } catch (\Exception $e) {

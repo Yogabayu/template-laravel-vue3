@@ -23,6 +23,6 @@ class FileView extends Model
 
     public function file()
     {
-        return $this->belongsTo(File::class, 'file_uuid', 'uuid');
+        return $this->belongsTo(File::class, 'file_uuid', 'id');
     }
 }

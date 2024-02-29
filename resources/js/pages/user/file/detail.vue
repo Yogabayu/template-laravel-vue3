@@ -298,6 +298,7 @@ export default {
         id: null,
         file_uuid: this.$route.params.fileId,
         desc: null,
+        descupdate: null,
       };
     },
     getUserData() {

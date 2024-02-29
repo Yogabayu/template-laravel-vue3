@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\FileToPosition;
@@ -30,6 +31,8 @@ class SearchPageController extends Controller
             }
 
             $files = $query->get();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User mencari file berdasarkan parameter');
 
             return ResponseHelper::successRes('berhasil mendapatkan data', $files);
         } catch (\Exception $e) {

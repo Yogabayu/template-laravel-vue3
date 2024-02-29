@@ -15,6 +15,7 @@ use App\Http\Controllers\User\FileController as UserFileController;
 use App\Http\Controllers\User\HelperController as UserHelperController;
 use App\Http\Controllers\User\ReadPageController;
 use App\Http\Controllers\User\SearchPageController;
+use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,7 +86,13 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('fileperposition', [FileController::class, 'filePerPosition']);
         Route::get('mostfileviews', [FileController::class, 'mostView']);
         Route::get('fileviewsbyid/{id}', [FileController::class, 'fileViewsByid']);
-        // Route::get('fileperdivisionid/{id}', [FileController::class, 'filePerDivisionId']);
+        Route::get('fileviewbyuser/{id}', [FileController::class, 'historyFilePerUser']);
+        Route::post('listhistoryfilebyuser', [FileController::class, 'getHistoryAccessUser']);
+        //->comment
+        Route::get('comment/{id}', [FileController::class, 'getFileComment']);
+        Route::post('comment', [FileController::class, 'sendComment']);
+        Route::delete('comment/{id}', [FileController::class, 'deleteComment']);
+        Route::put('comment/{id}', [FileController::class, 'editComment']);
 
         //helper
         Route::get('total-file', [HelperController::class, 'totalFile']);

@@ -96,6 +96,13 @@ const upgradeBanner = computed(() => {
           icon: 'bxs-hot',
         }"
       />
+      <VerticalNavLink
+        :item="{
+          title: 'Riwayat Akses User',
+          icon: 'bx-history',
+          to:'/a-filehistory'
+        }"
+      />
 
       <!-- 👉 lain -->
       <VerticalNavSectionTitle

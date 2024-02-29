@@ -12,9 +12,6 @@
           <v-btn color="primary" size="small" class="my-3 mx-3" @click="openModal(1)">
             Tambah Data
           </v-btn>
-          <v-btn color="primary" size="small" class="my-3 mx-3" @click="toLink('a-filecategory')">
-            Filter: Kategori
-          </v-btn>
         </div>
         <div class="d-flex align-center pe-2 w-25">
           <v-text-field prepend-inner-icon="mdi-magnify" density="compact" label="Search" single-line flat hide-details

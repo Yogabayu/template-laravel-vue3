@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ResponseHelper;
 use App\Helpers\UserActivityHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Division;
 use App\Models\File;
 use App\Models\FileToCategory;
@@ -12,6 +13,7 @@ use App\Models\FileToDivision;
 use App\Models\FileToPosition;
 use App\Models\FileView;
 use App\Models\Position;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File as FacadesFile;
@@ -296,6 +298,115 @@ class FileController extends Controller
                     'userList' => $userList,
                 ]
             ]);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function historyFilePerUser($id)
+    {
+        try {
+            $fileList = DB::table('fileviews')
+                ->join('users', 'fileviews.user_uuid', '=', 'users.uuid')
+                ->join('files', 'fileviews.file_uuid', '=', 'files.id')
+                ->join('positions', 'users.position_id', '=', 'positions.id')
+                ->select('files.id', 'files.name', 'files.path', 'files.summary', 'users.name as username', DB::raw('MAX(fileviews.created_at) AS latest_view'))
+                ->where('fileviews.user_uuid', $id)
+                ->groupBy('files.id', 'files.name', 'files.path', 'files.summary', 'users.name')
+                ->get();
+
+            $user = User::where('uuid', $id)->first();
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mendapatkan data',
+                'data' => [
+                    'fileList' => $fileList,
+                    'detailUser' => $user,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return $this->errorRes('Failed to retrieve files. ' . $e->getMessage());
+        }
+    }
+
+    public function getHistoryAccessUser(Request $request)
+    {
+        try {
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Melihat histori akses user');
+            $history = FileView::with('user', 'file')
+                ->where('user_uuid', $request->uuid)
+                ->where('file_uuid', $request->fileid)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $history);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function getFileComment($id)
+    {
+        try {
+            $comment = Comment::with('user', 'user.position')->where('file_uuid', $id)->orderBy('created_at', 'desc')->get();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $comment);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function sendComment(Request $request)
+    {
+        try {
+            $request->validate([
+                'file_uuid' => 'required',
+                'desc' => 'required',
+            ], [
+                'file_uuid.required' => 'File UUID is required.',
+                'desc.required' => 'Description is required.',
+            ]);
+
+            $comment = Comment::create([
+                'uuid' => Str::uuid(),
+                'user_uuid' => auth()->user()->uuid,
+                'file_uuid' => $request->file_uuid,
+                'desc'      => $request->desc,
+            ]);
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Admin mengirim komentar pada file ' . $request->file_uuid);
+
+            return ResponseHelper::successRes('Berhasil menambahkan komentar', $comment);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function deleteComment($id)
+    {
+        try {
+            $comment = Comment::findOrFail($id);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Admin menghapus komentar pada file ' . $comment->file_uuid);
+            $comment->delete();
+            return ResponseHelper::successRes('Berhasil menghapus komentar', $comment);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function editComment(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'desc' => 'required'
+            ]);
+
+            $comment = Comment::findOrFail($id);
+            $comment->desc = $request->desc;
+            $comment->save();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Admin mengedit komentar pada file ' . $comment->file_uuid);
+
+            return ResponseHelper::successRes('Komentar berhasil diperbarui', $comment);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes($e->getMessage());
         }
