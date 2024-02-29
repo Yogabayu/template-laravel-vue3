@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\HelperController;
@@ -92,6 +93,11 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('total-category', [HelperController::class, 'totalCategory']);
         Route::get('total-position', [HelperController::class, 'totalPosition']);
 
+        //device
+        Route::get('devices', [DeviceController::class, 'index']);
+        Route::get('devices/{id}', [DeviceController::class, 'deviceUser']);
+        Route::put('updatedevices/{id}', [DeviceController::class, 'updateDevice']);
+        Route::delete('deletedevices/{id}', [DeviceController::class, 'deleteDevice']);
 
 
         //////// Route User \\\\\\\\\

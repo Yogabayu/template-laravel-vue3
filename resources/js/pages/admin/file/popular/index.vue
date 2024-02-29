@@ -6,8 +6,31 @@
           Daftar File Populer
         </VCardTitle>
       </VCardItem>
+      <div class="d-flex justify-end mb-6">
+        <!-- <v-btn color="primary" size="small" class="my-3 mx-3" @click="openModal(1)">
+            Tambah Data
+          </v-btn> -->
 
-      <EasyDataTable show-index :headers="headers" :items="items" >
+        <div class="d-flex align-center pe-2 w-25">
+          <v-text-field
+            prepend-inner-icon="mdi-magnify"
+            density="compact"
+            label="Search"
+            single-line
+            flat
+            hide-details
+            variant="solo-filled"
+            v-model="searchValue"
+          ></v-text-field>
+        </div>
+      </div>
+
+      <EasyDataTable
+        show-index
+        :headers="headers"
+        :items="items"
+        :search-value="searchValue"
+      >
         <template #empty-message>
           <p>Data file Kosong</p>
         </template>
@@ -24,7 +47,12 @@
           </v-chip-group>
         </template>
         <template #item-path="item">
-          <a :href="filePath + item.path" target="_blank" rel="noopener noreferrer" style="cursor: pointer !important">
+          <a
+            :href="filePath + item.path"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="cursor: pointer !important"
+          >
             <v-chip color="primary">
               <v-icon start icon="mdi-file"></v-icon> lihat
             </v-chip>
@@ -35,7 +63,7 @@
             <v-tooltip location="top" text="Lihat Detail user akses">
               <template v-slot:activator="{ props }">
                 <button v-bind="props" @click="toDetail(item.id)">
-                  <VIcon size="20" icon="bx-file-find" color="red"  />
+                  <VIcon size="20" icon="bx-file-find" color="red" />
                 </button>
               </template>
             </v-tooltip>
@@ -59,6 +87,7 @@ import mainURL from "@/axios";
 export default {
   data() {
     return {
+      searchValue: "",
       filePath: this.$filePath,
       items: [],
       headers: [
@@ -71,7 +100,7 @@ export default {
     };
   },
   methods: {
-    toDetail(id: any){
+    toDetail(id: any) {
       this.$router.push(`/a-popular-list/${id}`);
     },
     async getMostView() {

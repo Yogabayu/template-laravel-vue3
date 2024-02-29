@@ -105,6 +105,13 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
+          to:'/a-devices',
+          title: 'Perangkat User',
+          icon: 'bx-devices',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
           to:'/a-useractivity',
           title: 'Activitas User',
           icon: 'bx-user',

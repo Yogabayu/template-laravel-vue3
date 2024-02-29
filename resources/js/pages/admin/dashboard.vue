@@ -60,13 +60,13 @@
 
                   <v-list-item-title> refresh</v-list-item-title>
                 </v-list-item>
-                <!-- <v-list-item color="primary">
+                <v-list-item color="primary" @click="toLink('a-popular')">
                   <template v-slot:prepend>
                     <v-icon icon="mdi-details"></v-icon>
                   </template>
 
                   <v-list-item-title> detail</v-list-item-title>
-                </v-list-item> -->
+                </v-list-item>
               </v-list>
             </v-menu>
           </div>
@@ -153,6 +153,9 @@ export default {
     };
   },
   methods: {
+    toLink(link) {
+      this.$router.push(`/${link}`);
+    },
     getUserDataAndToken() {
       const savedUserData = localStorage.getItem("userData");
       const savedUserToken = localStorage.getItem("userToken");

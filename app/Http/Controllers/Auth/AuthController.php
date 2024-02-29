@@ -56,7 +56,6 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            // if (!$user->isAdmin) {
             $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
 
             if (!$deviceUser->isEmpty()) {
@@ -75,14 +74,13 @@ class AuthController extends Controller
                     $deviceDifferent = false;
 
                     foreach ($deviceUser as $dv) {
-                        if ($dv->isVerified != 0 && ($dv->ip != $request->ip() || $dv->deviceName != request('device'))) {
+                        if ($dv->isVerified != 0 && ($dv->ip != $request->ip() && $dv->deviceName != request('device'))) {
                             $deviceDifferent = true;
                             break;
                         }
                     }
 
                     if ($deviceDifferent) {
-
                         DeviceVerification::create([
                             'user_uuid' => auth()->user()->uuid,
                             'deviceName' => request('device'),
@@ -106,15 +104,6 @@ class AuthController extends Controller
                     'isVerified' => 1,
                 ]);
             }
-            // }
-            // if ($user->isAdmin) {
-            //     DeviceVerification::create([
-            //         'user_uuid' => auth()->user()->uuid,
-            //         'deviceName' => request('device'),
-            //         'ip' => $request->ip(),
-            //         'isVerified' => 1,
-            //     ]);
-            // }
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
