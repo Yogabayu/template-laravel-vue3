@@ -37,7 +37,12 @@
       <div class="iframeContainer">
         <div v-if="userData && userData.canDownload">
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
-          <embed class="responsive-iframe" :src="filePath + detail.path" />
+          <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
+            <!-- Jika browser tidak mendukung tag <object> -->
+            <p>Browser Anda tidak mendukung tampilan dokumen PDF. Anda dapat <a
+                :href="filePath + detail.path">mengunduh</a> dokumen ini.</p>
+          </object>
+
 
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}" frameborder="0"
             allowfullscreen></iframe> -->
@@ -49,7 +54,11 @@
         <div v-else>
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
-          <embed class="responsive-iframe" :src="filePath + detail.path+ '#toolbar=0'" />
+          <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
+            <!-- Jika browser tidak mendukung tag <object> -->
+            <p>Browser Anda tidak mendukung tampilan dokumen PDF. </p>
+          </object>
+
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
             allowfullscreen></iframe> -->
           <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
