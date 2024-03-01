@@ -37,12 +37,12 @@
       <div class="iframeContainer">
         <div v-if="userData && userData.canDownload">
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
-          <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
-            <!-- Jika browser tidak mendukung tag <object> -->
+          <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
             <p>Browser Anda tidak mendukung tampilan dokumen PDF. Anda dapat <a
                 :href="filePath + detail.path">mengunduh</a> dokumen ini.</p>
-          </object>
-
+          </object> -->
+          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe>  -->
+          <iframe title="PDF" width="100%" :src="`/pdfjs-3.4.120-dist/web/viewer.html?file=${filePath + detail.path}`"></iframe>
 
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}" frameborder="0"
             allowfullscreen></iframe> -->
@@ -54,10 +54,12 @@
         <div v-else>
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
-          <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
-            <!-- Jika browser tidak mendukung tag <object> -->
+
+          <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
             <p>Browser Anda tidak mendukung tampilan dokumen PDF. </p>
-          </object>
+          </object> -->
+
+          <iframe title="PDF" width="100%" :src="`/pdfjs-3.4.120-dist/web/viewer.html?file=${filePath + detail.path}`"></iframe>
 
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
             allowfullscreen></iframe> -->
