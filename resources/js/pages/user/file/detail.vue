@@ -35,11 +35,27 @@
     <v-card-text>
       <div class="iframeContainer">
         <div v-if="userData && userData.canDownload">
-          <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe>
+          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
+
+          <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}" frameborder="0"
+            allowfullscreen></iframe> -->
+          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}" frameborder="0"
+            allowfullscreen></iframe>
+
+          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf" frameborder="0" allowfullscreen></iframe> -->
         </div>
         <div v-else>
-          <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
+          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
+            allowfullscreen></iframe> -->
+
+          <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
+            allowfullscreen></iframe> -->
+          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
             allowfullscreen></iframe>
+
+
+          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf#toolbar=0'" frameborder="0"
+            allowfullscreen></iframe> -->
         </div>
       </div>
 
@@ -319,6 +335,7 @@ export default {
   width: 100%;
   overflow: hidden;
   padding-top: 100%;
+  height: auto;
   /* 3:2 Aspect Ratio */
 }
 

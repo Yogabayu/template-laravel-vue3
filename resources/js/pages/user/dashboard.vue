@@ -110,7 +110,7 @@
               :text="item.summary.substring(0, 100) + '...'"
               class="mb-2"
               height="200px"
-              @click="toDetailFile(item.file.id)"
+              @click="toDetailFile(item.id)"
             ></v-card>
           </VCol>
         </v-row>
