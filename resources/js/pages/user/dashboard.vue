@@ -59,11 +59,13 @@
               color="primary"
             ></v-progress-circular>
           </v-col>
+        </v-row>
+        <v-row>
           <VCol
             v-if="fileRandom != null"
             v-for="(item, index) in fileRandom"
             :key="index"
-            cols="6"
+            cols="12"
             md="6"
           >
             <v-card
