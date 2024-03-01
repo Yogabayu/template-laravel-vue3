@@ -43,7 +43,7 @@ export default {
         })
         .catch(error => {
           // Jika terjadi kesalahan dalam permintaan, tampilkan pesan error
-          console.error('Error during logout:', error);
+          // console.error('Error during logout:', error);
           Swal.fire({
             icon: 'error',
             title: 'Oops...',

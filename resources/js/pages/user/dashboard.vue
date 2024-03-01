@@ -3,38 +3,6 @@
     <VCol cols="12" md="12">
       <AnalyticsCongratulations />
     </VCol>
-
-    <!-- <VCol cols="12" sm="4">
-      <VRow>
-        <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Tersedia',
-              image: docs,
-              stats: `${tFile}`,
-            }"
-          />
-        </VCol>
-        <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Dibaca',
-              image: openFile,
-              stats: `${tUser}`,
-            }"
-          />
-        </VCol>
-        <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Favorite',
-              image: fileFavorite,
-              stats: `${tUser}`,
-            }"
-          />
-        </VCol>
-      </VRow>
-    </VCol> -->
     <v-container>
       <v-row>
         <VCol cols="4" md="6">
@@ -43,6 +11,7 @@
               title: 'File Tersedia',
               image: docs,
               stats: `${tFile}`,
+              link: '/u-search'
             }"
           />
         </VCol>
@@ -52,6 +21,7 @@
               title: 'File Dibaca',
               image: openFile,
               stats: `${tRead}`,
+              link: '/u-read'
             }"
           />
         </VCol>
@@ -61,6 +31,7 @@
               title: 'File Favorite',
               image: fileFavorite,
               stats: `${tFav}`,
+              link: '/u-favorite'
             }"
           />
         </VCol>
@@ -107,10 +78,11 @@
         </v-row>
       </v-container>
     </div>
-    <div>
+
+    <div class="mt-2">
       <div>
         <v-btn class="ma-2" color="primary" variant="outlined">
-          Popular
+          File Popular
           <v-icon end icon="mdi-fire" color="purple-darken-2"></v-icon>
         </v-btn>
       </div>
@@ -123,20 +95,22 @@
               color="primary"
             ></v-progress-circular>
           </v-col>
+        </v-row>
+        <v-row>
           <VCol
             v-if="fileFav != null"
             v-for="(item, index) in fileFav"
             :key="index"
-            cols="6"
+            cols="12"
             md="6"
           >
             <v-card
-              :title="item.name"
+              :title="item.name"              
               :subtitle="'dilihat: ' + item.views_count + 'x'"
-              :text="item.summary.substring(0, 70) + '...'"
+              :text="item.summary.substring(0, 100) + '...'"
               class="mb-2"
-              max-height="300px"
-              @click="toDetailFile(item.id)"
+              height="200px"
+              @click="toDetailFile(item.file.id)"
             ></v-card>
           </VCol>
         </v-row>

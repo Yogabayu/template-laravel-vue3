@@ -78,7 +78,7 @@
       <div class="mt-3">
         <v-card class="mx-auto">
           <v-card-title> Komentar </v-card-title>
-          <v-card-title>
+          <v-card-title v-if="userData && userData.canComment == 1">
             <VForm @submit.prevent="insertData">
               <v-row align="center" justify="center">
                 <VCol md="10" cols="10">
@@ -305,6 +305,7 @@ export default {
       const userDataString = localStorage.getItem("userData");
       if (userDataString) {
         this.userData = JSON.parse(userDataString);
+        console.log(this.userData);
       }
     },
     goBack() {

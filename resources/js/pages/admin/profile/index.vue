@@ -9,19 +9,33 @@
       <!-- 👉 Form -->
 
       <div class="profile-container">
-        <img class="profile-image" :src="displayPhoto" alt="User Profile Photo" />
+        <img
+          class="profile-image"
+          :src="displayPhoto"
+          alt="User Profile Photo"
+        />
       </div>
 
       <VForm class="mt-6" @submit.prevent="updateUserProfile">
         <VRow>
           <!-- 👉 First Name -->
           <VCol md="6" cols="12">
-            <VTextField placeholder="John" label="Nama" v-model="dataForm.name" autofocus />
+            <VTextField
+              placeholder="John"
+              label="Nama"
+              v-model="dataForm.name"
+              autofocus
+            />
           </VCol>
 
           <!-- 👉 Email -->
           <VCol cols="12" md="6">
-            <VTextField label="E-mail" placeholder="johndoe@gmail.com" type="email" v-model="dataForm.email" />
+            <VTextField
+              label="E-mail"
+              placeholder="johndoe@gmail.com"
+              type="email"
+              v-model="dataForm.email"
+            />
           </VCol>
 
           <!-- 👉 NIK -->
@@ -31,16 +45,25 @@
 
           <!-- 👉 Address -->
           <VCol cols="12" md="6">
-            <VTextField v-model="dataForm.password" label="Password" placeholder="············"
+            <VTextField
+              v-model="dataForm.password"
+              label="Password"
+              placeholder="············"
               :type="isPasswordVisible ? 'text' : 'password'"
               :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
-              @click:append-inner="isPasswordVisible = !isPasswordVisible" />
+              @click:append-inner="isPasswordVisible = !isPasswordVisible"
+            />
           </VCol>
 
           <!-- 👉 NIK -->
           <VCol cols="12" md="6">
-            <v-file-input accept="image/png, image/jpeg, image/bmp" placeholder="Pick an photo" prepend-icon="mdi-camera"
-              label="Photo" @change="handlePhotoChange"></v-file-input>
+            <v-file-input
+              accept="image/png, image/jpeg, image/bmp"
+              placeholder="Pick an photo"
+              prepend-icon="mdi-camera"
+              label="Photo"
+              @change="handlePhotoChange"
+            ></v-file-input>
           </VCol>
 
           <!-- 👉 Form Actions -->
@@ -57,7 +80,6 @@
 
 <script>
 import mainURL from "@/axios";
-import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -116,7 +138,10 @@ export default {
         if (response.status === 200) {
           if (this.dataForm.password == null) {
             this.getUserProfile();
-            localStorage.setItem("userData", JSON.stringify(response.data.data));
+            localStorage.setItem(
+              "userData",
+              JSON.stringify(response.data.data)
+            );
             window.location.reload();
             this.$showToast("success", "Success", response.data.message);
             console.log(this.dataForm.password);
@@ -140,7 +165,6 @@ export default {
           this.dataForm.nik = response.data.data.nik;
           this.dataForm.uuid = response.data.data.uuid;
           this.displayPhoto = `http://localhost:8000/user/photo/${response.data.data.photo}`;
-
         } else {
           this.$showToast("error", "Sorry", response.data.data.message);
         }
@@ -149,39 +173,44 @@ export default {
       }
     },
     async logout() {
-      mainURL
-        .post("/logout")
-        .then((response) => {
-          localStorage.removeItem("userData");
-          localStorage.removeItem("userToken");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("userToken");
 
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          Toast.fire({
-            icon: "success",
-            title: "Yeay",
-            text: "Berhasil logout",
-          });
+      this.$showToast("succces", "Sukses", "Berhasil Logout");
+      this.$router.push("/login");
+      // mainURL
+      //   .post("/logout")
+      //   .then((response) => {
+      //     localStorage.removeItem("userData");
+      //     localStorage.removeItem("userToken");
 
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          console.error("Error during logout:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Terjadi kesalahan saat melakukan logout",
-          });
-        });
+      //     const Toast = Swal.mixin({
+      //       toast: true,
+      //       position: "top-end",
+      //       showConfirmButton: false,
+      //       timer: 3000,
+      //       timerProgressBar: true,
+      //       didOpen: (toast) => {
+      //         toast.addEventListener("mouseenter", Swal.stopTimer);
+      //         toast.addEventListener("mouseleave", Swal.resumeTimer);
+      //       },
+      //     });
+      //     Toast.fire({
+      //       icon: "success",
+      //       title: "Yeay",
+      //       text: "Berhasil logout",
+      //     });
+
+      //     this.$router.push("/login");
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error during logout:", error);
+      //     Swal.fire({
+      //       icon: "error",
+      //       title: "Oops...",
+      //       text: "Terjadi kesalahan saat melakukan logout",
+      //     });
+      //   });
     },
   },
   mounted() {

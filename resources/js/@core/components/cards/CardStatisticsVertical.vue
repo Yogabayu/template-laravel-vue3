@@ -4,6 +4,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  link: {
+    type: String,
+    required: false,
+  },
   image: {
     type: String,
     required: true,
@@ -19,6 +23,12 @@ const props = defineProps({
 })
 
 const isPositive = controlledComputed(() => props.change, () => Math.sign(props.change) === 1)
+
+const router = useRouter();
+const handleButtonClick = (link) => {
+  // this.$router.push(`${link}`);
+  router.push(link);
+};
 </script>
 
 <template>
@@ -35,6 +45,7 @@ const isPositive = controlledComputed(() => props.change, () => Math.sign(props.
       <MoreBtn
         size="x-small"
         class="me-n3 mt-n4"
+        @click="handleButtonClick(props.link)"
       />
     </VCardText>
 

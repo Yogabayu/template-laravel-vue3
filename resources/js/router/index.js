@@ -7,7 +7,8 @@ const router = createRouter({
       path: "/",
       redirect: (to) => {
         const userToken = localStorage.getItem("userToken");
-        return userToken ? "/dashboard" : "/login";
+        // return userToken ? "/dashboard" : "/login";
+        return "/login";
       },
     },
     {
@@ -19,14 +20,19 @@ const router = createRouter({
           component: () => import("../pages/auth/login.vue"),
         },
       ],
-      beforeEnter: (to, from, next) => {
-        const userToken = localStorage.getItem("userToken");
-        if (userToken) {
-          next("/dashboard");
-        } else {
-          next();
-        }
-      },
+      // beforeEnter: (to, from, next) => {
+      //   const userToken = localStorage.getItem("userToken");
+      //   if (userToken) {
+      //     if (userToken.isAdmin) {
+      //       next("/dashboard");
+            
+      //     } else {
+      //       next('/user-dashboard');
+      //     }
+      //   } else {
+      //     next();
+      //   }
+      // },
     },
     {
       path: "/register",
@@ -403,26 +409,10 @@ function checkLogin(next) {
   if (userToken) {
     next();
   } else {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer);
-        toast.addEventListener("mouseleave", Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Anda perlu login terlebih dahulu",
-    });
-
     localStorage.removeItem("userToken");
     localStorage.removeItem("userData");
+    
+    alert("You need to login to access this page.");
     next("/login");
   }
 }
@@ -433,24 +423,26 @@ function checkAdminLogin(next) {
   if (userToken && userData && userData.isAdmin) {
     next();
   } else {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer);
-        toast.addEventListener("mouseleave", Swal.resumeTimer);
-      },
-    });
-    Toast.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Silahkan Login ulang",
-    });
+    // const Toast = Swal.mixin({
+    //   toast: true,
+    //   position: "top-end",
+    //   showConfirmButton: false,
+    //   timer: 3000,
+    //   timerProgressBar: true,
+    //   didOpen: (toast) => {
+    //     toast.addEventListener("mouseenter", Swal.stopTimer);
+    //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+    //   },
+    // });
+    // Toast.fire({
+    //   icon: "error",
+    //   title: "Oops...",
+    //   text: "Silahkan Login ulang",
+    // });
     localStorage.removeItem("userToken");
     localStorage.removeItem("userData");
+    
+    alert("You need to have admin permission to access this page.");
     next("/login"); // Redirect non-admin users to their dashboard
   }
 }

@@ -132,7 +132,7 @@
                     prepend-icon="mdi-help-rhombus"
                   ></v-select>
                 </VCol>
-                <VCol cols="12" md="6">
+                <!-- <VCol cols="12" md="6">
                   <v-select
                     label="Izin Print?"
                     :items="[
@@ -142,7 +142,7 @@
                     v-model="dataForm.canPrint"
                     prepend-icon="mdi-help-rhombus"
                   ></v-select>
-                </VCol>
+                </VCol> -->
                 <VCol cols="12" md="6">
                   <v-select
                     label="Izin Comment?"
@@ -283,7 +283,7 @@
                     prepend-icon="mdi-help-rhombus"
                   ></v-select>
                 </VCol>
-                <VCol cols="12" md="6">
+                <!-- <VCol cols="12" md="6">
                   <v-select
                     label="Izin Print?"
                     :items="[
@@ -293,7 +293,7 @@
                     v-model="dataForm.canPrint"
                     prepend-icon="mdi-help-rhombus"
                   ></v-select>
-                </VCol>
+                </VCol> -->
                 <VCol cols="12" md="6">
                   <v-select
                     label="Izin Comment?"
@@ -468,7 +468,7 @@ export default defineComponent({
         isActive: 1,
         isAdmin: 0,
         canDownload: null,
-        canPrint: null,
+        canPrint: 1,
         canComment: null,
       },
       items: [],
