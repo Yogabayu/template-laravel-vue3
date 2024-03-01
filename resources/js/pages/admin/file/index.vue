@@ -510,6 +510,7 @@ export default {
       } catch (error) {
         this.closeModal(2);
         this.getAllFiles();
+        console.log(error);
         this.$showToast("error", "Sorry", "error get data division");
       }
     },
@@ -575,6 +576,7 @@ export default {
           this.$showToast("error", "Sorry", response.data.message);
         }
       } catch (error) {
+        console.log(error);        
         this.$showToast("error", "Sorry", error.response.data.message);
       }
     },
