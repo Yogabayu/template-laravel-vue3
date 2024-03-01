@@ -33,6 +33,7 @@
       </v-row>
     </v-card-subtitle>
     <v-card-text>
+      <p>https://templatevue.yogabayuap.com/file/file/{{ detail.path }}</p>
       <div class="iframeContainer">
         <div v-if="userData && userData.canDownload">
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
