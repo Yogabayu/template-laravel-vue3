@@ -305,7 +305,7 @@ class FileController extends Controller
                 ->join('files', 'fileviews.file_uuid', '=', 'files.id')
                 ->join('users', 'files.author_uuid', '=', 'users.uuid')
                 ->join('positions', 'users.position_id', '=', 'positions.id')
-                ->groupBy('files.id', 'files.name', 'users.name', 'files.summary', 'users.name')
+                ->groupBy('files.id', 'files.name', 'users.name', 'files.summary', 'users.name', 'files.path')
                 ->orderByDesc('views_count')
                 ->take(6)
                 ->get();
