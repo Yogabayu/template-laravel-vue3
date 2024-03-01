@@ -55,7 +55,6 @@ class AuthController extends Controller
                     'message' => 'Failed | Akun tidak aktif, silahkan hubungi administrator',
                 ], 401);
             }
-
             $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
 
             if (!$deviceUser->isEmpty()) {
@@ -74,7 +73,7 @@ class AuthController extends Controller
                     $deviceDifferent = false;
 
                     foreach ($deviceUser as $dv) {
-                        if ($dv->isVerified != 0 && ($dv->ip != $request->ip() && $dv->deviceName != request('device'))) {
+                        if ($dv->isVerified != 0 | ($dv->ip != $request->ip() && $dv->deviceName != request('device'))) {
                             $deviceDifferent = true;
                             break;
                         }
@@ -104,7 +103,6 @@ class AuthController extends Controller
                     'isVerified' => 1,
                 ]);
             }
-
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
             return response()->json([

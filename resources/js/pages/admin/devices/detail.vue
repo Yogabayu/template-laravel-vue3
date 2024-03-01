@@ -150,7 +150,6 @@ export default {
       this.edit = false;
     },
     openModal(item) {
-      // console.log(item);
       this.dataForm.id = item.id;
       this.dataForm.nameDev = item.nameDev;
       this.dataForm.isVerified = item.isVerified;

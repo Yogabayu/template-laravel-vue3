@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     cekForm() {
-      console.log(this.dataForm);
+      // console.log(this.dataForm);
     },
     handlePhotoChange(event) {
       const selectedFile = event.target.files[0];
@@ -145,7 +145,6 @@ export default {
             );
             window.location.reload();
             this.$showToast("success", "Success", response.data.message);
-            console.log(this.dataForm.password);
           } else {
             this.logout();
           }

@@ -14,7 +14,7 @@ class PositionSeeder extends Seeder
     public function run(): void
     {
         $positions = [
-            ['id' => Str::uuid(), 'name' => 'IT Programmer'],
+            ['id' => Str::uuid(), 'name' => 'ITP'],
             ['id' => Str::uuid(), 'name' => 'IT Support'],
             ['id' => Str::uuid(), 'name' => 'Account Officer Pusat'],
         ];
