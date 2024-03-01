@@ -94,6 +94,7 @@ export default {
       },
       displayPhoto: null,
       isPasswordVisible: false,
+      photoUrl: this.$userPhotoUrl,
     };
   },
   methods: {
@@ -164,7 +165,7 @@ export default {
           this.dataForm.email = response.data.data.email;
           this.dataForm.nik = response.data.data.nik;
           this.dataForm.uuid = response.data.data.uuid;
-          this.displayPhoto = `http://localhost:8000/user/photo/${response.data.data.photo}`;
+          this.displayPhoto = `${this.photoUrl}/${response.data.data.photo}`;
         } else {
           this.$showToast("error", "Sorry", response.data.data.message);
         }
