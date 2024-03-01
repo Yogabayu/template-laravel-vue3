@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DeviceVerification extends Model
 {
     use HasFactory;
-    protected $table = "deviceVerifications";
+    protected $table = "deviceverifications";
     protected $fillable = [
         'id',
         'user_uuid',

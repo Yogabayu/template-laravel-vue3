@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fileViews', function (Blueprint $table) {
+        Schema::create('fileviews', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_uuid');
             $table->uuid('file_uuid');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fileViews');
+        Schema::dropIfExists('fileviews');
     }
 };

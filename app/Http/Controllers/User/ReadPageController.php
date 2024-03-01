@@ -15,19 +15,19 @@ class ReadPageController extends Controller
     {
         try {
             $files = DB::table('files')
-                ->select('files.id', 'files.name', 'files.summary', 'positions.name as posname', 'fileViews.created_at')
-                ->join('fileViews', function ($join) {
-                    $join->on('files.id', '=', 'fileViews.file_uuid')
-                        ->whereRaw('fileViews.id IN (
+                ->select('files.id', 'files.name', 'files.summary', 'positions.name as posname', 'fileviews.created_at')
+                ->join('fileviews', function ($join) {
+                    $join->on('files.id', '=', 'fileviews.file_uuid')
+                        ->whereRaw('fileviews.id IN (
                         SELECT MAX(id) 
-                        FROM fileViews 
+                        FROM fileviews 
                         GROUP BY file_uuid
                      )');
                 })
-                ->join('users', 'fileViews.user_uuid', '=', 'users.uuid')
+                ->join('users', 'fileviews.user_uuid', '=', 'users.uuid')
                 ->join('positions', 'users.position_id', '=', 'positions.id')
                 ->where('users.uuid', auth()->user()->uuid)
-                ->orderByDesc('fileViews.created_at')
+                ->orderByDesc('fileviews.created_at')
                 ->get();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User melihat file terbaca');

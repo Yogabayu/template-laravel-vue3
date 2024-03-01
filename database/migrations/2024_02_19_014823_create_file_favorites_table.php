@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fileFavorites', function (Blueprint $table) {
+        Schema::create('filefavorites', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_uuid');
             $table->uuid('file_uuid');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fileFavorites');
+        Schema::dropIfExists('filefavorites');
     }
 };

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fileToPositions', function (Blueprint $table) {
+        Schema::create('filetopositions', function (Blueprint $table) {
             $table->id();
             $table->uuid('file_uuid');
             $table->uuid('position_uuid');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fileToPositions');
+        Schema::dropIfExists('filetopositions');
     }
 };

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fileVersions', function (Blueprint $table) {
+        Schema::create('fileversions', function (Blueprint $table) {
             $table->id();
             $table->uuid('file_uuid');
             $table->integer('versionNumber');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fileVersions');
+        Schema::dropIfExists('fileversions');
     }
 };

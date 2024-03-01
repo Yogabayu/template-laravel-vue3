@@ -300,9 +300,9 @@ class FileController extends Controller
     public function mostView()
     {
         try {
-            $most = DB::table('fileViews')
-                ->select('files.id', 'files.name', 'files.summary', 'users.name as username', 'files.path', DB::raw('COUNT(fileViews.id) AS views_count'))
-                ->join('files', 'fileViews.file_uuid', '=', 'files.id')
+            $most = DB::table('fileviews')
+                ->select('files.id', 'files.name', 'files.summary', 'users.name as username', 'files.path', DB::raw('COUNT(fileviews.id) AS views_count'))
+                ->join('files', 'fileviews.file_uuid', '=', 'files.id')
                 ->join('users', 'files.author_uuid', '=', 'users.uuid')
                 ->join('positions', 'users.position_id', '=', 'positions.id')
                 ->groupBy('files.id', 'files.name', 'users.name', 'files.summary', 'users.name')

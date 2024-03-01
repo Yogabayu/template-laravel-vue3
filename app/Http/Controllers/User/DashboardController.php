@@ -30,10 +30,10 @@ class DashboardController extends Controller
     public function fileFav()
     {
         try {
-            $fileViews = DB::table('fileViews')
-                ->select('files.id', 'files.name', 'files.summary', DB::raw('COUNT(fileViews.id) AS views_count'))
-                ->join('files', 'fileViews.file_uuid', '=', 'files.id')
-                ->join('users', 'fileViews.user_uuid', '=', 'users.uuid')
+            $fileViews = DB::table('fileviews')
+                ->select('files.id', 'files.name', 'files.summary', DB::raw('COUNT(fileviews.id) AS views_count'))
+                ->join('files', 'fileviews.file_uuid', '=', 'files.id')
+                ->join('users', 'fileviews.user_uuid', '=', 'users.uuid')
                 ->join('positions', 'users.position_id', '=', 'positions.id')
                 ->where('positions.id', auth()->user()->position_id)
                 ->groupBy('files.id', 'files.name', 'users.name', 'files.summary')
