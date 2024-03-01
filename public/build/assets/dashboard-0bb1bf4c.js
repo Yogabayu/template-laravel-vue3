@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as r,c as o}from"./main-fe8c19d8.js";const c={};function s(t,a){return r(),o("p",null,"masuk user")}const f=e(c,[["render",s]]);export{f as default};

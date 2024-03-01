@@ -1,1 +1,0 @@
-import{o as s,c as n,b as t,t as a}from"./main-fe8c19d8.js";const o={class:"nav-section-title"},i={class:"title-wrapper"},c=["textContent"],p={__name:"VerticalNavSectionTitle",props:{item:{type:null,required:!0}},setup(e){return(l,r)=>(s(),n("li",o,[t("div",i,[t("span",{class:"title-text",textContent:a(e.item.heading)},null,8,c)])]))}};export{p as _};
