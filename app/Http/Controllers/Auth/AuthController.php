@@ -56,7 +56,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
+            $deviceUser = DB::table('deviceVerifications')->where('user_uuid', auth()->user()->uuid)->get();
 
             if (!$deviceUser->isEmpty()) {
                 $deviceMatched = false;
