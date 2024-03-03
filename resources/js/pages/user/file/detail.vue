@@ -51,29 +51,19 @@
     <v-card-text>
       <div class="">
         <div v-if="userData && userData.canDownload">
-          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
-          <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
-            <p>Browser Anda tidak mendukung tampilan dokumen PDF. Anda dapat <a
-                :href="filePath + detail.path">mengunduh</a> dokumen ini.</p>
-          </object> -->
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
-            allowfullscreen></iframe> -->
           <vue-pdf-embed :source="pdfUrl" />
+          <div class="d-flex justify-center">
+            <v-btn
+            class="ma-2"
+            variant="text"
+            append-icon="mdi-download"
+            color="blue-lighten-2"
+            :href="pdfUrl"
+            > Download</v-btn>
+          </div>
         </div>
         <div v-else>
           <vue-pdf-embed :source="pdfUrl" />
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
-            allowfullscreen></iframe> -->
-          <!-- <PDFViewer :pdfUrl="filePath + detail.path" /> -->
-          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
-            allowfullscreen></iframe> -->
-
-          <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
-            <p>Browser Anda tidak mendukung tampilan dokumen PDF. </p>
-          </object> -->
-
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf#toolbar=0'" frameborder="0"
-            allowfullscreen></iframe> -->
         </div>
       </div>
 
