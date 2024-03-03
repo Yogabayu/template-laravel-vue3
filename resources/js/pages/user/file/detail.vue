@@ -1,6 +1,10 @@
 <template>
   <v-card class="mx-auto">
-    <v-img src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg" height="100px" cover></v-img>
+    <v-img
+      src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
+      height="100px"
+      cover
+    ></v-img>
 
     <v-card-title>
       <v-spacer />
@@ -9,10 +13,22 @@
           <h3>
             {{ detail.name ?? "-" }}
           </h3>
-          <v-btn v-if="fav == true" class="ma-2" variant="text" icon="mdi-heart" color="blue-lighten-2"
-            @click="favorite"></v-btn>
-          <v-btn v-else class="ma-2" variant="text" icon="mdi-heart-outline" color="blue-lighten-2"
-            @click="favorite"></v-btn>
+          <v-btn
+            v-if="fav == true"
+            class="ma-2"
+            variant="text"
+            icon="mdi-heart"
+            color="blue-lighten-2"
+            @click="favorite"
+          ></v-btn>
+          <v-btn
+            v-else
+            class="ma-2"
+            variant="text"
+            icon="mdi-heart-outline"
+            color="blue-lighten-2"
+            @click="favorite"
+          ></v-btn>
         </v-row>
       </div>
       <v-spacer />
@@ -33,7 +49,6 @@
       </v-row>
     </v-card-subtitle>
     <v-card-text>
-      <p>https://templatevue.yogabayuap.com/file/file/{{ detail.path }}</p>
       <div class="iframeContainer">
         <div v-if="userData && userData.canDownload">
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
@@ -42,16 +57,21 @@
                 :href="filePath + detail.path">mengunduh</a> dokumen ini.</p>
           </object> -->
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe>  -->
-          <iframe title="PDF" width="100%" :src="`/pdfjs-3.4.120-dist/web/viewer.html?file=${filePath + detail.path}`"></iframe>
 
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}" frameborder="0"
             allowfullscreen></iframe> -->
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}" frameborder="0"
-            allowfullscreen></iframe> -->
+          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
+            allowfullscreen></iframe>
 
           <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf" frameborder="0" allowfullscreen></iframe> -->
+          <!-- <PDFViewer :pdfUrl="filePath + detail.path" /> -->
+          <!-- <VuePdfEmbed annotation-layer text-layer :source="filePath + detail.path" /> -->
         </div>
         <div v-else>
+          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
+            allowfullscreen></iframe>
+          <!-- <VuePdfEmbed annotation-layer text-layer :source="filePath + detail.path" /> -->
+          <!-- <PDFViewer :pdfUrl="filePath + detail.path" /> -->
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
 
@@ -59,13 +79,11 @@
             <p>Browser Anda tidak mendukung tampilan dokumen PDF. </p>
           </object> -->
 
-          <iframe title="PDF" width="100%" :src="`/pdfjs-3.4.120-dist/web/viewer.html?file=${filePath + detail.path}`"></iframe>
 
           <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
             allowfullscreen></iframe> -->
           <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
             allowfullscreen></iframe> -->
-
 
           <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
@@ -88,10 +106,18 @@
             <VForm @submit.prevent="insertData">
               <v-row align="center" justify="center">
                 <VCol md="10" cols="10">
-                  <v-textarea bg-color="grey-lighten-2" color="cyan" v-model="dataForm.desc"></v-textarea>
+                  <v-textarea
+                    bg-color="grey-lighten-2"
+                    color="cyan"
+                    v-model="dataForm.desc"
+                  ></v-textarea>
                 </VCol>
                 <VCol md="2" cols="2">
-                  <v-btn density="compact" icon="mdi-note-plus" type="submit"></v-btn>
+                  <v-btn
+                    density="compact"
+                    icon="mdi-note-plus"
+                    type="submit"
+                  ></v-btn>
                 </VCol>
               </v-row>
             </VForm>
@@ -100,10 +126,14 @@
             <div>
               <!-- <CommentList :comments="comments" /> -->
               <div>
-                <div v-for="(comment, index) in comments" :key="index" :class="{
-                  'admin-comment': comment.user_type == 1,
-                  'user-comment': comment.user_type == 0,
-                }">
+                <div
+                  v-for="(comment, index) in comments"
+                  :key="index"
+                  :class="{
+                    'admin-comment': comment.user_type == 1,
+                    'user-comment': comment.user_type == 0,
+                  }"
+                >
                   <div class="comment-content">
                     <p>{{ comment.content }}</p>
                     <v-row class="justify-space-between mx-2 mb-2">
@@ -114,7 +144,9 @@
 
                   <v-menu transition="scale-transition">
                     <template v-slot:activator="{ props }">
-                      <v-icon v-bind="props" class="ellipsis-icon">mdi-dots-vertical</v-icon>
+                      <v-icon v-bind="props" class="ellipsis-icon"
+                        >mdi-dots-vertical</v-icon
+                      >
                     </template>
 
                     <v-list>
@@ -125,7 +157,10 @@
 
                         <v-list-item-title> edit</v-list-item-title>
                       </v-list-item>
-                      <v-list-item color="primary" @click="deleteComment(comment.id)">
+                      <v-list-item
+                        color="primary"
+                        @click="deleteComment(comment.id)"
+                      >
                         <template v-slot:prepend>
                           <v-icon icon="mdi-trash"></v-icon>
                         </template>
@@ -148,10 +183,18 @@
           <VForm @submit.prevent="updateComment">
             <v-row align="center" justify="center">
               <VCol md="10" cols="10">
-                <v-textarea bg-color="grey-lighten-2" color="cyan" v-model="dataForm.descupdate"></v-textarea>
+                <v-textarea
+                  bg-color="grey-lighten-2"
+                  color="cyan"
+                  v-model="dataForm.descupdate"
+                ></v-textarea>
               </VCol>
               <VCol md="2" cols="2">
-                <v-btn density="compact" icon="mdi-note-plus" type="submit"></v-btn>
+                <v-btn
+                  density="compact"
+                  icon="mdi-note-plus"
+                  type="submit"
+                ></v-btn>
               </VCol>
             </v-row>
           </VForm>
@@ -163,13 +206,23 @@
 
 <script>
 import mainURL from "@/axios";
+// import PDFViewer from "./component/PDFViewer.vue";
+
+// essential styles
+import 'vue-pdf-embed/dist/style/index.css';
+
+// optional styles
+import 'vue-pdf-embed/dist/style/annotationLayer.css';
+import 'vue-pdf-embed/dist/style/textLayer.css';
 
 export default {
+  // components: { PDFViewer },
   data() {
     return {
       idFile: this.$route.params.fileId,
       fileUser: this.$userPhotoUrl,
       filePath: this.$filePath,
+      pdfUrl: "",
       detail: {},
       userData: null,
       categories: null,
@@ -296,6 +349,7 @@ export default {
 
         if (response.status === 200) {
           this.detail = response.data.data;
+          this.pdfUrl = this.detail.path;
           this.categories = response.data.data.categories;
           this.fav = response.data.data.favorite ? true : false;
           this.getUserData();
