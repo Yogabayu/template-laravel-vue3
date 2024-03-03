@@ -49,28 +49,21 @@
       </v-row>
     </v-card-subtitle>
     <v-card-text>
-      <div class="iframeContainer">
+      <div class="">
         <div v-if="userData && userData.canDownload">
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe> -->
           <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
             <p>Browser Anda tidak mendukung tampilan dokumen PDF. Anda dapat <a
                 :href="filePath + detail.path">mengunduh</a> dokumen ini.</p>
           </object> -->
-          <!-- <iframe class="responsive-iframe" :src="filePath + detail.path" frameborder="0" allowfullscreen></iframe>  -->
-
-          <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}" frameborder="0"
+          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
             allowfullscreen></iframe> -->
-          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
-            allowfullscreen></iframe>
-
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf" frameborder="0" allowfullscreen></iframe> -->
-          <!-- <PDFViewer :pdfUrl="filePath + detail.path" /> -->
-          <!-- <VuePdfEmbed annotation-layer text-layer :source="filePath + detail.path" /> -->
+          <vue-pdf-embed :source="pdfUrl" />
         </div>
         <div v-else>
-          <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
-            allowfullscreen></iframe>
-          <!-- <VuePdfEmbed annotation-layer text-layer :source="filePath + detail.path" /> -->
+          <vue-pdf-embed :source="pdfUrl" />
+          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008 Proses Persetujuan Pinjaman_1709275201.pdf" frameborder="0"
+            allowfullscreen></iframe> -->
           <!-- <PDFViewer :pdfUrl="filePath + detail.path" /> -->
           <!-- <iframe class="responsive-iframe" :src="filePath + detail.path + '#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
@@ -78,12 +71,6 @@
           <!-- <object class="responsive-iframe" :data="filePath + detail.path + '#toolbar=0'" type="application/pdf">
             <p>Browser Anda tidak mendukung tampilan dokumen PDF. </p>
           </object> -->
-
-
-          <!-- <iframe class="responsive-iframe" src="http://localhost:8000/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
-            allowfullscreen></iframe> -->
-          <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/{{ detail.path }}#toolbar=0" frameborder="0"
-            allowfullscreen></iframe> -->
 
           <!-- <iframe class="responsive-iframe" src="https://templatevue.yogabayuap.com/file/file/IK.008%20Proses%20Persetujuan%20Pinjaman_1709275201.pdf#toolbar=0'" frameborder="0"
             allowfullscreen></iframe> -->
@@ -206,17 +193,12 @@
 
 <script>
 import mainURL from "@/axios";
-// import PDFViewer from "./component/PDFViewer.vue";
-
-// essential styles
-import 'vue-pdf-embed/dist/style/index.css';
-
-// optional styles
-import 'vue-pdf-embed/dist/style/annotationLayer.css';
-import 'vue-pdf-embed/dist/style/textLayer.css';
+import VuePdfEmbed from "vue-pdf-embed";
 
 export default {
-  // components: { PDFViewer },
+  components: {
+    VuePdfEmbed,
+  },
   data() {
     return {
       idFile: this.$route.params.fileId,
@@ -349,7 +331,7 @@ export default {
 
         if (response.status === 200) {
           this.detail = response.data.data;
-          this.pdfUrl = this.detail.path;
+          this.pdfUrl = this.filePath + this.detail.path;
           this.categories = response.data.data.categories;
           this.fav = response.data.data.favorite ? true : false;
           this.getUserData();

@@ -61,7 +61,7 @@ class AuthController extends Controller
                 $deviceMatched = false;
 
                 foreach ($deviceUser as $dv) {
-                    if ($dv->deviceName == request('device') && $dv->ip == $request->ip()) {
+                    if ($dv->deviceName == request('device') || $dv->ip == $request->ip()) {
                         if ($dv->isVerified == 1) {
                             $deviceMatched = true;
                             break;
@@ -73,7 +73,7 @@ class AuthController extends Controller
                     $deviceDifferent = false;
 
                     foreach ($deviceUser as $dv) {
-                        if ($dv->isVerified != 0 | ($dv->ip != $request->ip() && $dv->deviceName != request('device'))) {
+                        if ($dv->isVerified != 0 | ($dv->ip != $request->ip() || $dv->deviceName != request('device'))) {
                             $deviceDifferent = true;
                             break;
                         }

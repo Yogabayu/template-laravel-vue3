@@ -21,6 +21,7 @@ export default defineConfig({
           includeAbsolute: false,
       },
       compilerOptions: {
+        // isCustomElement: (tag) => ['vue-pdf-embed'].includes(tag),
         isCustomElement: (tag) => ['VuePdfEmbed'].includes(tag),
       }
   },
