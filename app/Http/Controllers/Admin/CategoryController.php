@@ -36,6 +36,8 @@ class CategoryController extends Controller
     {
         try {
             $categories = Category::withCount('files')->orderBy('files_count', 'desc')->get();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Melihat semua data kategory');
             return $this->successRes('Successfully retrieved categories.', $categories);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve categories. ' . $e->getMessage());
@@ -109,6 +111,8 @@ class CategoryController extends Controller
         try {
             $category = Category::findOrFail($id);
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Melihat detail kategori : ' . $category->name);
+
             return $this->successRes('Successfully get category.', $category);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to create category. ' . $e->getMessage());
@@ -139,7 +143,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->save();
 
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User updated category | ' . $category->id);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User updated category | ' . $category->name);
             return $this->successRes('Successfully updated category.', $category);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to update category. ' . $e->getMessage());

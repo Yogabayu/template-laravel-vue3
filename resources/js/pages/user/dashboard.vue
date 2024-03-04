@@ -11,7 +11,7 @@
               title: 'File Tersedia',
               image: docs,
               stats: `${tFile}`,
-              link: '/u-search'
+              link: '/u-search',
             }"
           />
         </VCol>
@@ -21,7 +21,7 @@
               title: 'File Dibaca',
               image: openFile,
               stats: `${tRead}`,
-              link: '/u-read'
+              link: '/u-read',
             }"
           />
         </VCol>
@@ -31,7 +31,7 @@
               title: 'File Favorite',
               image: fileFavorite,
               stats: `${tFav}`,
-              link: '/u-favorite'
+              link: '/u-favorite',
             }"
           />
         </VCol>
@@ -69,13 +69,26 @@
             md="6"
           >
             <v-card
-              :title="item.file.name"
-              :subtitle="item.file.author.name"
-              :text="item.file.summary.substring(0, 40) + '...'"
-              class="mb-2"
+              class="mb-2 card-style"
               height="200px"
+              hover
               @click="toDetailFile(item.file.id)"
-            ></v-card>
+            >
+              <v-img
+                src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
+                height="20px"
+                cover
+              ></v-img>
+              <v-card-title>
+                {{ item.file.name }}
+              </v-card-title>
+              <v-card-subtitle>
+                {{ item.file.author.name }}
+              </v-card-subtitle>
+              <v-card-text>
+                {{ item.file.summary.substring(0, 40) + "..." }}
+              </v-card-text>
+            </v-card>
           </VCol>
         </v-row>
       </v-container>
@@ -107,13 +120,26 @@
             md="6"
           >
             <v-card
-              :title="item.name"              
-              :subtitle="'dilihat: ' + item.views_count + 'x'"
-              :text="item.summary.substring(0, 100) + '...'"
-              class="mb-2"
+              class="mb-2 card-style"
               height="200px"
+              hover
               @click="toDetailFile(item.id)"
-            ></v-card>
+            >
+              <v-img
+                src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
+                height="20px"
+                cover
+              ></v-img>
+              <v-card-title>
+                {{ item.name }}
+              </v-card-title>
+              <v-card-subtitle>
+                dilihat: {{ item.views_count }}x
+              </v-card-subtitle>
+              <v-card-text>
+                {{ item.summary.substring(0, 100) + "..." }}
+              </v-card-text>
+            </v-card>
           </VCol>
         </v-row>
       </v-container>
@@ -278,3 +304,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card-style {
+  box-shadow: 9px 9px 9px rgba(20, 20, 20, 0.6);
+}
+</style>

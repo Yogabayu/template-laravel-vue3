@@ -419,7 +419,7 @@ export default {
       headers: [
         { text: "Pengunggah", value: "author.name", sortable: true },
         { text: "File Name", value: "name", sortable: true },
-        { text: "Posisi", value: "positions", sortable: true },
+        { text: "Jabatan", value: "positions", sortable: true },
         { text: "Kategori", value: "categories", sortable: true },
         { text: "File", value: "path", sortable: true },
         { text: "Tanggal Diupload", value: "created_at", sortable: true },

@@ -477,7 +477,7 @@ export default defineComponent({
         { text: "Photo", value: "photo", sortable: true },
         { text: "NIK", value: "nik", sortable: true },
         { text: "Email", value: "email", sortable: true },
-        { text: "Posisi", value: "position", sortable: false },
+        { text: "Jabatan", value: "position", sortable: false },
         { text: "Operation", value: "operation" },
       ],
       positions: [],

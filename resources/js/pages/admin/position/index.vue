@@ -37,7 +37,7 @@
               <VRow>
                 <VCol md="12" cols="12">
                   <VTextField
-                    placeholder="Nama Posisi"
+                    placeholder="Nama Jabatan"
                     label="Nama"
                     v-model="dataForm.name"
                     autofocus
@@ -69,7 +69,7 @@
               <VRow>
                 <VCol md="12" cols="12">
                   <VTextField
-                    placeholder="Nama Posisi"
+                    placeholder="Nama Jabatan"
                     label="Nama"
                     v-model="dataForm.name"
                     autofocus
@@ -101,7 +101,7 @@
         :search-value="searchValue"
       >
       <template #empty-message>
-          <p>Data Posisi Kosong</p>
+          <p>Data Jabatan Kosong</p>
         </template>
         <template #loading>
           <p>loading data .....</p>
@@ -146,7 +146,7 @@ export default {
       },
       items: [],
       headers: [
-        { text: "Nama Posisi", value: "name", sortable: true },
+        { text: "Nama Jabatan", value: "name", sortable: true },
         { text: "Total Karyawan", value: "users_count", sortable: true },
         { text: "Operation", value: "operation" },
       ],

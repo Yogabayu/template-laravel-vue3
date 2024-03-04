@@ -22,6 +22,8 @@ class UserController extends Controller
             $user->password = Hash::make('12345678');
             $user->save();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mereset password user: ' . $user->name);
+
             return ResponseHelper::successRes('Berhasil reset password, password user sekarang: 12345678', $user);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes($e->getMessage());
@@ -34,6 +36,8 @@ class UserController extends Controller
             $device = DeviceVerification::findOrFail($id);
             $device->delete();
             DB::commit();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Menghapus data perangkat: ' . $device->nameDev);
 
             return response()->json([
                 'success' => true,
@@ -70,6 +74,8 @@ class UserController extends Controller
             $device->save();
             DB::commit();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengubah data perangkat: ' . $device->nameDev);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Berhasil update data',
@@ -89,6 +95,8 @@ class UserController extends Controller
         try {
             $userData = User::with('devices')->where('uuid', $uuid)->first();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data perangkat user: ' . $userData->name);
+
             return ResponseHelper::successRes('Berhasil mendapatkan data', $userData);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes('Failed to authenticate. | ' . $e->getMessage());
@@ -99,6 +107,7 @@ class UserController extends Controller
         try {
             $userData = User::where('id', auth()->user()->id)->first();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data user : ' . $userData->name);
             return ResponseHelper::successRes('Berhasil mendapatkan data', $userData);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes('Failed to authenticate. | ' . $e->getMessage());
@@ -303,6 +312,24 @@ class UserController extends Controller
             $users = User::with('position')->get();
 
             return ResponseHelper::successRes('Berhasil mendapatkan data', $users);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
+
+    public function getMostUserview()
+    {
+        try {
+            $most = DB::table('fileviews')
+                ->select('users.uuid', 'users.name', 'positions.name as position', DB::raw('COUNT(fileviews.id) AS views_count'))
+                ->join('users', 'fileviews.user_uuid', '=', 'users.uuid')
+                ->join('positions', 'users.position_id', '=', 'positions.id')
+                ->groupBy('users.uuid', 'users.name', 'positions.name')
+                ->orderByDesc('views_count')
+                ->take(6)
+                ->get();
+
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $most);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes($e->getMessage());
         }

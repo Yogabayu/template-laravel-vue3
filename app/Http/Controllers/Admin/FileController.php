@@ -45,6 +45,8 @@ class FileController extends Controller
         try {
             $datas = Position::withCount('files')->with('files')->get();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data file per posisi');
+
             return ResponseHelper::successRes('Berhasil mendapatkan data', $datas);
         } catch (\Exception $e) {
             return ResponseHelper::errorRes($e->getMessage());
@@ -56,6 +58,8 @@ class FileController extends Controller
         try {
             $file = FileToPosition::with('file', 'file.author', 'file.categories', 'position')->where('position_uuid', $id)->get();
             $position = Position::where('id', $id)->first();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data file dengan posisi : ' . $position->name);
 
             return response()->json([
                 'success' => true,
@@ -75,6 +79,8 @@ class FileController extends Controller
         try {
             $file = FileToCategory::with('file', 'file.author', 'file.positions', 'category')->where('category_uuid', $id)->get();
             $category = Category::where('id', $id)->first();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data file per kategori : ' . $category->name);
 
             return response()->json([
                 'success' => true,
@@ -109,6 +115,8 @@ class FileController extends Controller
     {
         try {
             $files = File::with('author', 'positions', 'categories')->get();
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses semua data file');
             return $this->successRes('Successfully retrieved files.', $files);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve files. ' . $e->getMessage());
@@ -196,6 +204,7 @@ class FileController extends Controller
     {
         try {
             $file = File::with('author', 'positions', 'categories')->where('id', $id)->first();
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data file | ' . $file->name);
             return $this->successRes('File retrieved successfully.', $file);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve file. ' . $e->getMessage(), 404);

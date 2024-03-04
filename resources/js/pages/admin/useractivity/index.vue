@@ -7,6 +7,14 @@
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">
+        <v-btn
+          color="primary"
+          size="small"
+          class="my-3 mx-3"
+          @click="toLink('a-listuseractivity')"
+        >
+          Lihat Berdasarkan User
+        </v-btn>
         <div class="d-flex align-center pe-2 w-25">
           <v-text-field prepend-inner-icon="mdi-magnify" density="compact" label="Search" single-line flat hide-details
             variant="solo-filled" v-model="searchValue"></v-text-field>
@@ -47,6 +55,9 @@ export default {
     };
   },
   methods: {
+    toLink(link: string) {
+      this.$router.push(`/${link}`);
+    },
     formatDate(dateString: string | number | Date) {
       const date = new Date(dateString);
       return date.toLocaleString('id-ID');

@@ -7,7 +7,7 @@
           Back
         </router-link>
         <VCardTitle class="text-2xl font-weight-bold">
-          Daftar File Berdasarkan Posisi : {{ positionProfile.name ?? "-" }}
+          Daftar File Berdasarkan Jabatan : {{ positionProfile.name ?? "-" }}
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">

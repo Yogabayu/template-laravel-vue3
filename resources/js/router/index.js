@@ -281,6 +281,32 @@ const router = createRouter({
       ],
     },
     {
+      path: "/a-listuseractivity",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/useractivity/peruser/listuser.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-listuseractivity/:userUuid",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/useractivity/peruser/detailbyuser.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
       path: "/a-devices",
       component: () => import("../layouts/admin/default.vue"),
       children: [
@@ -343,6 +369,19 @@ const router = createRouter({
         {
           path: "",
           component: () => import("../pages/user/dashboard.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/user-profile",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/profile/profile.vue"),
           beforeEnter: (to, from, next) => {
             checkLogin(next);
           },

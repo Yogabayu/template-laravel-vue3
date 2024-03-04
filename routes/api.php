@@ -53,8 +53,10 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::post('user-device', [UserController::class, 'changeDevice']);
         Route::delete('user-device/{id}', [UserController::class, 'deleteDevice']);
         Route::get('reset-password/{id}', [UserController::class, 'resetPassword']);
+        Route::get('getmostuserview', [UserController::class, 'getMostUserview']);
         //activity
         Route::get('useractivity', [UserActivityController::class, 'index']);
+        Route::get('useractivity/{id}', [UserActivityController::class, 'getUserActivity']);
 
         //division
         // Route::get('division', [DivisionController::class, 'index'])->name('division.index');

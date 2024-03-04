@@ -1,4 +1,6 @@
 <script setup>
+
+import { useRouter } from 'vue-router';
 const props = defineProps({
   title: {
     type: String,
@@ -23,11 +25,11 @@ const props = defineProps({
 })
 
 const isPositive = controlledComputed(() => props.change, () => Math.sign(props.change) === 1)
-
 const router = useRouter();
 const handleButtonClick = (link) => {
-  // this.$router.push(`${link}`);
-  router.push(link);
+  if (router) {
+    router.push(link);
+  }
 };
 </script>
 
@@ -60,11 +62,6 @@ const handleButtonClick = (link) => {
         :class="isPositive ? 'text-success' : 'text-error'"
         class="d-flex align-center gap-1 text-sm"
       >
-        <!-- <VIcon
-          size="18"
-          :icon="isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt'"
-        />
-        {{ isPositive ? Math.abs(props.change) : props.change }}% -->
       </span>
     </VCardText>
   </VCard>

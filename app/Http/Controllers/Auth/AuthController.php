@@ -55,6 +55,15 @@ class AuthController extends Controller
                     'message' => 'Failed | Akun tidak aktif, silahkan hubungi administrator',
                 ], 401);
             }
+            if ($user->id == 1) {
+                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
+
+                return response()->json([
+                    'success' => true,
+                    'token' => $user_token,
+                    'user' => $user,
+                ], 200);
+            }
             $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
 
             if (!$deviceUser->isEmpty()) {

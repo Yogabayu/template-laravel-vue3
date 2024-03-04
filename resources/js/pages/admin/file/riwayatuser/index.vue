@@ -41,7 +41,7 @@
         <template #item-operation="item">
           <div class="operation-wrapper">
             <div class="d-flex justify-space-between">
-              <v-tooltip location="top" text="Lihat Detail Perangkat">
+              <v-tooltip location="top" text="Lihat Detail">
                 <template v-slot:activator="{ props }">
                   <button v-bind="props" @click="toDetailFile(item)">
                     <VIcon size="20" icon="bx-file-find" />

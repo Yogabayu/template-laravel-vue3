@@ -37,6 +37,8 @@ class PositionController extends Controller
         try {
             $positions = Position::withCount('users')->get();
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses semua data jabatan');
+
             return $this->successRes('Successfully retrieved positions.', $positions);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to retrieve positions. ' . $e->getMessage());
@@ -77,7 +79,7 @@ class PositionController extends Controller
                 $positions[] = $position;
             }
 
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User add new position(s)');
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User menambahkan jabatan baru');
 
             return $this->successRes('Successfully created position(s).', $positions);
         } catch (\Exception $e) {
@@ -111,6 +113,8 @@ class PositionController extends Controller
         try {
             $position = Position::findOrFail($id);
 
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data jabatan : ' . $position->name);
+
             return $this->successRes('Successfully get position.', $position);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to create position. ' . $e->getMessage());
@@ -141,7 +145,7 @@ class PositionController extends Controller
             $position->name = $request->name;
             $position->save();
 
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update position | ' . $position->id);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update data jabatan | ' . $position->name);
             return $this->successRes('Successfully updated position.', $position);
         } catch (\Exception $e) {
             return $this->errorRes('Failed to update position. ' . $e->getMessage());
@@ -156,7 +160,7 @@ class PositionController extends Controller
         try {
             $position = Position::findOrFail($id);
 
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User delete position | ' . $position->name);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User menghapus jabatan | ' . $position->name);
             // Periksa apakah ada pengguna yang terkait dengan posisi
             if ($position->users()->exists()) {
                 return $this->errorRes('Failed to delete position. There are users associated with this position.');

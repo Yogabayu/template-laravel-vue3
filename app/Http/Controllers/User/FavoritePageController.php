@@ -13,8 +13,8 @@ class FavoritePageController extends Controller
     public function favFiles()
     {
         try {
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User melihat file favorit');
             $favFiles = FileFav::with('file', 'file.author')->where('user_uuid', auth()->user()->uuid)->get();
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User melihat file favorit');
 
             return ResponseHelper::successRes('berhasil mendapatkan data', $favFiles);
         } catch (\Exception $e) {

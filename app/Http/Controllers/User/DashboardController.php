@@ -15,7 +15,7 @@ class DashboardController extends Controller
     public function index()
     {
         try {
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Mengakses user dashboard');
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Mengakses dashboard');
             $random = FileToPosition::with('file', 'file.author')
                 ->where('position_uuid', auth()->user()->position_id)
                 ->inRandomOrder()

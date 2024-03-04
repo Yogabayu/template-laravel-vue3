@@ -31,7 +31,13 @@ import { formatDate } from '@/@core/utils/formatters';
             </v-row>
           </v-col>
           <v-col v-if="items != null && items.length > 0" v-for="(item, index) in items" :key="index" cols="12" md="6">
-            <v-card class="mx-auto" max-width="344" height="200px" color="primary" variant="tonal">
+            
+            <v-card class="mx-auto card-style" max-width="344" height="200px" color="primary" variant="tonal" hover>
+              <v-img
+                src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
+                height="20px"
+                cover
+              ></v-img>
               <v-card-item>
                 <div>
                   <div class="text-overline mb-1">
@@ -93,3 +99,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .card-style{
+    box-shadow: 9px 9px 9px rgba(20,20,20,0.6);
+  }
+</style>
