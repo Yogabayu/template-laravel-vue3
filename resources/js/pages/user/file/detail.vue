@@ -50,7 +50,7 @@
     </v-card-subtitle>
     <v-card-text>
       <div class="">
-        <div v-if="userData && userData.canDownload">
+        <div v-if="userData && userData.canDownload == 1">
           <vue-pdf-embed :source="pdfUrl" />
           <div class="d-flex justify-center">
             <v-btn
