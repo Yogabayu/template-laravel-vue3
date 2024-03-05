@@ -568,11 +568,11 @@ export default defineComponent({
           this.dataForm.nik = item.nik;
           this.dataForm.uuid = item.uuid;
           this.dataForm.position_id = item.position_id;
-          this.dataForm.isActive = item.isActive;
-          this.dataForm.isAdmin = item.isAdmin;
-          this.dataForm.canDownload = item.canDownload;
-          this.dataForm.canPrint = item.canPrint;
-          this.dataForm.canComment = item.canComment;
+          this.dataForm.isActive = parseInt(item.isActive);
+          this.dataForm.isAdmin = parseInt(item.isAdmin);
+          this.dataForm.canDownload = parseInt(item.canDownload);
+          this.dataForm.canPrint = parseInt(item.canPrint);
+          this.dataForm.canComment = parseInt(item.canComment);
           this.edit = true;
         }
       }

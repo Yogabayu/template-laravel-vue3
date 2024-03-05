@@ -50,10 +50,17 @@ const showToast = (icon, title, text) => {
 
 // Make showToast method globally available
 app.config.globalProperties.$showToast = showToast
+
+/** localhost */
 // app.config.globalProperties.$userPhotoUrl = 'http://localhost:8000/user/photo/';
+/** development */
 // app.config.globalProperties.$userPhotoUrl = 'https://templatevue.yogabayuap.com/user/photo/';
+/** production */
 app.config.globalProperties.$userPhotoUrl = 'https://kma.bankarthaya.com/user/photo/';
 
+/** localhost */
 // app.config.globalProperties.$filePath = 'http://localhost:8000/file/file/';
+/** development */
 // app.config.globalProperties.$filePath = 'https://templatevue.yogabayuap.com/file/file/';
+/** production */
 app.config.globalProperties.$filePath = 'https://kma.bankarthaya.com/file/file/';
