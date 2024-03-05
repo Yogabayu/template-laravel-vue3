@@ -99,9 +99,12 @@ export default {
 
         if (response.status === 200) {
           this.saveUserDataAndToken(response.data);
-          if (response.data.user.isAdmin) {
+          // console.log(response.data.user.isAdmin);
+          if (response.data.user.isAdmin==1) {
             await this.$router.push("/dashboard");
+            // console.log('masuk admin');
           } else {
+            // console.log('masuk user');
             await this.$router.push("/user-dashboard");
           }
 
