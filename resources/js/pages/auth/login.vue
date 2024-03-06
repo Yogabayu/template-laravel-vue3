@@ -19,9 +19,9 @@
       <VCardText>
         <VForm @submit.prevent="login">
           <VRow>
-            <!-- email -->
+            <!-- nik -->
             <VCol cols="12">
-              <VTextField v-model="form.email" autofocus placeholder="johndoe@email.com" label="Email" type="email" />
+              <VTextField v-model="form.nik" autofocus placeholder="008xxxxx" label="NIK" type="number" />
             </VCol>
 
             <!-- password -->
@@ -70,7 +70,7 @@ export default {
       userData: null,
       userToken: null,
       form: {
-        email: "",
+        nik: null,
         password: "",
         remember: false,
       },
@@ -92,7 +92,7 @@ export default {
       try {
         const userAgent = navigator.userAgent;
         const response = await mainURL.post("/login", {
-          email: this.form.email,
+          nik: this.form.nik,
           password: this.form.password,
           device: userAgent,
         });
