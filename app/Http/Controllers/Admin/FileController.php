@@ -144,10 +144,12 @@ class FileController extends Controller
                 'positions'     => 'required|array',
                 'summary'       => 'required'
             ], [
-                'name.required'      => 'Name is required.',
-                'path.required'      => 'File is required.',
-                'path.mimes'         => 'File must be a PDF.',
-                'summary.required'   => 'Summary is required.',
+                'name.required'      => 'Nama wajib diisi.',
+                'path.required'      => 'File wajib diunggah.',
+                'path.mimes'         => 'File harus berformat PDF.',
+                'categories.required' => 'Kategori wajib dipilih.',
+                'positions.required' => 'Posisi wajib dipilih.',
+                'summary.required'   => 'Ringkasan wajib diisi.',
             ]);
 
             $file = new File();
@@ -165,14 +167,6 @@ class FileController extends Controller
             $file->path = $fileimage;
 
             $file->save();
-
-            // $divisions = $request->divisions;
-            // foreach ($divisions as $div) {
-            //     $divisionMapping = new FileToDivision();
-            //     $divisionMapping->file_uuid = $file->id;
-            //     $divisionMapping->division_uuid = $div;
-            //     $divisionMapping->save();
-            // }
 
             $positions = $request->positions;
             foreach ($positions as $pos) {

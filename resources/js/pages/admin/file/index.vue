@@ -168,6 +168,13 @@
               </VRow>
             </VForm>
           </template>
+          <template v-slot:actions>
+            <v-progress-linear
+              v-model="uploadProgress"
+              color="amber"
+              height="25"
+            ></v-progress-linear>
+          </template>
         </v-card>
       </v-dialog>
 
@@ -295,6 +302,13 @@
               </VRow>
             </VForm>
           </template>
+          <template v-slot:actions>
+            <v-progress-linear
+              v-model="uploadProgress"
+              color="amber"
+              height="25"
+            ></v-progress-linear>
+          </template>
         </v-card>
       </v-dialog>
 
@@ -310,15 +324,7 @@
         <template #loading>
           <p>loading data .....</p>
         </template>
-        <template #item-positions="item">
-          <v-chip-group selected-class="text-primary" column>
-            <div v-for="(x, index) in item.positions" :key="index">
-              <VChip style="color: rgb(6, 84, 107)" @click="toPositionId(x.id)">
-                {{ x.name }}
-              </VChip>
-            </div>
-          </v-chip-group>
-        </template>
+
         <template #item-created_at="item">
           <p>{{ formatDate(item.created_at) }}</p>
         </template>
@@ -333,6 +339,66 @@
               <v-icon start icon="mdi-file"></v-icon> lihat
             </v-chip>
           </a>
+        </template>
+        <template #item-positions="item">
+          <!-- <v-chip-group selected-class="text-primary" column>
+            <div v-for="(x, index) in item.positions" :key="index">
+              <VChip style="color: rgb(6, 84, 107)" @click="toPositionId(x.id)">
+                {{ x.name }}
+              </VChip>
+            </div>
+          </v-chip-group> -->
+          <v-chip-group selected-class="text-primary" column>
+            <template v-if="item.positions.length <= 5">
+              <div v-for="(x, index) in item.positions" :key="index">
+                <VChip
+                  style="color: rgb(6, 84, 107)"
+                  @click="toPositionId(x.id)"
+                >
+                  {{ x.name }}
+                </VChip>
+              </div>
+            </template>
+            <template v-else>
+              <div
+                v-for="(x, index) in item.positions.slice(0, 5)"
+                :key="index"
+              >
+                <VChip
+                  style="color: rgb(6, 84, 107)"
+                  @click="toPositionId(x.id)"
+                >
+                  {{ x.name }}
+                </VChip>
+              </div>
+              <VChip
+                style="color: rgb(6, 84, 107)"
+                @click="showAllPositions(item)"
+              >
+                +{{ item.positions.length - 5 }} lainnya
+              </VChip>
+
+              <v-dialog v-model="isShowDetailPos" width="auto">
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Daftar Jabatan Terpilih</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-chip-group selected-class="text-primary" column>
+                      <div v-for="(x, index) in detailPos.positions" :key="index">
+                        <VChip
+                          style="color: rgb(6, 84, 107)"
+                          @click="toPositionId(x.id)"
+                        >
+                          {{ x.name }}
+                        </VChip>
+                      </div>
+                    </v-chip-group>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+            </template>
+          </v-chip-group>
         </template>
         <template #item-operation="item">
           <div class="d-flex justify-space-between">
@@ -392,6 +458,7 @@
 </template>
 <script lang="ts">
 import mainURL from "@/axios";
+import { AxiosProgressEvent } from "axios";
 
 export default {
   watch: {
@@ -426,14 +493,7 @@ export default {
         { text: "Operation    ", value: "operation" },
       ],
       searchValue: "",
-      searchField: [
-        "name",
-        "author.name",
-        "email",
-        "divisions",
-        "positions",
-        "categories",
-      ],
+      searchField: ["name", "author.name", "email", "positions", "categories"],
       dataForm: {
         id: null,
         name: null,
@@ -446,9 +506,16 @@ export default {
       categories: [],
       selectedPositions: [],
       selectedCategories: [],
+      uploadProgress: null,
+      isShowDetailPos: false,
+      detailPos: null,
     };
   },
   methods: {
+    showAllPositions(item) {
+      this.detailPos = item;
+      this.isShowDetailPos = true;
+    },
     toCategoryId(id: any) {
       this.$router.push(`/a-percategory/${id}`);
     },
@@ -464,7 +531,6 @@ export default {
     async updateData() {
       try {
         const formData = new FormData();
-
         formData.append("id", this.dataForm.id);
         formData.append("name", this.dataForm.name);
         formData.append("summary", this.dataForm.summary);
@@ -487,15 +553,25 @@ export default {
         }
 
         formData.append("_method", "PUT");
+        const config = {
+          onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+            try {
+              this.uploadProgress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+            } catch (error) {
+              console.error("Error calculating progress:", error);
+            }
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
 
         const response = await mainURL.post(
           `/file/${this.dataForm.id}`,
           formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          config
         );
 
         if (response.status === 200) {
@@ -508,9 +584,10 @@ export default {
           this.$showToast("error", "Sorry", response.data.message);
         }
       } catch (error) {
+        console.log(error);
         this.closeModal(2);
         this.getAllFiles();
-        this.$showToast("error", "Sorry", "error get data division");
+        this.$showToast("error", "Sorry", error.response.data.message);
       }
     },
     async deleteFile(item: { id: any }) {
@@ -561,20 +638,35 @@ export default {
 
         formData.append("_method", "POST");
 
-        const response = await mainURL.post("/file", formData, {
+        const config = {
+          onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+            try {
+              this.uploadProgress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+            } catch (error) {
+              console.error("Error calculating progress:", error);
+            }
+          },
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        });
+        };
+
+        const response = await mainURL.post("/file", formData, config);
 
         if (response.status === 200) {
           this.closeModal(1);
           this.getAllFiles();
+          this.uploadProgress = null;
           this.$showToast("success", "Success", response.data.message);
         } else {
+          this.uploadProgress = null;
           this.$showToast("error", "Sorry", response.data.message);
         }
-      } catch (error) {    
+      } catch (error) {
+        this.uploadProgress = null;
+        this.closeModal(1);
         this.$showToast("error", "Sorry", error.response.data.message);
       }
     },
