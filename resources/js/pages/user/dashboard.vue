@@ -71,6 +71,7 @@
             <v-card
               class="mb-2 card-style"
               height="200px"
+              max-width="344"
               hover
               @click="toDetailFile(item.file.id)"
             >
@@ -122,6 +123,7 @@
             <v-card
               class="mb-2 card-style"
               height="200px"
+              max-width="344"
               hover
               @click="toDetailFile(item.id)"
             >

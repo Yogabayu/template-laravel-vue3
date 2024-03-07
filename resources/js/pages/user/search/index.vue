@@ -87,6 +87,8 @@
                     class="mx-auto card-style"
                     color="primary"
                     variant="tonal"
+                    height="230px"
+                    max-width="344"
                     hover
                   >
                     <v-img
@@ -99,9 +101,9 @@
                         <div class="text-overline mb-1">
                           {{ item.file.author.name }}
                         </div>
-                        <div class="text-h6 mb-1">{{ item.file.name }}</div>
+                        <div class="text-h6 mb-1">{{ item.file.name.substring(0, 20) + "..." }}</div>
                         <div class="text-caption">
-                          {{ item.file.summary.substring(0, 70) + "..." }}
+                          {{ item.file.summary.substring(0, 30) + "..." }}
                         </div>
                       </div>
                     </v-card-item>

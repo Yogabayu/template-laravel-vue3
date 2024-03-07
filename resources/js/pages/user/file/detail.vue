@@ -10,9 +10,9 @@
       <v-spacer />
       <div class="text-center">
         <v-row class="d-flex align-center justify-center">
-          <h3>
-            {{ detail.name ?? "-" }}
-          </h3>
+            <h3 class="overflow-auto">
+              {{ detail.name ?? "-" }}
+            </h3>
           <v-btn
             v-if="fav == true"
             class="ma-2"
@@ -51,19 +51,21 @@
     <v-card-text>
       <div class="">
         <div v-if="userData && userData.canDownload == 1">
-          <vue-pdf-embed :source="pdfUrl" />
+          <vue-pdf-embed :source="pdfUrl" loaded scale="2" />
           <div class="d-flex justify-center">
             <v-btn
-            class="ma-2"
-            variant="text"
-            append-icon="mdi-download"
-            color="blue-lighten-2"
-            :href="pdfUrl"
-            > Download</v-btn>
+              class="ma-2"
+              variant="text"
+              append-icon="mdi-download"
+              color="blue-lighten-2"
+              :href="pdfUrl"
+            >
+              Download</v-btn
+            >
           </div>
         </div>
         <div v-else>
-          <vue-pdf-embed :source="pdfUrl" />
+          <vue-pdf-embed :source="pdfUrl" loaded scale="2" />
         </div>
       </div>
 

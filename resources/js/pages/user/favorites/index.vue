@@ -29,7 +29,7 @@
             </v-row>
           </v-col>
           <v-col v-if="items != null && items.length > 0" v-for="(item, index) in items" :key="index" cols="12" md="6">
-            <v-card class="mx-auto card-style" max-width="344" height="200px" color="primary" variant="tonal" hover>
+            <v-card class="mx-auto card-style" max-width="344" height="230px" color="primary" variant="tonal" hover>
               <v-img
                 src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
                 height="20px"
@@ -40,7 +40,7 @@
                   <div class="text-overline mb-1">
                     {{ item.file.author.name }}
                   </div>
-                  <div class="text-h6 mb-1">{{ item.file.name }}</div>
+                  <div class="text-h6 mb-1">{{ item.file.name.substring(0, 30) + "..." }}</div>
                   <div class="text-caption">
                     {{ item.file.summary.substring(0, 70) + "..." }}
                   </div>
