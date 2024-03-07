@@ -385,7 +385,10 @@
                   </v-card-title>
                   <v-card-text>
                     <v-chip-group selected-class="text-primary" column>
-                      <div v-for="(x, index) in detailPos.positions" :key="index">
+                      <div
+                        v-for="(x, index) in detailPos.positions"
+                        :key="index"
+                      >
                         <VChip
                           style="color: rgb(6, 84, 107)"
                           @click="toPositionId(x.id)"
@@ -624,11 +627,11 @@ export default {
           if (key !== "id" && key !== "positions" && key !== "categories") {
             formData.append(key, this.dataForm[key]);
           }
-        }
+        }        
+
         this.dataForm.positions = this.selectedPositions.map(
           (item: { value: any }) => item.value
         );
-
         this.dataForm.positions.forEach((position: string | Blob) => {
           formData.append("positions[]", position);
         });
@@ -636,7 +639,7 @@ export default {
           formData.append("categories[]", category);
         });
 
-        formData.append("_method", "POST");
+        formData.append("_method", "POST");        
 
         const config = {
           onUploadProgress: (progressEvent: AxiosProgressEvent) => {
@@ -708,6 +711,11 @@ export default {
               checked: false,
             })
           );
+          this.positions.push({
+            value: "all",
+            title: "Semua Jabatan",
+            checked: false,
+          });
         } else {
           this.$showToast("error", "Sorry", "error get data position");
         }
@@ -736,8 +744,8 @@ export default {
         name: null,
         path: null,
         summary: null,
-        positions: null,
-        categories: null,
+        positions: [],
+        categories: [],
       };
       this.selectedPositions = [];
     },
@@ -757,7 +765,7 @@ export default {
         await this.getCategories();
       } else if (type === 2) {
         if (item) {
-          await this.getPositions(); // Menunggu hingga getPositions selesai
+          await this.getPositions();
           await this.getCategories();
           this.dataForm.id = item.id;
           this.dataForm.name = item.name;

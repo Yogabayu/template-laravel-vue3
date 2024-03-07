@@ -114,7 +114,7 @@ class FileController extends Controller
     public function index()
     {
         try {
-            $files = File::with('author', 'positions', 'categories')->get();
+            $files = File::with('author', 'positions', 'categories')->orderBy('created_at', 'desc')->get();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses semua data file');
             return $this->successRes('Successfully retrieved files.', $files);
@@ -169,11 +169,21 @@ class FileController extends Controller
             $file->save();
 
             $positions = $request->positions;
-            foreach ($positions as $pos) {
-                $posisionMapping = new FileToPosition();
-                $posisionMapping->file_uuid = $file->id;
-                $posisionMapping->position_uuid = $pos;
-                $posisionMapping->save();
+            if (in_array('all', $positions)) {
+                $allPositions = Position::all();
+                foreach ($allPositions as $pos) {
+                    $posisionMapping = new FileToPosition();
+                    $posisionMapping->file_uuid = $file->id;
+                    $posisionMapping->position_uuid = $pos->id;
+                    $posisionMapping->save();
+                }
+            } else {
+                foreach ($positions as $pos) {
+                    $posisionMapping = new FileToPosition();
+                    $posisionMapping->file_uuid = $file->id;
+                    $posisionMapping->position_uuid = $pos;
+                    $posisionMapping->save();
+                }
             }
 
             $categories = $request->categories;
