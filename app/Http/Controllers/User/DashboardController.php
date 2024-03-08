@@ -46,4 +46,18 @@ class DashboardController extends Controller
             return ResponseHelper::errorRes('Failed');
         }
     }
+
+    public function getNewFile()
+    {
+        try {
+            $newfile = FileToPosition::with('file', 'file.author')
+                ->where('position_uuid', auth()->user()->position_id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            return ResponseHelper::successRes('Berhasil Mendapatkan Data', $newfile);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes('failed get newest file');
+        }
+    }
 }

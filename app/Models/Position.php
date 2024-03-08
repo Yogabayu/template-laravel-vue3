@@ -11,7 +11,7 @@ class Position extends Model
     protected $table = 'positions';
     protected $primaryKey = 'id'; // Change 'division_id' to your actual primary key column name
     public $incrementing = false;
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'level'];
 
     public function fileToPositions()
     {

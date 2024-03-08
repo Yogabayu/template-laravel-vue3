@@ -1,21 +1,23 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import upgradeBannerDark from '@images/pro/upgrade-banner-dark.png'
-import upgradeBannerLight from '@images/pro/upgrade-banner-light.png'
-import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import { useTheme } from 'vuetify'
+import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
+import upgradeBannerDark from "@images/pro/upgrade-banner-dark.png";
+import upgradeBannerLight from "@images/pro/upgrade-banner-light.png";
+import VerticalNavLayout from "@layouts/components/VerticalNavLayout.vue";
+import VerticalNavLink from "@layouts/components/VerticalNavLink.vue";
+import { useTheme } from "vuetify";
 
 // Components
-import Footer from '@/layouts/admin/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/admin/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/admin/components/UserProfile.vue'
+import Footer from "@/layouts/admin/components/Footer.vue";
+import NavbarThemeSwitcher from "@/layouts/admin/components/NavbarThemeSwitcher.vue";
+import UserProfile from "@/layouts/admin/components/UserProfile.vue";
 
-const vuetifyTheme = useTheme()
+const vuetifyTheme = useTheme();
 
 const upgradeBanner = computed(() => {
-  return vuetifyTheme.global.name.value === 'light' ? upgradeBannerLight : upgradeBannerDark
-})
+  return vuetifyTheme.global.name.value === "light"
+    ? upgradeBannerLight
+    : upgradeBannerDark;
+});
 </script>
 
 <template>
@@ -70,12 +72,12 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          to:'/a-category',
+          to: '/a-category',
           title: 'Kategori',
           icon: 'bx-area',
         }"
       />
-      
+
       <!-- 👉 file -->
       <VerticalNavSectionTitle
         :item="{
@@ -84,14 +86,14 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          to:'/a-file',
+          to: '/a-file',
           title: 'Semua File',
           icon: 'bx-file',
         }"
       />
       <VerticalNavLink
         :item="{
-          to:'/a-popular',
+          to: '/a-popular',
           title: 'File Populer',
           icon: 'bxs-hot',
         }"
@@ -100,7 +102,26 @@ const upgradeBanner = computed(() => {
         :item="{
           title: 'Riwayat Akses User',
           icon: 'bx-history',
-          to:'/a-filehistory'
+          to: '/a-filehistory',
+        }"
+      />
+
+      <!-- 👉 Draft -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Pengajuan Draft',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          title: 'Semua Draft',
+          icon: 'bx-file',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          title: 'Riwayat Pengajuan Draft',
+          icon: 'bx-history',
         }"
       />
 
@@ -112,20 +133,19 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          to:'/a-devices',
+          to: '/a-devices',
           title: 'Perangkat User',
           icon: 'bx-devices',
         }"
       />
       <VerticalNavLink
         :item="{
-          to:'/a-useractivity',
+          to: '/a-useractivity',
           title: 'Activitas User',
           icon: 'bx-user',
         }"
       />
     </template>
-
 
     <!-- 👉 Pages -->
     <slot />

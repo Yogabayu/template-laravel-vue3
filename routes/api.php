@@ -121,6 +121,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             //page: dashboard
             Route::get('index', [DashboardController::class, 'index']);
             Route::get('fileFav', [DashboardController::class, 'fileFav']);
+            Route::get('newestfile', [DashboardController::class, 'getNewFile']);
 
             //page: file
             Route::get('file/{id}', [UserFileController::class, 'detailFile']);

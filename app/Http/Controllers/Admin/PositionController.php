@@ -62,28 +62,14 @@ class PositionController extends Controller
             $request->validate([
                 'name' => 'required',
             ]);
-
-            $positions = [];
-
-            if (is_array($request->name)) {
-                // Jika 'name' adalah array
-                foreach ($request->name as $name) {
-                    $this->validatePositionName($name);
-                    $position = $this->createPosition($name);
-                    $positions[] = $position;
-                }
-            } else {
-                // Jika 'name' adalah string tunggal
-                $this->validatePositionName($request->name);
-                $position = $this->createPosition($request->name);
-                $positions[] = $position;
-            }
+            $this->validatePositionName($request->name, $request->can_upload_draft);
+            $position = $this->createPosition($request->name, $request->level);
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User menambahkan jabatan baru');
 
-            return $this->successRes('Successfully created position(s).', $positions);
+            return $this->successRes('Successfully created position.', $position);
         } catch (\Exception $e) {
-            return $this->errorRes('Failed to create position(s). ' . $e->getMessage());
+            return $this->errorRes('Failed to create position. ' . $e->getMessage());
         }
     }
 
@@ -97,11 +83,12 @@ class PositionController extends Controller
         ])->validate();
     }
 
-    private function createPosition($name)
+    private function createPosition($name, $level)
     {
         return Position::create([
             'id' => Str::uuid(),
             'name' => $name,
+            'level' => $level,
         ]);
     }
 
@@ -143,6 +130,7 @@ class PositionController extends Controller
 
             $position = Position::where('id', $id)->first();
             $position->name = $request->name;
+            $position->level = $request->level;
             $position->save();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update data jabatan | ' . $position->name);

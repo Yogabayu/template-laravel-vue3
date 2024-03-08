@@ -3,46 +3,65 @@
     <VCol cols="12" md="12">
       <AnalyticsCongratulations />
     </VCol>
+    <VCol cols="12" md="12">
+      <VCard class="text-center text-sm-start">
+        <VRow no-gutters>
+          <VCol cols="12" sm="12">
+            <VCardItem>
+              <VCardTitle class="text-md-h5 text-primary">
+                File Terbaru 🆕
+              </VCardTitle>
+            </VCardItem>
+
+            <VCardText>
+              <v-card class="mb-2 card-style" hover v-if="newestFile && newestFile.file">
+                <v-img src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg" height="20px"
+                  cover></v-img>
+                <v-card-title>
+                  {{ newestFile.file.name }}
+                </v-card-title>
+                <v-card-subtitle>
+                  {{ newestFile.file.author.name }} - {{ formatDate(newestFile.file.created_at) }}
+                </v-card-subtitle>
+                <v-card-text>
+                  {{ newestFile.file.summary && newestFile.file.summary.substring(0, 100) + "..." }}
+                </v-card-text>
+              </v-card>
+            </VCardText>
+          </VCol>
+        </VRow>
+      </VCard>
+    </VCol>
     <v-container>
       <v-row>
         <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Tersedia',
-              image: docs,
-              stats: `${tFile}`,
-              link: '/u-search',
-            }"
-          />
+          <CardStatisticsVertical v-bind="{
+                title: 'File Tersedia',
+                image: docs,
+                stats: `${tFile}`,
+                link: '/u-search',
+              }" />
         </VCol>
         <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Dibaca',
-              image: openFile,
-              stats: `${tRead}`,
-              link: '/u-read',
-            }"
-          />
+          <CardStatisticsVertical v-bind="{
+                title: 'File Dibaca',
+                image: openFile,
+                stats: `${tRead}`,
+                link: '/u-read',
+              }" />
         </VCol>
         <VCol cols="4" md="6">
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'File Favorite',
-              image: fileFavorite,
-              stats: `${tFav}`,
-              link: '/u-favorite',
-            }"
-          />
+          <CardStatisticsVertical v-bind="{
+                title: 'File Favorite',
+                image: fileFavorite,
+                stats: `${tFav}`,
+                link: '/u-favorite',
+              }" />
         </VCol>
       </v-row>
     </v-container>
 
-    <v-divider
-      :thickness="2"
-      class="border-opacity-100"
-      color="info"
-    ></v-divider>
+    <v-divider :thickness="2" class="border-opacity-100" color="info"></v-divider>
     <div class="mt-2">
       <div>
         <v-btn class="ma-2" color="primary" variant="outlined">
@@ -54,32 +73,14 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="6" v-if="fileRandom == null">
-            Getting Data ...<v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
+            Getting Data ...<v-progress-circular indeterminate color="primary"></v-progress-circular>
           </v-col>
         </v-row>
         <v-row>
-          <VCol
-            v-if="fileRandom != null"
-            v-for="(item, index) in fileRandom"
-            :key="index"
-            cols="12"
-            md="6"
-          >
-            <v-card
-              class="mb-2 card-style"
-              height="200px"
-              max-width="344"
-              hover
-              @click="toDetailFile(item.file.id)"
-            >
-              <v-img
-                src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
-                height="20px"
-                cover
-              ></v-img>
+          <VCol v-if="fileRandom != null" v-for="(item, index) in fileRandom" :key="index" cols="12" md="6">
+            <v-card class="mb-2 card-style" height="200px" max-width="344" hover @click="toDetailFile(item.file.id)">
+              <v-img src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg" height="20px"
+                cover></v-img>
               <v-card-title>
                 {{ item.file.name }}
               </v-card-title>
@@ -106,32 +107,14 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="6" v-if="fileFav == null">
-            Getting Data ...<v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
+            Getting Data ...<v-progress-circular indeterminate color="primary"></v-progress-circular>
           </v-col>
         </v-row>
         <v-row>
-          <VCol
-            v-if="fileFav != null"
-            v-for="(item, index) in fileFav"
-            :key="index"
-            cols="12"
-            md="6"
-          >
-            <v-card
-              class="mb-2 card-style"
-              height="200px"
-              max-width="344"
-              hover
-              @click="toDetailFile(item.id)"
-            >
-              <v-img
-                src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
-                height="20px"
-                cover
-              ></v-img>
+          <VCol v-if="fileFav != null" v-for="(item, index) in fileFav" :key="index" cols="12" md="6">
+            <v-card class="mb-2 card-style" height="200px" max-width="344" hover @click="toDetailFile(item.id)">
+              <v-img src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg" height="20px"
+                cover></v-img>
               <v-card-title>
                 {{ item.name }}
               </v-card-title>
@@ -186,9 +169,14 @@ export default {
       tFav: null,
       fileRandom: null,
       fileFav: null,
+      newestFile: {},
     };
   },
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString("id-ID");
+    },
     toDetailFile(item) {
       this.$router.push(`/u-filedetail/${item}`);
     },
@@ -297,12 +285,34 @@ export default {
         this.$showToast("error", "Sorry", errorMessage);
       }
     },
+    async getNewestFile() {
+      try {
+        const response = await mainURL.get("/user/newestfile");
+
+        if (response.status === 200) {
+          this.newestFile = response.data.data;
+        } else {
+          const errorMessage =
+            response && response.data && response.data.message
+              ? response.data.message
+              : "Gagal. Silakan coba lagi.";
+          this.$showToast("error", "Sorry", errorMessage);
+        }
+      } catch (error) {
+        const errorMessage =
+          error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : "Gagal login. Silakan coba lagi.";
+        this.$showToast("error", "Sorry", errorMessage);
+      }
+    }
   },
   mounted() {
     this.getTotalFileAvailable();
     this.getTotalFileRead();
     this.getTotalFileFav();
     this.getDashboard();
+    this.getNewestFile();
   },
 };
 </script>
