@@ -140,6 +140,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             //page: search
             Route::get('search', [SearchPageController::class, 'index']);
             Route::get('category', [SearchPageController::class, 'category']);
+            Route::get('category/{id}', [SearchPageController::class, 'fileToCategory']);
         });
     });
 });

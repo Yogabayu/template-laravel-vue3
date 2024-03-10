@@ -441,6 +441,19 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/u-search/:categoryId",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/search/searchpercategory.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
   ],
 });
 
