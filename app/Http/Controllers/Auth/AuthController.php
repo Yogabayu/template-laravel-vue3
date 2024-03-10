@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -52,6 +53,7 @@ class AuthController extends Controller
             $user = User::find(Auth::user()->id);
             $user_token['token'] = $user->createToken('appToken')->accessToken;
             if (!$user->isActive) {
+                $this->sendNotif($user);
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed | Akun tidak aktif, silahkan hubungi administrator',
@@ -101,6 +103,8 @@ class AuthController extends Controller
 
                     UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User gagal login karena device / ip terdeteksi berbeda dari yang didaftarkan');
 
+                    $this->sendNotif($user);
+
                     return response()->json([
                         'success' => false,
                         'message' => 'Failed | Device tidak memiliki akses',
@@ -139,6 +143,18 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Logged out successfully',
             ], 200);
+        }
+    }
+
+    private function sendNotif($user)
+    {
+        $admins = User::where('isAdmin', 1)->get();
+        foreach ($admins as $admin) {
+            Mail::send('email.notif', ['user' => $user], function ($message) use ($admin) {
+                $message->from('kma@bankarthaya.com', 'Administrator');
+                $message->to($admin->email, 'Admin');
+                $message->subject('Notifikasi Email');
+            });
         }
     }
 }
