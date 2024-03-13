@@ -103,7 +103,6 @@
           </v-card-title>
           <v-card-text>
             <div>
-              <!-- <CommentList :comments="comments" /> -->
               <div>
                 <div
                   v-for="(comment, index) in comments"
@@ -129,7 +128,7 @@
                     </template>
 
                     <v-list>
-                      <v-list-item color="primary" @click="popupEdit(comment)">
+                      <v-list-item color="primary" @click="popupEdit(comment)" v-if="userData.uuid == comment.user_id">
                         <template v-slot:prepend>
                           <v-icon icon="mdi-edit"></v-icon>
                         </template>
@@ -349,6 +348,7 @@ export default {
           id: comment.uuid,
           content: comment.desc,
           user_type: comment.user.isAdmin,
+          user_id: comment.user.uuid,
           name: comment.user.name,
           position: comment.user.position.name,
           created_at: comment.created_at,
