@@ -14,7 +14,7 @@
             </VCardItem>
 
             <VCardText>
-              <v-card class="mb-2 card-style" hover v-if="newestFile && newestFile.file">
+              <v-card class="mb-2 card-style" hover v-if="newestFile && newestFile.file" @click="toDetailFile(newestFile.file.id)">
                 <v-img src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg" height="20px"
                   cover></v-img>
                 <v-card-title>
