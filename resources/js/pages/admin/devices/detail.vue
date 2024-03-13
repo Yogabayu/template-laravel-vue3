@@ -80,7 +80,7 @@
           <p>loading data .....</p>
         </template>
         <template #item-isVerified="{ isVerified }">
-          <v-chip color="primary" v-if="isVerified"> Verified </v-chip>
+          <v-chip color="primary" v-if="isVerified==1"> Verified </v-chip>
           <v-chip color="#eb4034" v-else> Not Verified </v-chip>
         </template>
         <template #item-operation="item">

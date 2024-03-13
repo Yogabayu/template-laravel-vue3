@@ -192,7 +192,7 @@ export default {
     openModal(item = null) {
       this.dataForm.id = item.id;
       this.dataForm.nameDev = item.nameDev;
-      this.dataForm.isVerified = item.isVerified;
+      this.dataForm.isVerified = parseInt(item.isVerified);
       this.edit = true;
     },
     resetForm() {
