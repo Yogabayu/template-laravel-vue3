@@ -7,13 +7,26 @@
         </VCardTitle>
       </VCardItem>
       <div class="d-flex justify-space-between mb-6">
-        <v-btn color="primary" size="small" class="my-3 mx-3" @click="openModal(1)">
+        <v-btn
+          color="primary"
+          size="small"
+          class="my-3 mx-3"
+          @click="openModal(1)"
+        >
           Tambah Data
         </v-btn>
 
         <div class="d-flex align-center pe-2 w-25">
-          <v-text-field prepend-inner-icon="mdi-magnify" density="compact" label="Search" single-line flat hide-details
-            variant="solo-filled" v-model="searchValue"></v-text-field>
+          <v-text-field
+            prepend-inner-icon="mdi-magnify"
+            density="compact"
+            label="Search"
+            single-line
+            flat
+            hide-details
+            variant="solo-filled"
+            v-model="searchValue"
+          ></v-text-field>
         </div>
       </div>
       <v-dialog v-model="insert" width="auto">
@@ -23,22 +36,37 @@
             <VForm @submit.prevent="insertData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField placeholder="Nama Jabatan" label="Nama" v-model="dataForm.name" autofocus
-                    :rules="[rules.required]" prepend-icon="mdi-file" />
+                  <VTextField
+                    placeholder="Nama Jabatan"
+                    label="Nama"
+                    v-model="dataForm.name"
+                    autofocus
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
                 </VCol>
-                <VCol md="12" cols="12">
-                  <v-select label="Level Jabatan?" :items="[
-          { value: 4, title: 'Level 4' },
-          { value: 3, title: 'Level 3' },
-          { value: 2, title: 'Level 2' },
-          { value: 1, title: 'Level 1' },
-          { value: 0, title: 'Level 0' },
-        ]" v-model="dataForm.level" prepend-icon="mdi-help-rhombus"></v-select>
-                </VCol>
+                <!-- <VCol md="12" cols="12">
+                  <v-select
+                    label="Level Jabatan?"
+                    :items="[
+                      { value: 4, title: 'Level 4' },
+                      { value: 3, title: 'Level 3' },
+                      { value: 2, title: 'Level 2' },
+                      { value: 1, title: 'Level 1' },
+                      { value: 0, title: 'Level 0' },
+                    ]"
+                    v-model="dataForm.level"
+                    prepend-icon="mdi-help-rhombus"
+                  ></v-select>
+                </VCol> -->
                 <VCol cols="12" class="d-flex flex-wrap gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button type="button" class="btn btn-blue" @click="closeModal(1)">
+                  <button
+                    type="button"
+                    class="btn btn-blue"
+                    @click="closeModal(1)"
+                  >
                     Batal
                   </button>
                 </VCol>
@@ -54,22 +82,37 @@
             <VForm @submit.prevent="updateData">
               <VRow>
                 <VCol md="12" cols="12">
-                  <VTextField placeholder="Nama Jabatan" label="Nama" v-model="dataForm.name" autofocus
-                    :rules="[rules.required]" prepend-icon="mdi-file" />
+                  <VTextField
+                    placeholder="Nama Jabatan"
+                    label="Nama"
+                    v-model="dataForm.name"
+                    autofocus
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
                 </VCol>
-                <VCol md="12" cols="12">
-                  <v-select label="Bisa Upload Draft?" :items="[
-          { value: 4, title: 'Level 4' },
-          { value: 3, title: 'Level 3' },
-          { value: 2, title: 'Level 2' },
-          { value: 1, title: 'Level 1' },
-          { value: 0, title: 'Level 0' },
-        ]" v-model="dataForm.level" prepend-icon="mdi-help-rhombus"></v-select>
-                </VCol>
+                <!-- <VCol md="12" cols="12">
+                  <v-select
+                    label="Bisa Upload Draft?"
+                    :items="[
+                      { value: 4, title: 'Level 4' },
+                      { value: 3, title: 'Level 3' },
+                      { value: 2, title: 'Level 2' },
+                      { value: 1, title: 'Level 1' },
+                      { value: 0, title: 'Level 0' },
+                    ]"
+                    v-model="dataForm.level"
+                    prepend-icon="mdi-help-rhombus"
+                  ></v-select>
+                </VCol> -->
                 <VCol cols="12" class="d-flex flex-wrap gap-4">
                   <VBtn type="submit">Simpan</VBtn>
 
-                  <button type="button" class="btn btn-blue" @click="closeModal(1)">
+                  <button
+                    type="button"
+                    class="btn btn-blue"
+                    @click="closeModal(1)"
+                  >
                     Batal
                   </button>
                 </VCol>
@@ -78,8 +121,13 @@
           </template>
         </v-card>
       </v-dialog>
-      <EasyDataTable show-index :headers="headers" :items="items" :search-field="searchField"
-        :search-value="searchValue">
+      <EasyDataTable
+        show-index
+        :headers="headers"
+        :items="items"
+        :search-field="searchField"
+        :search-value="searchValue"
+      >
         <template #empty-message>
           <p>Data Jabatan Kosong</p>
         </template>
@@ -87,18 +135,32 @@
           <p>loading data .....</p>
         </template>
         <template #item-level="{ level }">
-          <VChip v-for="lv in level" :key="lv" :style="{ color: getChipColor(lv) }">
+          <VChip
+            v-for="lv in level"
+            :key="lv"
+            :style="{ color: getChipColor(lv) }"
+          >
             Level {{ lv }}
           </VChip>
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
             <button>
-              <VIcon size="20" icon="bx-edit" color="blue" @click="openModal(2, item)" />
+              <VIcon
+                size="20"
+                icon="bx-edit"
+                color="blue"
+                @click="openModal(2, item)"
+              />
             </button>
             &nbsp;
             <button>
-              <VIcon size="20" icon="bx-trash" color="red" @click="deletePosition(item)" />
+              <VIcon
+                size="20"
+                icon="bx-trash"
+                color="red"
+                @click="deletePosition(item)"
+              />
             </button>
           </div>
         </template>
@@ -118,13 +180,13 @@ export default {
       dataForm: {
         id: null,
         name: "",
-        level: null,
+        level: 0,
       },
       items: [],
       headers: [
         { text: "Nama Jabatan", value: "name", sortable: true },
         { text: "Total Karyawan", value: "users_count", sortable: true },
-        { text: "Upload Draft?", value: "level", sortable: true },
+        // { text: "Upload Draft?", value: "level", sortable: true },
         { text: "Operation", value: "operation" },
       ],
       searchValue: "",
@@ -137,23 +199,23 @@ export default {
     getChipColor(level) {
       switch (level) {
         case 0:
-          console.log('Level 0');
-          return 'rgb(255, 153, 0)';
+          console.log("Level 0");
+          return "rgb(255, 153, 0)";
         case 1:
-          console.log('Level 1');
-          return 'rgb(229, 43, 43)';
+          console.log("Level 1");
+          return "rgb(229, 43, 43)";
         case 2:
-          console.log('Level 2');
-          return 'rgb(6, 84, 107)';
+          console.log("Level 2");
+          return "rgb(6, 84, 107)";
         case 3:
-          console.log('Level 3');
-          return 'rgb(150, 150, 150)'; // Warna abu-abu untuk level 3
+          console.log("Level 3");
+          return "rgb(150, 150, 150)"; // Warna abu-abu untuk level 3
         case 4:
-          console.log('Level 4');
-          return 'rgb(0, 0, 0)'; // Warna hitam untuk level 4
+          console.log("Level 4");
+          return "rgb(0, 0, 0)"; // Warna hitam untuk level 4
         default:
-          console.log('Level default');
-          return 'rgb(6, 84, 107)'; // Warna default untuk level yang tidak valid
+          console.log("Level default");
+          return "rgb(6, 84, 107)"; // Warna default untuk level yang tidak valid
       }
     },
     async deletePosition(item: { id: any }) {
@@ -238,7 +300,7 @@ export default {
       this.dataForm = {
         name: "",
         id: null,
-        level: null,
+        level: 0,
       };
     },
     openModal(type: number, item = null) {

@@ -62,7 +62,7 @@ class PositionController extends Controller
             $request->validate([
                 'name' => 'required',
             ]);
-            $this->validatePositionName($request->name, $request->can_upload_draft);
+            $this->validatePositionName($request->name);
             $position = $this->createPosition($request->name, $request->level);
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User menambahkan jabatan baru');
