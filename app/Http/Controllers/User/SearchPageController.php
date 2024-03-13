@@ -46,7 +46,7 @@ class SearchPageController extends Controller
                 ->where('categories.id', $request->category)
                 ->where('files.name', 'like', '%' . $request->name . '%')
                 ->where('filetopositions.position_uuid', auth()->user()->position_id)
-                ->groupBy('files.id')
+                ->groupBy('files.id', 'files.author_uuid', 'files.name', 'files.path', 'files.summary', 'files.created_at', 'files.updated_at', 'users.name')
                 ->get();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User mencari file berdasarkan parameter');
@@ -93,9 +93,8 @@ class SearchPageController extends Controller
                 ->select('files.*', 'users.name as username', DB::raw('IF(filefavorites.file_uuid IS NOT NULL, 1, 0) as favorite'))
                 ->where('categories.id', $uuid)
                 ->where('filetopositions.position_uuid', auth()->user()->position_id)
-                ->groupBy('files.id')
+                ->groupBy('files.id', 'files.author_uuid', 'files.name', 'files.path', 'files.summary', 'files.created_at', 'files.updated_at', 'users.name')
                 ->get();
-            // $files = File::all();
             $category = Category::where('id', $uuid)->first();
 
             return response()->json([
