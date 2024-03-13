@@ -127,8 +127,8 @@
                       >
                     </template>
 
-                    <v-list>
-                      <v-list-item color="primary" @click="popupEdit(comment)" v-if="userData.uuid == comment.user_id">
+                    <v-list v-if="userData.uuid == comment.user_id">
+                      <v-list-item color="primary" @click="popupEdit(comment)" >
                         <template v-slot:prepend>
                           <v-icon icon="mdi-edit"></v-icon>
                         </template>
