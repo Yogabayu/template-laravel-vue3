@@ -151,7 +151,7 @@ class AuthController extends Controller
         $admins = User::where('isAdmin', 1)->get();
         foreach ($admins as $admin) {
             Mail::send('email.notif', ['user' => $user], function ($message) use ($admin) {
-                $message->from('kma@bankarthaya.com', 'Administrator');
+                $message->from('systemkma@bankarthaya.com', 'Administrator');
                 $message->to($admin->email, 'Admin');
                 $message->subject('Notifikasi Email');
             });
