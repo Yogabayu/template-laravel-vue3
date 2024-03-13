@@ -71,6 +71,16 @@
                   ></v-textarea>
                 </VCol>
 
+                <VCol md="12" cols="12">
+                  <VTextField
+                    placeholder="Keywords file"
+                    label="Keywords"
+                    v-model="dataForm.keywords"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
+                </VCol>
+
                 <VCol cols="12" md="6">
                   <v-file-input
                     accept="application/pdf"
@@ -226,6 +236,16 @@
                     v-model="dataForm.summary"
                     prepend-icon="mdi-comment"
                   ></v-textarea>
+                </VCol>
+
+                <VCol md="12" cols="12">
+                  <VTextField
+                    placeholder="Keywords file"
+                    label="Keywords"
+                    v-model="dataForm.keywords"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-file"
+                  />
                 </VCol>
 
                 <VCol cols="12" md="6">
@@ -492,16 +512,18 @@ export default {
         { text: "Jabatan", value: "positions", sortable: true },
         { text: "Kategori", value: "categories", sortable: true },
         { text: "File", value: "path", sortable: true },
+        { text: "Keywords", value: "keywords", sortable: true },
         { text: "Tanggal Diupload", value: "created_at", sortable: true },
         { text: "Operation    ", value: "operation" },
       ],
       searchValue: "",
-      searchField: ["name", "author.name", "email", "positions", "categories"],
+      searchField: ["name", "author.name", "email", "positions", "categories","keywords"],
       dataForm: {
         id: null,
         name: null,
         path: null,
         summary: "",
+        keywords: "",
         positions: [],
         categories: [],
       },
@@ -537,6 +559,7 @@ export default {
         formData.append("id", this.dataForm.id);
         formData.append("name", this.dataForm.name);
         formData.append("summary", this.dataForm.summary);
+        formData.append("keywords", this.dataForm.keywords);
         if (this.dataForm.path !== null) {
           formData.append("path", this.dataForm.path);
         }
@@ -641,6 +664,7 @@ export default {
 
         formData.append("_method", "POST");        
 
+        // console.log(...formData);
         const config = {
           onUploadProgress: (progressEvent: AxiosProgressEvent) => {
             try {
@@ -744,6 +768,7 @@ export default {
         name: null,
         path: null,
         summary: null,
+        keywords: null,
         positions: [],
         categories: [],
       };
@@ -770,6 +795,7 @@ export default {
           this.dataForm.id = item.id;
           this.dataForm.name = item.name;
           this.dataForm.summary = item.summary;
+          this.dataForm.keywords = item.keywords;
           const itemPositionIds = item.positions.map(
             (pos: { id: any }) => pos.id
           );

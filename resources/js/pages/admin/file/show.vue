@@ -24,6 +24,11 @@
               <td>:</td>
               <td>{{ detail.summary }}</td>
             </tr>
+            <tr>
+              <td>Keyword</td>
+              <td>:</td>
+              <td>{{ detail.keywords }}</td>
+            </tr>
             <tr v-if="detail.author">
               <td>Pengunggah</td>
               <td>:</td>

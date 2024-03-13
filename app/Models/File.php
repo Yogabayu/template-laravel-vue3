@@ -17,6 +17,7 @@ class File extends Model
         'name',
         'path',
         'summary',
+        'keywords',
     ];
 
     public function author()

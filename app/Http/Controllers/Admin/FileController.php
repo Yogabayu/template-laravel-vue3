@@ -142,7 +142,8 @@ class FileController extends Controller
                 'path'          => 'required|max:20480|mimes:pdf',
                 'categories'    => 'required|array',
                 'positions'     => 'required|array',
-                'summary'       => 'required'
+                'summary'       => 'required',
+                'keywords'       => 'required'
             ], [
                 'name.required'      => 'Nama wajib diisi.',
                 'path.required'      => 'File wajib diunggah.',
@@ -150,6 +151,7 @@ class FileController extends Controller
                 'categories.required' => 'Kategori wajib dipilih.',
                 'positions.required' => 'Posisi wajib dipilih.',
                 'summary.required'   => 'Ringkasan wajib diisi.',
+                'keywords.required'   => 'Keyword wajib diisi.',
             ]);
 
             $file = new File();
@@ -157,6 +159,7 @@ class FileController extends Controller
             $file->author_uuid = auth()->user()->uuid;
             $file->name = $request->name;
             $file->summary = $request->summary;
+            $file->keywords = $request->keywords;
 
             //upload file
             $imageEXT = $request->file('path')->getClientOriginalName();
@@ -246,6 +249,9 @@ class FileController extends Controller
             // Update file details
             $file->name = $request->name;
             $file->summary = $request->summary;
+            if ($request->has('keywords')) {
+                $file->keywords = $request->keywords;
+            }
 
             if ($request->hasFile('path')) {
                 $oldPath = $file->path;

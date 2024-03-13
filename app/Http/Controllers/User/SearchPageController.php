@@ -44,8 +44,12 @@ class SearchPageController extends Controller
                 })
                 ->select('files.*', 'users.name as username', DB::raw('IF(filefavorites.file_uuid IS NOT NULL, 1, 0) as favorite'))
                 ->where('categories.id', $request->category)
-                ->where('files.name', 'like', '%' . $request->name . '%')
                 ->where('filetopositions.position_uuid', auth()->user()->position_id)
+                ->where(function ($query) use ($request) {
+                    $query->where('files.name', 'like', '%' . $request->name . '%')
+                        ->orWhere('files.summary', 'like', '%' . $request->name . '%')
+                        ->orWhere('files.keywords', 'like', '%' . $request->name . '%');
+                })
                 ->groupBy('files.id', 'files.author_uuid', 'files.name', 'files.path', 'files.summary', 'files.created_at', 'files.updated_at', 'users.name', 'filefavorites.file_uuid', 'filefavorites.user_uuid')
                 ->get();
 
