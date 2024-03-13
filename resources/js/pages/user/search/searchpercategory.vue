@@ -118,7 +118,7 @@
                         variant="text"
                         icon="mdi-heart"
                         color="blue-lighten-2"
-                        v-if="item.favorite"
+                        v-if="item.favorite==1"
                         @click="favorite(item.id)"
                       ></v-btn>
                       <v-btn
@@ -216,7 +216,6 @@ export default {
   },
   mounted() {
     this.getFile(this.idCat);
-    console.log(this.idCat);
   },
 };
 </script>
