@@ -64,16 +64,6 @@ class SearchPageController extends Controller
     public function category()
     {
         try {
-            // $categories = DB::table('filetocategories')
-            //     ->join('files', 'filetocategories.file_uuid', '=', 'files.id')
-            //     ->join('categories', 'filetocategories.category_uuid', '=', 'categories.id')
-            //     ->join('users', 'files.author_uuid', '=', 'users.uuid')
-            //     ->join('positions', 'users.position_id', '=', 'positions.id')
-            //     ->where('positions.id', auth()->user()->position_id)
-            //     ->select('categories.*', DB::raw('COUNT(files.id) as file_count'))
-            //     ->groupBy('categories.id')
-            //     ->get();
-
             $categories = Category::all();
 
             return ResponseHelper::successRes('berhasil mendapatkan data', $categories);

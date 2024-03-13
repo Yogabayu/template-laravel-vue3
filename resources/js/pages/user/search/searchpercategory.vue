@@ -205,6 +205,7 @@ export default {
         if (response.status === 200) {
           this.category = response.data.data.category;
           this.files = response.data.data.files;
+          console.log(response.data);
         } else {
           this.$showToast("error", "Sorry", response.data.data.message);
         }
@@ -215,6 +216,7 @@ export default {
   },
   mounted() {
     this.getFile(this.idCat);
+    console.log(this.idCat);
   },
 };
 </script>
