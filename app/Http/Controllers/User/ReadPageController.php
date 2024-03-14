@@ -15,7 +15,7 @@ class ReadPageController extends Controller
     {
         try {
             $files = DB::table('files')
-                ->select('files.id', 'files.name', 'files.summary', 'positions.name as posname', 'fileviews.created_at')
+                ->select('files.id', 'files.name', 'files.summary', 'positions.name as posname', 'fileviews.created_at', 'files.keywords')
                 ->join('fileviews', function ($join) {
                     $join->on('files.id', '=', 'fileviews.file_uuid')
                         ->whereRaw('fileviews.id IN (
