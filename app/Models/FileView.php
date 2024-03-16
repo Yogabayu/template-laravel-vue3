@@ -14,6 +14,7 @@ class FileView extends Model
         'file_uuid',
         'startTime',
         'endTime',
+        'timespent'
     ];
 
     public function user()

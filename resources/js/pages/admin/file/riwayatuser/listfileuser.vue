@@ -38,6 +38,9 @@
               <template #item-startTime="item">
                 {{ formatDate(item.startTime) }}
               </template>
+              <template #item-timespent="item">
+                {{ item.timespent }} second
+              </template>
               <template #empty-message>
                 <p>Data Kosong</p>
               </template>
@@ -114,6 +117,7 @@ export default {
       headersHistory: [
         { text: "File", value: "file.name", sortable: true },
         { text: "Dilihat", value: "startTime", sortable: true },
+        { text: "Lama Waktu", value: "timespent", sortable: true },
       ],
     };
   },

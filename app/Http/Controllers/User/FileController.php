@@ -31,6 +31,14 @@ class FileController extends Controller
         }
     }
 
+    public function updateTimeSpent(Request $request)
+    {
+        $fileView = FileView::where('user_uuid', auth()->user()->uuid)->orderBy('id', 'desc')->first();
+        $fileView->timespent = $request->timespent;
+        $fileView->save();
+        return ResponseHelper::successRes('Berhasil update data', $fileView);
+    }
+
     public function sendComment(Request $request)
     {
         try {

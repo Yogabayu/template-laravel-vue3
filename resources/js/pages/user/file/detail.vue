@@ -209,9 +209,32 @@ export default {
 
       edit: false,
       fav: true,
+      startTime: null,
+      timeSpent: 0
     };
   },
+  created() {
+    this.startTime = new Date();
+    this.calculateTimeSpent();
+    console.log("Component created!");
+  },
+  beforeRouteLeave (to, from, next) {
+    this.updateTimeSpent();
+    console.log("Component will be destroyed soon!");
+    next(); 
+  },
   methods: {
+    calculateTimeSpent() {
+      this.timer = setInterval(() => {
+        const currentTime = new Date();
+        this.timeSpent = Math.round((currentTime - this.startTime) / 1000);
+      }, 1000);
+    },
+    updateTimeSpent() {
+      clearInterval(this.timer);
+      const currentTime = new Date();
+      this.timeSpent = Math.round((currentTime - this.startTime) / 1000);
+    },
     popupEdit(comment) {
       this.dataForm.id = comment.id;
       this.dataForm.descupdate = comment.content;

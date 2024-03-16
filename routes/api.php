@@ -130,6 +130,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             Route::delete('deletecomment/{id}', [UserFileController::class, 'deleteComment']);
             Route::put('editcomment/{id}', [UserFileController::class, 'editComment']);
             Route::get('setfavfile/{id}', [UserFileController::class, 'setFavFile']);
+            Route::post('timespent', [UserFileController::class, 'updateTimeSpent']);
 
             //page: favorite
             Route::get('fav', [FavoritePageController::class, 'favFiles']);
