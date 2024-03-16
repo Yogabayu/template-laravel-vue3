@@ -10,9 +10,9 @@
       <v-spacer />
       <div class="text-center">
         <v-row class="d-flex align-center justify-center">
-            <h3 class="overflow-auto">
-              {{ detail.name ?? "-" }}
-            </h3>
+          <h3 class="overflow-auto">
+            {{ detail.name ?? "-" }}
+          </h3>
           <v-btn
             v-if="fav == true"
             class="ma-2"
@@ -128,7 +128,7 @@
                     </template>
 
                     <v-list v-if="userData.uuid == comment.user_id">
-                      <v-list-item color="primary" @click="popupEdit(comment)" >
+                      <v-list-item color="primary" @click="popupEdit(comment)">
                         <template v-slot:prepend>
                           <v-icon icon="mdi-edit"></v-icon>
                         </template>
@@ -210,18 +210,17 @@ export default {
       edit: false,
       fav: true,
       startTime: null,
-      timeSpent: 0
+      timeSpent: 0,
     };
   },
   created() {
     this.startTime = new Date();
     this.calculateTimeSpent();
-    console.log("Component created!");
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     this.updateTimeSpent();
-    console.log("Component will be destroyed soon!");
-    next(); 
+    this.updateTimeSpentServer();
+    next();
   },
   methods: {
     calculateTimeSpent() {
@@ -234,6 +233,12 @@ export default {
       clearInterval(this.timer);
       const currentTime = new Date();
       this.timeSpent = Math.round((currentTime - this.startTime) / 1000);
+    },
+    async updateTimeSpentServer() {
+      const formData = new FormData();
+      formData.append("timespent", this.timeSpent);
+      formData.append("_method", "POST");
+      const response = await mainURL.post(`/user/timespent`, formData);
     },
     popupEdit(comment) {
       this.dataForm.id = comment.id;
