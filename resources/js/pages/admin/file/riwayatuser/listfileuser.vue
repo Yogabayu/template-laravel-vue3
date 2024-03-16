@@ -39,7 +39,8 @@
                 {{ formatDate(item.startTime) }}
               </template>
               <template #item-timespent="item">
-                {{ item.timespent }} second
+                <span v-if="item.timespent!=null"> {{ item.timespent }} second </span>
+                <span v-else> -- </span>                
               </template>
               <template #empty-message>
                 <p>Data Kosong</p>
