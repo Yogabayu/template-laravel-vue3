@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" v-prevent-right-click>
     <v-img
       src="https://bankarthaya.com/wp-content/uploads/2023/07/desktop-1024x576-1.jpg"
       height="100px"
@@ -49,7 +49,7 @@
       </v-row>
     </v-card-subtitle>
     <v-card-text>
-      <div class="">
+      <div v-prevent-right-click>
         <div v-if="userData && userData.canDownload == 1">
           <vue-pdf-embed :source="pdfUrl" loaded scale="2" />
           <div class="d-flex justify-center">
