@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DeviceVerification::class, 'user_uuid', 'uuid');
     }
+
+    public function drafts()
+    {
+        return $this->hasMany(Drafts::class, 'user_uuid', 'uuid');
+    }
 }

@@ -35,16 +35,16 @@ const router = createRouter({
       //   }
       // },
     },
-    {
-      path: "/register",
-      component: () => import("../layouts/blank.vue"),
-      children: [
-        {
-          path: "", // This will match /register itself
-          component: () => import("../pages/register.vue"),
-        },
-      ],
-    },
+    // {
+    //   path: "/register",
+    //   component: () => import("../layouts/blank.vue"),
+    //   children: [
+    //     {
+    //       path: "", // This will match /register itself
+    //       component: () => import("../pages/register.vue"),
+    //     },
+    //   ],
+    // },
     {
       path: "/:pathMatch(.*)*",
       component: () => import("../layouts/blank.vue"),
