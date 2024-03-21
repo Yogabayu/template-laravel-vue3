@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         if ($user && Auth::attempt(['email' => $user->email, 'password' => request('password')])) {
 
-            $user = User::find(Auth::user()->id);
+            $user = User::with('position', 'position.approvalLevel')->find(Auth::user()->id);
             $user_token['token'] = $user->createToken('appToken')->accessToken;
             if (!$user->isActive) {
                 $this->sendNotif($user);

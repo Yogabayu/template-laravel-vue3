@@ -9,7 +9,7 @@ class Position extends Model
 {
     use HasFactory;
     protected $table = 'positions';
-    protected $primaryKey = 'id'; // Change 'division_id' to your actual primary key column name
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $fillable = ['id', 'name', 'level', 'approval_level_id'];
 
@@ -29,6 +29,6 @@ class Position extends Model
     }
     public function approvalLevel()
     {
-        return $this->hasOne(DraftApprovalLevel::class, 'id', 'approval_level_id');
+        return $this->belongsTo(DraftApprovalLevel::class, 'approval_level_id');
     }
 }

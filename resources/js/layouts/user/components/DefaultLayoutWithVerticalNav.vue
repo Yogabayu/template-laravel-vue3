@@ -1,17 +1,20 @@
 <script setup>
-import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import { useTheme } from 'vuetify'
+import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
+import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue';
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
+import { useTheme } from 'vuetify';
 
 // Components
-import NavbarThemeSwitcher from '@/layouts/user/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/user/components/UserProfile.vue'
+import NavbarThemeSwitcher from '@/layouts/user/components/NavbarThemeSwitcher.vue';
+import UserProfile from '@/layouts/user/components/UserProfile.vue';
 
 const vuetifyTheme = useTheme()
 const isPhone = ref(false) // Initialize a ref for phone detection
 if (typeof window !== 'undefined') {
   isPhone.value = window.innerWidth <= 600 // Adjust the width threshold according to your preference
 }
+
+const userData = JSON.parse(localStorage.getItem("userData"));
 </script>
 
 <template>
@@ -56,6 +59,18 @@ if (typeof window !== 'undefined') {
         icon: 'bx-show',
         to: '/u-read'
       }" />
+      
+      <VerticalNavSectionTitle v-if="userData.position.approval_level_id!=1"
+        :item="{
+          heading: 'Pengajuan Draft',
+        }"
+      />
+      <VerticalNavLink v-if="userData.position.approval_level_id!=1" :item="{
+        title: 'Draft',
+        icon: 'bx-file',
+        to:'/u-draft'
+      }" />
+
 
     </template>
 
@@ -66,7 +81,6 @@ if (typeof window !== 'undefined') {
     <!-- 👉 Footer -->
     <template #footer>
       <!-- <Footer /> -->
-      <!-- URUNG : perlu configurasi  -->
       <v-bottom-navigation :elevation="0" mode="shift" v-if="isPhone">
         <v-btn value="home" :to="'/user-dashboard'">
           <v-icon>mdi-home</v-icon>

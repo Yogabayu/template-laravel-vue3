@@ -12,6 +12,7 @@ class Draft extends Model
     protected $fillable = [
         'user_uuid',
         'title',
+        'desc',
         'file',
         'status',
         'required_approvals',
@@ -24,5 +25,9 @@ class Draft extends Model
     public function comments()
     {
         return $this->hasMany(DraftComment::class, 'draft_id');
+    }
+    public function positions()
+    {
+        return $this->belongsToMany(Position::class, 'draft_approval_mappings', 'draft_id', 'position_id')->withPivot('is_approved', 'id');
     }
 }

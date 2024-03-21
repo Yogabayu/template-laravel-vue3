@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('draft_id');
             $table->uuid('position_id');
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
 
             $table->foreign('draft_id')->references('id')->on('drafts');

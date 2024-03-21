@@ -80,6 +80,6 @@ class User extends Authenticatable
 
     public function drafts()
     {
-        return $this->hasMany(Drafts::class, 'user_uuid', 'uuid');
+        return $this->hasMany(Draft::class, 'user_uuid', 'uuid');
     }
 }

@@ -454,6 +454,36 @@ const router = createRouter({
         },
       ],
     },
+
+    //draft
+    {
+      path: "/u-draft",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          // component: () => import("../pages/user/draft/index.vue"),
+          component: () => import("../pages/user/draft/v2/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/u-draft/:draftId",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/draft/detail.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    
   ],
 });
 

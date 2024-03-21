@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('user_uuid');
             $table->string('title');
             $table->string('file');
+            $table->longText('desc')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->integer('required_approvals')->comment('jumlah approval yang dibutuhkan')->nullable();
             $table->timestamps();

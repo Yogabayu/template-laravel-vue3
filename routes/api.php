@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\DraftApprovalLevelController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\HelperController;
 use App\Http\Controllers\Admin\PositionController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\DraftController;
 use App\Http\Controllers\User\FavoritePageController;
 use App\Http\Controllers\User\FileController as UserFileController;
 use App\Http\Controllers\User\HelperController as UserHelperController;
@@ -57,6 +59,8 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         //activity
         Route::get('useractivity', [UserActivityController::class, 'index']);
         Route::get('useractivity/{id}', [UserActivityController::class, 'getUserActivity']);
+        //draft-approval-level
+        Route::get('draft-approval-level', [DraftApprovalLevelController::class, 'index']);
 
         //division
         // Route::get('division', [DivisionController::class, 'index'])->name('division.index');
@@ -92,7 +96,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::post('listhistoryfilebyuser', [FileController::class, 'getHistoryAccessUser']);
         Route::get('fileperpositionid/{id}', [FileController::class, 'filePerPositionId']);
         Route::get('filepercategoryid/{id}', [FileController::class, 'filePerCategoryId']);
-        //->comment
+        // comment
         Route::get('comment/{id}', [FileController::class, 'getFileComment']);
         Route::post('comment', [FileController::class, 'sendComment']);
         Route::delete('comment/{id}', [FileController::class, 'deleteComment']);
@@ -142,6 +146,19 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             Route::get('search', [SearchPageController::class, 'index']);
             Route::get('category', [SearchPageController::class, 'category']);
             Route::get('category/{id}', [SearchPageController::class, 'fileToCategory']);
+
+            //page:draft
+            Route::get('draft', [DraftController::class, 'index']);
+            Route::post('draft', [DraftController::class, 'store']);
+            Route::put('draft/{id}', [DraftController::class, 'update']);
+            Route::delete('draft/{id}', [DraftController::class, 'destroy']);
+            Route::get('changestatusdraft/{id}', [DraftController::class, 'changeStatusDraft']);
+            ////detail draft
+            Route::get('draft/{id}', [DraftController::class, 'detailDraft']);
+            Route::post('changeposapprove', [DraftController::class, 'changePosApprove']);
+            Route::post('adddraftcomment', [DraftController::class, 'addDraftComment']);
+            Route::delete('deletedraftcomment/{id}', [DraftController::class, 'deleteDraftComment']);
+            Route::put('updatedraftcomment/{id}', [DraftController::class, 'updateDraftComment']);
         });
     });
 });

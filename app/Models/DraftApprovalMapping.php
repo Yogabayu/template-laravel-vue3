@@ -9,7 +9,7 @@ class DraftApprovalMapping extends Model
 {
     use HasFactory;
     protected $table = 'draft_approval_mappings';
-    protected $fillable = ['draft_id', 'position_id'];
+    protected $fillable = ['draft_id', 'position_id', 'is_approved'];
 
     public function draft()
     {
