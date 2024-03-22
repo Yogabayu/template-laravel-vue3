@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Helpers\DraftActivityHelper;
 use App\Helpers\ResponseHelper;
@@ -10,7 +10,6 @@ use App\Models\Draft;
 use App\Models\DraftApprovalMapping;
 use App\Models\DraftComment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class DraftController extends Controller
@@ -18,38 +17,8 @@ class DraftController extends Controller
     public function index(Request $request)
     {
         try {
-            // if ($request->input('request') == 'approve') {
-            //     $drafts = Draft::where('user_uuid', auth()->user()->uuid)
-            //         ->whereHas('positions', function ($query) {
-            //             $query->where('position_id', auth()->user()->position_id);
-            //         })
-            //         ->where('status', 'approved')
-            //         ->with('positions')
-            //         ->get();
-            // } else if ($request->input('request') == 'pending') {
-            //     $drafts = Draft::where('user_uuid', auth()->user()->uuid)
-            //         ->whereHas('positions', function ($query) {
-            //             $query->where('position_id', auth()->user()->position_id);
-            //         })
-            //         ->where('status', 'pending')
-            //         ->with('positions')
-            //         ->get();
-            // } else if ($request->input('request') == 'rejected') {
-            //     $drafts = Draft::where('user_uuid', auth()->user()->uuid)
-            //         ->whereHas('positions', function ($query) {
-            //             $query->where('position_id', auth()->user()->position_id);
-            //         })
-            //         ->where('status', 'rejected')
-            //         ->with('positions')
-            //         ->get();
-            // } else {
-            $drafts = Draft::where('user_uuid', auth()->user()->uuid)
-                ->orWhereHas('positions', function ($query) {
-                    $query->where('position_id', auth()->user()->position_id);
-                })
-                ->with('positions')
+            $drafts = Draft::with('positions')
                 ->get();
-            // }
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user mendapatkan data draft');
 
@@ -190,7 +159,6 @@ class DraftController extends Controller
 
             $draft->delete();
 
-            // return $this->successRes('Draft deleted successfully.', null);
             return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Menghapus Draft : ' . $id);
@@ -203,11 +171,11 @@ class DraftController extends Controller
     {
         try {
             $draft = Draft::findOrFail($id);
-            if (auth()->user()->uuid != $draft->user_uuid) {
-                DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $draft->title);
-                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah status draft ' . $draft->title);
-                return ResponseHelper::errorRes('Hanya Uploader yang bisa mengubah status');
-            }
+            // if (auth()->user()->uuid != $draft->user_uuid) {
+            //     DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $draft->title);
+            //     UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah status draft ' . $draft->title);
+            //     return ResponseHelper::errorRes('Hanya Uploader yang bisa mengubah status');
+            // }
             if ($draft->status == 'approved') {
                 $draft->status = 'pending';
                 $draft->save();
@@ -216,19 +184,19 @@ class DraftController extends Controller
                 UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user melakukan mengubah draft menjadi pending draft ' . $draft->title);
                 return ResponseHelper::successRes('Berhasil Update data', $draft);
             }
-            $count = DraftApprovalMapping::where('draft_id', $draft->id)->where('is_approved', true)->count();
-            if ($count == $draft->required_approvals) {
-                $draft->status = 'approved';
-                $draft->save();
+            // $count = DraftApprovalMapping::where('draft_id', $draft->id)->where('is_approved', true)->count();
+            // if ($count == $draft->required_approvals) {
+            $draft->status = 'approved';
+            $draft->save();
 
-                DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
-                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'draft telah disetujui : ' . $draft->title);
-                return ResponseHelper::successRes('Berhasil Update data', $draft);
-            } else {
-                DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $draft->title);
-                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft gagal disetujui : ' . $draft->title);
-                return ResponseHelper::errorRes('Belum semua Approval Disetujui, gagal merubah status');
-            }
+            DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'draft telah disetujui : ' . $draft->title);
+            return ResponseHelper::successRes('Berhasil Update data', $draft);
+            // } else {
+            //     DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $draft->title);
+            //     UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft gagal disetujui : ' . $draft->title);
+            //     return ResponseHelper::errorRes('Belum semua Approval Disetujui, gagal merubah status');
+            // }
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah status draft ' . $id);
@@ -261,23 +229,27 @@ class DraftController extends Controller
         try {
             $user = auth()->user();
             $change = DraftApprovalMapping::findOrFail($request->id);
-            if ($user->position_id != $change->position_id) {
-                DraftActivityHelper::draftActivity(auth()->user()->uuid, $change->draft_id, 'Gagal Mengganti Status Approve : ' . $change->draft_id);
-                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user mencoba mengganti status approve file' . $change->draft_id);
-                return ResponseHelper::errorRes('Posisi anda berbeda dengan posisi yang diizinkan. Silahkan coba kembali');
-            }
+            // if ($user->position_id != $change->position_id) {
+            //     DraftActivityHelper::draftActivity(auth()->user()->uuid, $change->draft_id, 'Gagal Mengganti Status Approve : ' . $change->draft_id);
+            //     UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user mencoba mengganti status approve file' . $change->draft_id);
+            //     return ResponseHelper::errorRes('Posisi anda berbeda dengan posisi yang diizinkan. Silahkan coba kembali');
+            // }
             $change->is_approved = $request->statusPosProv;
             $change->save();
 
             $draftId = $change->draft_id;
             $draft = Draft::findOrFail($draftId);
-            $countApprove = DraftApprovalMapping::where('draft_id', $draftId)->where('is_approved', true)->count();
-            if ($countApprove == $draft->required_approvals) {
-                $draft->status = 'approved';
-                $draft->save();
-                DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
-                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft otomatis disetujui oleh sistem karena telah memenuhi syarat' . $draft->title);
-            }
+            $draft->status = 'approved';
+            $draft->save();
+            DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft otomatis disetujui oleh sistem karena telah memenuhi syarat' . $draft->title);
+            // $countApprove = DraftApprovalMapping::where('draft_id', $draftId)->where('is_approved', true)->count();
+            // if ($countApprove == $draft->required_approvals) {
+            //     $draft->status = 'approved';
+            //     $draft->save();
+            //     DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
+            //     UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft otomatis disetujui oleh sistem karena telah memenuhi syarat' . $draft->title);
+            // }
 
             return ResponseHelper::successRes('Berhasil', $change);
         } catch (\Exception $e) {

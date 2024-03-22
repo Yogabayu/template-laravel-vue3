@@ -109,21 +109,22 @@ const upgradeBanner = computed(() => {
       <!-- 👉 Draft -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'Pengajuan Draft',
+          heading: 'Draft',
         }"
       />
       <VerticalNavLink
         :item="{
+          to: '/a-draft',
           title: 'Semua Draft',
           icon: 'bx-file',
         }"
       />
-      <VerticalNavLink
+      <!-- <VerticalNavLink
         :item="{
           title: 'Riwayat Pengajuan Draft',
           icon: 'bx-history',
         }"
-      />
+      /> -->
 
       <!-- 👉 lain -->
       <VerticalNavSectionTitle

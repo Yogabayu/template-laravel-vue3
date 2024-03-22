@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DraftApprovalLevelController;
+use App\Http\Controllers\Admin\DraftController as AdminDraftController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\HelperController;
 use App\Http\Controllers\Admin\PositionController;
@@ -113,6 +114,18 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('devices/{id}', [DeviceController::class, 'deviceUser']);
         Route::put('updatedevices/{id}', [DeviceController::class, 'updateDevice']);
         Route::delete('deletedevices/{id}', [DeviceController::class, 'deleteDevice']);
+        //page:draft
+        Route::get('draft', [AdminDraftController::class, 'index']);
+        Route::post('draft', [AdminDraftController::class, 'store']);
+        Route::put('draft/{id}', [AdminDraftController::class, 'update']);
+        Route::delete('draft/{id}', [AdminDraftController::class, 'destroy']);
+        Route::get('changestatusdraft/{id}', [AdminDraftController::class, 'changeStatusDraft']);
+        ////detail draft
+        Route::get('draft/{id}', [AdminDraftController::class, 'detailDraft']);
+        Route::post('changeposapprove', [AdminDraftController::class, 'changePosApprove']);
+        Route::post('adddraftcomment', [AdminDraftController::class, 'addDraftComment']);
+        Route::delete('deletedraftcomment/{id}', [AdminDraftController::class, 'deleteDraftComment']);
+        Route::put('updatedraftcomment/{id}', [AdminDraftController::class, 'updateDraftComment']);
 
 
         //////// Route User \\\\\\\\\

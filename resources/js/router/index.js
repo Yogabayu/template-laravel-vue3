@@ -359,6 +359,32 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/a-draft",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/draft/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-draft/:draftId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/draft/detail.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
 
 
 

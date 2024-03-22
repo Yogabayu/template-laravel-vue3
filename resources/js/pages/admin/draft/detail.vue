@@ -879,7 +879,7 @@ export default {
     async getDetailDraft(id) {
       try {
         this.overlay = true;
-        const response = await mainURL.get(`/user/draft/${id}`);
+        const response = await mainURL.get(`/draft/${id}`);
         if (response.status === 200) {
           this.draft = response.data.data;
           this.selectedPositions = response.data.data.positions;
@@ -913,7 +913,7 @@ export default {
     async changeDraftStatus(id) {
       try {
         this.overlay = true;
-        const response = await mainURL.get(`/user/changestatusdraft/${id}`);
+        const response = await mainURL.get(`/changestatusdraft/${id}`);
 
         if (response.status === 200) {
           this.getDetailDraft(this.draftId);
@@ -936,7 +936,7 @@ export default {
         formData.append("statusPosProv", this.dataPosProv.statusPosProv);
         formData.append("_method", "POST");
 
-        const response = await mainURL.post("/user/changeposapprove", formData);
+        const response = await mainURL.post("/changeposapprove", formData);
 
         if (response.status === 200) {
           this.closeModal(1);
@@ -983,7 +983,7 @@ export default {
         };
 
         const response = await mainURL.post(
-          "/user/adddraftcomment",
+          "/adddraftcomment",
           formData,
           config
         );
@@ -1036,7 +1036,7 @@ export default {
         // console.log(...formData);
 
         const response = await mainURL.post(
-          `/user/updatedraftcomment/${this.updateDataComment.id}`,
+          `/updatedraftcomment/${this.updateDataComment.id}`,
           formData,
           config
         );
@@ -1072,7 +1072,7 @@ export default {
           this.overlay = false;
           return;
         }
-        const response = await mainURL.delete(`/user/deletedraftcomment/${id}`);
+        const response = await mainURL.delete(`/deletedraftcomment/${id}`);
         if (response.status === 200) {
           this.overlay = false;
           this.getDetailDraft(this.draftId);

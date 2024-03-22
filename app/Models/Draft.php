@@ -30,4 +30,8 @@ class Draft extends Model
     {
         return $this->belongsToMany(Position::class, 'draft_approval_mappings', 'draft_id', 'position_id')->withPivot('is_approved', 'id');
     }
+    public function draftActivities()
+    {
+        return $this->hasMany(DraftActivity::class, 'draft_id');
+    }
 }
