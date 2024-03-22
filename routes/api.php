@@ -60,8 +60,6 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         //activity
         Route::get('useractivity', [UserActivityController::class, 'index']);
         Route::get('useractivity/{id}', [UserActivityController::class, 'getUserActivity']);
-        //draft-approval-level
-        Route::get('draft-approval-level', [DraftApprovalLevelController::class, 'index']);
 
         //division
         // Route::get('division', [DivisionController::class, 'index'])->name('division.index');
