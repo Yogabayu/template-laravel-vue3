@@ -9,9 +9,9 @@ class Position extends Model
 {
     use HasFactory;
     protected $table = 'positions';
-    protected $primaryKey = 'id'; // Change 'division_id' to your actual primary key column name
+    protected $primaryKey = 'id';
     public $incrementing = false;
-    protected $fillable = ['id', 'name', 'level'];
+    protected $fillable = ['id', 'name', 'level', 'approval_level_id'];
 
     public function fileToPositions()
     {
@@ -26,5 +26,9 @@ class Position extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+    public function approvalLevel()
+    {
+        return $this->belongsTo(DraftApprovalLevel::class, 'approval_level_id');
     }
 }

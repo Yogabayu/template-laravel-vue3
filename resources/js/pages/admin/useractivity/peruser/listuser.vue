@@ -47,7 +47,7 @@
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
-            <v-tooltip location="top" text="Reset Password">
+            <v-tooltip location="top" text="Lihat Detail">
               <template v-slot:activator="{ props }">
                 <button v-bind="props">
                   <VIcon

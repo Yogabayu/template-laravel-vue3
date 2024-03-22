@@ -35,16 +35,16 @@ const router = createRouter({
       //   }
       // },
     },
-    {
-      path: "/register",
-      component: () => import("../layouts/blank.vue"),
-      children: [
-        {
-          path: "", // This will match /register itself
-          component: () => import("../pages/register.vue"),
-        },
-      ],
-    },
+    // {
+    //   path: "/register",
+    //   component: () => import("../layouts/blank.vue"),
+    //   children: [
+    //     {
+    //       path: "", // This will match /register itself
+    //       component: () => import("../pages/register.vue"),
+    //     },
+    //   ],
+    // },
     {
       path: "/:pathMatch(.*)*",
       component: () => import("../layouts/blank.vue"),
@@ -359,6 +359,32 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/a-draft",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/draft/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/a-draft/:draftId",
+      component: () => import("../layouts/admin/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/admin/draft/detail.vue"),
+          beforeEnter: (to, from, next) => {
+            checkAdminLogin(next);
+          },
+        },
+      ],
+    },
 
 
 
@@ -454,6 +480,36 @@ const router = createRouter({
         },
       ],
     },
+
+    //draft
+    {
+      path: "/u-draft",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          // component: () => import("../pages/user/draft/index.vue"),
+          component: () => import("../pages/user/draft/v2/index.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    {
+      path: "/u-draft/:draftId",
+      component: () => import("../layouts/user/default.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/draft/detail.vue"),
+          beforeEnter: (to, from, next) => {
+            checkLogin(next);
+          },
+        },
+      ],
+    },
+    
   ],
 });
 

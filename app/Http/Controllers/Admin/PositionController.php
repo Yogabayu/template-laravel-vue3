@@ -35,7 +35,7 @@ class PositionController extends Controller
     public function index()
     {
         try {
-            $positions = Position::withCount('users')->get();
+            $positions = Position::withCount('users')->with('approvalLevel')->get();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses semua data jabatan');
 
@@ -61,9 +61,10 @@ class PositionController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
+                'approval_level_id' => 'required',
             ]);
             $this->validatePositionName($request->name);
-            $position = $this->createPosition($request->name, $request->level);
+            $position = $this->createPosition($request->name, $request->approval_level_id);
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User menambahkan jabatan baru');
 
@@ -83,12 +84,12 @@ class PositionController extends Controller
         ])->validate();
     }
 
-    private function createPosition($name, $level)
+    private function createPosition($name, $approval_level_id)
     {
         return Position::create([
             'id' => Str::uuid(),
             'name' => $name,
-            'level' => $level,
+            'approval_level_id' => $approval_level_id,
         ]);
     }
 
@@ -130,7 +131,7 @@ class PositionController extends Controller
 
             $position = Position::where('id', $id)->first();
             $position->name = $request->name;
-            $position->level = $request->level;
+            $position->approval_level_id = $request->approval_level_id;
             $position->save();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User update data jabatan | ' . $position->name);

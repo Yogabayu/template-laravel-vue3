@@ -80,3 +80,18 @@ app.config.globalProperties.$userPhotoUrl = 'https://kma.bankarthaya.com/user/ph
 // app.config.globalProperties.$filePath = 'https://templatevue.yogabayuap.com/file/file/';
 /** production */
 app.config.globalProperties.$filePath = 'https://kma.bankarthaya.com/file/file/';
+// app.config.globalProperties.$filePath = 'https://kma.bankarthaya.com/file/file/';
+
+/** localhost */
+app.config.globalProperties.$draftUrl = 'http://localhost:8000/draft/';
+/** development */
+// app.config.globalProperties.$draftUrl = 'https://templatevue.yogabayuap.com/draft/';
+/** production */
+// app.config.globalProperties.$draftUrl = 'https://kma.bankarthaya.com/draft/';
+
+/** localhost */
+app.config.globalProperties.$drafCommenttUrl = 'http://localhost:8000/draft/comment/';
+/** development */
+// app.config.globalProperties.$drafCommenttUrl = 'https://templatevue.yogabayuap.com/draft/';
+/** production */
+// app.config.globalProperties.$drafCommenttUrl = 'https://kma.bankarthaya.com/draft/';

@@ -45,6 +45,15 @@
                     prepend-icon="mdi-file"
                   />
                 </VCol>
+                <VCol cols="12" md="12">
+                  <v-select
+                    label="Approval Draft"
+                    :items="approvalLevels"
+                    v-model="dataForm.approval_level_id"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-divide"
+                  ></v-select>
+                </VCol>
                 <!-- <VCol md="12" cols="12">
                   <v-select
                     label="Level Jabatan?"
@@ -91,6 +100,15 @@
                     prepend-icon="mdi-file"
                   />
                 </VCol>
+                <VCol cols="12" md="12">
+                  <v-select
+                    label="Approval Draft"
+                    :items="approvalLevels"
+                    v-model="dataForm.approval_level_id"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-divide"
+                  ></v-select>
+                </VCol>
                 <!-- <VCol md="12" cols="12">
                   <v-select
                     label="Bisa Upload Draft?"
@@ -111,7 +129,7 @@
                   <button
                     type="button"
                     class="btn btn-blue"
-                    @click="closeModal(1)"
+                    @click="closeModal(2)"
                   >
                     Batal
                   </button>
@@ -125,7 +143,6 @@
         show-index
         :headers="headers"
         :items="items"
-        :search-field="searchField"
         :search-value="searchValue"
       >
         <template #empty-message>
@@ -134,14 +151,12 @@
         <template #loading>
           <p>loading data .....</p>
         </template>
-        <template #item-level="{ level }">
-          <VChip
-            v-for="lv in level"
-            :key="lv"
-            :style="{ color: getChipColor(lv) }"
+        <template #item-approval_level="{ approval_level }">
+          <VChip v-if="approval_level!=null"
           >
-            Level {{ lv }}
+            {{ approval_level.name }}: {{ approval_level.desc }}
           </VChip>
+          <VChip v-else>-</VChip>
         </template>
         <template #item-operation="item">
           <div class="operation-wrapper">
@@ -171,6 +186,7 @@
 
 <script lang="ts">
 import mainURL from "@/axios";
+import { VChip } from "vuetify/lib/components/index.mjs";
 export default {
   data() {
     return {
@@ -180,19 +196,19 @@ export default {
       dataForm: {
         id: null,
         name: "",
-        level: 0,
+        approval_level_id: null,
       },
       items: [],
       headers: [
         { text: "Nama Jabatan", value: "name", sortable: true },
         { text: "Total Karyawan", value: "users_count", sortable: true },
-        // { text: "Upload Draft?", value: "level", sortable: true },
+        { text: "Approval Draft", value: "approval_level", sortable: true },
         { text: "Operation", value: "operation" },
       ],
       searchValue: "",
-      searchField: ["name", "users_count"],
       insert: false,
       edit: false,
+      approvalLevels:[],
     };
   },
   methods: {
@@ -241,7 +257,7 @@ export default {
       try {
         const formData = new FormData();
         formData.append("name", this.dataForm.name);
-        formData.append("level", this.dataForm.level);
+        formData.append("approval_level_id", this.dataForm.approval_level_id);
         formData.append("_method", "PUT");
 
         const response = await mainURL.post(
@@ -271,7 +287,7 @@ export default {
         }
 
         const formData = new FormData();
-        formData.append("level", this.dataForm.level);
+        formData.append("approval_level_id", this.dataForm.approval_level_id);
         formData.append("name", this.dataForm.name);
         formData.append("_method", "POST");
 
@@ -300,19 +316,21 @@ export default {
       this.dataForm = {
         name: "",
         id: null,
-        level: 0,
+        approval_level_id: 1,
       };
     },
     openModal(type: number, item = null) {
       if (type === 1) {
         this.insert = true;
+        this.getApprovalLevel();
       } else if (type === 2) {
         if (item) {
-          this.dataForm.level = parseInt(item.level);
+          this.dataForm.approval_level_id = parseInt(item.approval_level_id) ? parseInt(item.approval_level_id) : 1;
           this.dataForm.name = item.name;
           this.dataForm.id = item.id;
           this.edit = true;
         }
+        this.getApprovalLevel();
       }
     },
     async getAllPositions() {
@@ -328,6 +346,25 @@ export default {
         this.$showToast("error", "Sorry", error.data.data.message);
       }
     },
+    async getApprovalLevel(){
+      try {
+        const response = await mainURL.get("/draft-approval-level");
+
+        if (response.status === 200) {
+          this.approvalLevels = response.data.data.map(
+            (item: { id: any; name: any ; desc:any}) => ({
+              value: item.id,
+              title: item.name +'-'+item.desc,
+            })
+          );
+          
+        } else {
+          this.$showToast("error", "Sorry", response.data.data.message);
+        }
+      } catch (error) {
+        this.$showToast("error", "Sorry", error.data.data.message);
+      }
+    }
   },
   mounted() {
     this.getAllPositions();
