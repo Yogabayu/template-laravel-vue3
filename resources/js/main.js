@@ -94,4 +94,3 @@ app.config.globalProperties.$drafCommenttUrl = 'http://localhost:8000/draft/comm
 // app.config.globalProperties.$drafCommenttUrl = 'https://templatevue.yogabayuap.com/draft/';
 /** production */
 // app.config.globalProperties.$drafCommenttUrl = 'https://kma.bankarthaya.com/draft/';
-app.config.globalProperties.$filePath = 'https://kma.bankarthaya.com/file/file/';
