@@ -1129,7 +1129,7 @@ export default {
 
     toLink(item) {
       // console.log(item);
-      this.$router.push(`/u-draft/${item}`);
+      this.$router.push(`/a-draft/${item}`);
     },
     async updateData() {
       try {

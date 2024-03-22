@@ -189,6 +189,12 @@ class DraftController extends Controller
             $draft->status = 'approved';
             $draft->save();
 
+            $draftMaps = DraftApprovalMapping::where('draft_id', $draft->id)->get();
+            foreach ($draftMaps as $draftMap) {
+                $draftMap->is_approved = true;
+                $draftMap->save();
+            }
+
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'draft telah disetujui : ' . $draft->title);
             return ResponseHelper::successRes('Berhasil Update data', $draft);
@@ -198,7 +204,8 @@ class DraftController extends Controller
             //     return ResponseHelper::errorRes('Belum semua Approval Disetujui, gagal merubah status');
             // }
         } catch (\Exception $e) {
-            DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $id);
+            // $draft = Draft::findOrFail($id);
+            // DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Status Draft : ' . $id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah status draft ' . $id);
             return ResponseHelper::errorRes($e->getMessage());
         }
@@ -218,6 +225,9 @@ class DraftController extends Controller
 
             return ResponseHelper::successRes('Berhasil mendapatkan data', $draft);
         } catch (\Exception $e) {
+            $draft = Draft::with(['positions', 'user', 'comments', 'draftActivities' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }, 'comments.user', 'user.position', 'draftActivities.user'])->findOrFail($id);
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'gagal Melihat Detail Draft : ' . $id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'gagal user melihat detail draft:  ' . $draft->title);
             return ResponseHelper::errorRes($e->getMessage());
@@ -338,9 +348,6 @@ class DraftController extends Controller
     {
         try {
             $comment = DraftComment::findOrFail($id);
-            if (auth()->user()->uuid != $comment->user_uuid) {
-                return ResponseHelper::errorRes('Komentar ini bukan milik anda');
-            }
             if ($comment->attachment) {
                 $oldPath = $comment->attachment;
                 if ($oldPath && File::exists(public_path('draft/comment/'  . $oldPath))) {
