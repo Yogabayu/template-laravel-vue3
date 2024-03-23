@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File as FacadesFile;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\CloudMessage;
 
 class FileController extends Controller
 {
@@ -171,6 +173,8 @@ class FileController extends Controller
 
             $file->save();
 
+            $fcm_tokens = [];
+
             $positions = $request->positions;
             if (in_array('all', $positions)) {
                 $allPositions = Position::all();
@@ -179,6 +183,10 @@ class FileController extends Controller
                     $posisionMapping->file_uuid = $file->id;
                     $posisionMapping->position_uuid = $pos->id;
                     $posisionMapping->save();
+                    $users = User::where('position_id', $pos)
+                        ->whereNotNull('fcm_token')
+                        ->pluck('fcm_token');
+                    $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
                 }
             } else {
                 foreach ($positions as $pos) {
@@ -186,6 +194,10 @@ class FileController extends Controller
                     $posisionMapping->file_uuid = $file->id;
                     $posisionMapping->position_uuid = $pos;
                     $posisionMapping->save();
+                    $users = User::where('position_id', $pos)
+                        ->whereNotNull('fcm_token')
+                        ->pluck('fcm_token');
+                    $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
                 }
             }
 
@@ -196,6 +208,15 @@ class FileController extends Controller
                 $categoryMapping->category_uuid = $cat;
                 $categoryMapping->save();
             }
+            // dd($fcm_tokens);
+            foreach ($fcm_tokens as $token) {
+                $messaging = app('firebase.messaging');
+                $notification = Notification::create('File Baru Untuk Anda ', $file->name . ' Telah Ditambahkan');
+                $message = CloudMessage::withTarget('token', $token)
+                    ->withNotification($notification);
+                $messaging->send($message);
+            }
+
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Add new file | ' . $file->id);
 
             return $this->successRes('Successfully added new files.', $file);

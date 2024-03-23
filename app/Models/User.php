@@ -30,7 +30,8 @@ class User extends Authenticatable
         'position_id',
         'division_id',
         'nik',
-        'uuid'
+        'uuid',
+        'fcm_token',
     ];
 
     /**

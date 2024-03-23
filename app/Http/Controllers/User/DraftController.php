@@ -9,9 +9,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Draft;
 use App\Models\DraftApprovalMapping;
 use App\Models\DraftComment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 class DraftController extends Controller
 {
@@ -92,6 +95,7 @@ class DraftController extends Controller
             $draft->file = $filepath;
 
             $draft->save();
+            $fcm_tokens = [];
 
             $positions = $request->positions;
             foreach ($positions as $pos) {
@@ -100,7 +104,21 @@ class DraftController extends Controller
                 $posisionMapping->position_id = $pos;
                 $posisionMapping->is_approved = false;
                 $posisionMapping->save();
+
+                $users = User::where('position_id', $pos)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token');
+                $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
             }
+
+            foreach ($fcm_tokens as $token) {
+                $messaging = app('firebase.messaging');
+                $notification = Notification::create('Draft Baru ', $draft->title . ' Telah Ditambahkan, silahkan di lakukan pengecekan');
+                $message = CloudMessage::withTarget('token', $token)
+                    ->withNotification($notification);
+                $messaging->send($message);
+            }
+
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Membuat Draft Baru :' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user menambahkan draft ' . $draft->title);
             return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
@@ -178,6 +196,24 @@ class DraftController extends Controller
     {
         try {
             $draft = Draft::findOrFail($id);
+
+            $fcm_tokens = [];
+            $draftPositions = DraftApprovalMapping::where('draft_id', $draft->id)->select('position_id')->get();
+
+            foreach ($draftPositions as $position) {
+                $users = User::where('position_id', $position->position_id)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token');
+                $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
+            }
+            foreach ($fcm_tokens as $token) {
+                $messaging = app('firebase.messaging');
+                $notification = Notification::create('Draft Dihapus', $draft->title);
+                $message = CloudMessage::withTarget('token', $token)
+                    ->withNotification($notification);
+                $messaging->send($message);
+            }
+
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Hapus Draft :' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user melakukan hapus draft ' . $draft->title);
             if ($draft->file) {
@@ -190,7 +226,6 @@ class DraftController extends Controller
 
             $draft->delete();
 
-            // return $this->successRes('Draft deleted successfully.', null);
             return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Menghapus Draft : ' . $id);
@@ -271,6 +306,24 @@ class DraftController extends Controller
 
             $draftId = $change->draft_id;
             $draft = Draft::findOrFail($draftId);
+
+            $fcm_tokens = [];
+            $draftPositions = DraftApprovalMapping::where('draft_id', $draft->id)->select('position_id')->get();
+
+            foreach ($draftPositions as $position) {
+                $users = User::where('position_id', $position->position_id)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token');
+                $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
+            }
+            foreach ($fcm_tokens as $token) {
+                $messaging = app('firebase.messaging');
+                $notification = Notification::create('Status Draft diubah ', $draft->title . ' silahkan di lakukan pengecekan');
+                $message = CloudMessage::withTarget('token', $token)
+                    ->withNotification($notification);
+                $messaging->send($message);
+            }
+
             $countApprove = DraftApprovalMapping::where('draft_id', $draftId)->where('is_approved', true)->count();
             if ($countApprove == $draft->required_approvals) {
                 $draft->status = 'approved';
@@ -314,6 +367,25 @@ class DraftController extends Controller
             }
 
             $comment->save();
+
+            $draft = Draft::findOrFail($request->draft_id);
+            $fcm_tokens = [];
+            $draftPositions = DraftApprovalMapping::where('draft_id', $draft->id)->select('position_id')->get();
+
+            foreach ($draftPositions as $position) {
+                $users = User::where('position_id', $position->position_id)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token');
+                $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
+            }
+            foreach ($fcm_tokens as $token) {
+                $messaging = app('firebase.messaging');
+                $notification = Notification::create('Ada Komentar ditambahkan', $draft->title . ' silahkan di lakukan pengecekan');
+                $message = CloudMessage::withTarget('token', $token)
+                    ->withNotification($notification);
+                $messaging->send($message);
+            }
+
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Menambahkan komen pada draft: ' . $comment->draft_id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user manambahkan komen pada draft: ' . $comment->draft_id);
             return ResponseHelper::successRes('Berhasil menambahkan komentar', $comment);
