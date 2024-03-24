@@ -47,24 +47,83 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $user = User::where('nik', request('nik'))->first();
+        try {
+            $user = User::where('nik', request('nik'))->first();
 
-        if ($user && Auth::attempt(['email' => $user->email, 'password' => request('password')])) {
+            if ($user && Auth::attempt(['email' => $user->email, 'password' => request('password')])) {
 
-            $user = User::with('position', 'position.approvalLevel')->find(Auth::user()->id);
-            // if ($request->has('fcm_token')) {
-            //     $user->fcm_token = $request->fcm_token;
-            //     $user->save();
-            // }
-            $user_token['token'] = $user->createToken('appToken')->accessToken;
-            if (!$user->isActive) {
-                $this->sendNotif($user);
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed | Akun tidak aktif, silahkan hubungi administrator',
-                ], 401);
-            }
-            if ($user->id == 1) {
+                $user = User::with('position', 'position.approvalLevel')->find(Auth::user()->id);
+                // if ($request->has('fcm_token')) {
+                //     $user->fcm_token = $request->fcm_token;
+                //     $user->save();
+                // }
+                $user_token['token'] = $user->createToken('appToken')->accessToken;
+                if (!$user->isActive) {
+                    $this->sendNotif($user);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed | Akun tidak aktif, silahkan hubungi administrator',
+                    ], 401);
+                }
+                if ($user->id == 1) {
+                    UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
+
+                    return response()->json([
+                        'success' => true,
+                        'token' => $user_token,
+                        'user' => $user,
+                    ], 200);
+                }
+                $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
+
+                if (!$deviceUser->isEmpty()) {
+                    $deviceMatched = false;
+
+                    foreach ($deviceUser as $dv) {
+                        if ($dv->deviceName == request('device') || $dv->ip == $request->ip()) {
+                            if ($dv->isVerified == 1) {
+                                $deviceMatched = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!$deviceMatched) {
+                        $deviceDifferent = false;
+
+                        foreach ($deviceUser as $dv) {
+                            if ($dv->isVerified != 0 | ($dv->ip != $request->ip() || $dv->deviceName != request('device'))) {
+                                $deviceDifferent = true;
+                                break;
+                            }
+                        }
+
+                        if ($deviceDifferent) {
+                            DeviceVerification::create([
+                                'user_uuid' => auth()->user()->uuid,
+                                'deviceName' => request('device'),
+                                'ip' => $request->ip(),
+                                'isVerified' => 0,
+                            ]);
+                        }
+
+                        UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User gagal login karena device / ip terdeteksi berbeda dari yang didaftarkan');
+
+                        $this->sendNotif($user);
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Failed | Device tidak memiliki akses',
+                        ], 401);
+                    }
+                } else {
+                    DeviceVerification::create([
+                        'user_uuid' => auth()->user()->uuid,
+                        'deviceName' => request('device'),
+                        'ip' => $request->ip(),
+                        'isVerified' => 1,
+                    ]);
+                }
                 UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
                 return response()->json([
@@ -72,69 +131,18 @@ class AuthController extends Controller
                     'token' => $user_token,
                     'user' => $user,
                 ], 200);
-            }
-            $deviceUser = DB::table('deviceverifications')->where('user_uuid', auth()->user()->uuid)->get();
-
-            if (!$deviceUser->isEmpty()) {
-                $deviceMatched = false;
-
-                foreach ($deviceUser as $dv) {
-                    if ($dv->deviceName == request('device') || $dv->ip == $request->ip()) {
-                        if ($dv->isVerified == 1) {
-                            $deviceMatched = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!$deviceMatched) {
-                    $deviceDifferent = false;
-
-                    foreach ($deviceUser as $dv) {
-                        if ($dv->isVerified != 0 | ($dv->ip != $request->ip() || $dv->deviceName != request('device'))) {
-                            $deviceDifferent = true;
-                            break;
-                        }
-                    }
-
-                    if ($deviceDifferent) {
-                        DeviceVerification::create([
-                            'user_uuid' => auth()->user()->uuid,
-                            'deviceName' => request('device'),
-                            'ip' => $request->ip(),
-                            'isVerified' => 0,
-                        ]);
-                    }
-
-                    UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User gagal login karena device / ip terdeteksi berbeda dari yang didaftarkan');
-
-                    $this->sendNotif($user);
-
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Failed | Device tidak memiliki akses',
-                    ], 401);
-                }
             } else {
-                DeviceVerification::create([
-                    'user_uuid' => auth()->user()->uuid,
-                    'deviceName' => request('device'),
-                    'ip' => $request->ip(),
-                    'isVerified' => 1,
-                ]);
-            }
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'User Login');
 
-            return response()->json([
-                'success' => true,
-                'token' => $user_token,
-                'user' => $user,
-            ], 200);
-        } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed | Email atau Password salah.',
+                ], 401);
+            }
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed | Email atau Password salah.',
-            ], 401);
+                'message' => 'Failed to authenticate. | ' . $e->getMessage(),
+            ]);
         }
     }
 
