@@ -74,6 +74,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
         Route::get('position/{id}', [PositionController::class, 'show'])->name('position.show');
         Route::put('position/{id}', [PositionController::class, 'update'])->name('position.update');
         Route::delete('position/{id}', [PositionController::class, 'destroy'])->name('position.destroy');
+        Route::get('draft-approval-level', [DraftApprovalLevelController::class, 'index']);
 
         //category
         Route::get('category', [CategoryController::class, 'index'])->name('category.index');
