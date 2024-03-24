@@ -183,7 +183,7 @@ class FileController extends Controller
                     $posisionMapping->file_uuid = $file->id;
                     $posisionMapping->position_uuid = $pos->id;
                     $posisionMapping->save();
-                    $users = User::where('position_id', $pos)
+                    $users = User::where('position_id', $pos->id)
                         ->whereNotNull('fcm_token')
                         ->pluck('fcm_token');
                     $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
@@ -208,7 +208,7 @@ class FileController extends Controller
                 $categoryMapping->category_uuid = $cat;
                 $categoryMapping->save();
             }
-            dd($fcm_tokens);
+            // dd($fcm_tokens);
             foreach ($fcm_tokens as $token) {
                 $messaging = app('firebase.messaging');
                 $notification = Notification::create('File Baru Untuk Anda ', $file->name . ' Telah Ditambahkan');
