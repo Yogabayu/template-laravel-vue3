@@ -52,10 +52,10 @@ class AuthController extends Controller
         if ($user && Auth::attempt(['email' => $user->email, 'password' => request('password')])) {
 
             $user = User::with('position', 'position.approvalLevel')->find(Auth::user()->id);
-            if ($request->has('fcm_token')) {
-                $user->fcm_token = $request->fcm_token;
-                $user->save();
-            }
+            // if ($request->has('fcm_token')) {
+            //     $user->fcm_token = $request->fcm_token;
+            //     $user->save();
+            // }
             $user_token['token'] = $user->createToken('appToken')->accessToken;
             if (!$user->isActive) {
                 $this->sendNotif($user);
