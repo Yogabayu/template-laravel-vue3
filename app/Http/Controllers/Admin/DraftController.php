@@ -80,11 +80,15 @@ class DraftController extends Controller
             }
 
             foreach ($fcm_tokens as $token) {
-                $messaging = app('firebase.messaging');
-                $notification = Notification::create('Draft Baru ', $draft->title . ' Telah Ditambahkan, silahkan di lakukan pengecekan');
-                $message = CloudMessage::withTarget('token', $token)
-                    ->withNotification($notification);
-                $messaging->send($message);
+                try {
+                    $messaging = app('firebase.messaging');
+                    $notification = Notification::create('Draft Baru ', $draft->title . ' Telah Ditambahkan, silahkan di lakukan pengecekan');
+                    $message = CloudMessage::withTarget('token', $token)
+                        ->withNotification($notification);
+                    $messaging->send($message);
+                } catch (\Exception $ex) {
+                    error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                }
             }
 
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Membuat Draft Baru :' . $draft->title);
