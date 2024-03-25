@@ -50,7 +50,7 @@ class DraftController extends Controller
                 ->orWhereHas('positions', function ($query) {
                     $query->where('position_id', auth()->user()->position_id);
                 })
-                ->with('positions')
+                ->with('positions', 'user')
                 ->get();
             // }
 
