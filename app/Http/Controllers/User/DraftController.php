@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
@@ -77,7 +78,6 @@ class DraftController extends Controller
             ]);
 
             $count_require_approval = count($request->positions);
-            // dd($request->all());
 
             $draft = new Draft();
             $draft->user_uuid = auth()->user()->uuid;
@@ -112,11 +112,15 @@ class DraftController extends Controller
             }
 
             foreach ($fcm_tokens as $token) {
-                $messaging = app('firebase.messaging');
-                $notification = Notification::create('Draft Baru ', $draft->title . ' Telah Ditambahkan, silahkan di lakukan pengecekan');
-                $message = CloudMessage::withTarget('token', $token)
-                    ->withNotification($notification);
-                $messaging->send($message);
+                try {
+                    $messaging = app('firebase.messaging');
+                    $notification = Notification::create('Draft Baru ', $draft->title . ' Telah Ditambahkan, silahkan di lakukan pengecekan');
+                    $message = CloudMessage::withTarget('token', $token)
+                        ->withNotification($notification);
+                    $messaging->send($message);
+                } catch (MessagingException $ex) {
+                    error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                }
             }
 
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Membuat Draft Baru :' . $draft->title);
@@ -207,11 +211,15 @@ class DraftController extends Controller
                 $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
             }
             foreach ($fcm_tokens as $token) {
-                $messaging = app('firebase.messaging');
-                $notification = Notification::create('Draft Dihapus', $draft->title);
-                $message = CloudMessage::withTarget('token', $token)
-                    ->withNotification($notification);
-                $messaging->send($message);
+                try {
+                    $messaging = app('firebase.messaging');
+                    $notification = Notification::create('Draft Dihapus', $draft->title);
+                    $message = CloudMessage::withTarget('token', $token)
+                        ->withNotification($notification);
+                    $messaging->send($message);
+                } catch (MessagingException $ex) {
+                    error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                }
             }
 
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Hapus Draft :' . $draft->title);
@@ -223,6 +231,8 @@ class DraftController extends Controller
                 }
             }
             $draft->positions()->detach();
+            $draft->draftActivities()->delete();
+            $draft->comments()->delete();
 
             $draft->delete();
 
@@ -317,11 +327,15 @@ class DraftController extends Controller
                 $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
             }
             foreach ($fcm_tokens as $token) {
-                $messaging = app('firebase.messaging');
-                $notification = Notification::create('Status Draft diubah ', $draft->title . ' silahkan di lakukan pengecekan');
-                $message = CloudMessage::withTarget('token', $token)
-                    ->withNotification($notification);
-                $messaging->send($message);
+                try {
+                    $messaging = app('firebase.messaging');
+                    $notification = Notification::create('Status Draft diubah ', $draft->title . ' silahkan di lakukan pengecekan');
+                    $message = CloudMessage::withTarget('token', $token)
+                        ->withNotification($notification);
+                    $messaging->send($message);
+                } catch (MessagingException $ex) {
+                    error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                }
             }
 
             $countApprove = DraftApprovalMapping::where('draft_id', $draftId)->where('is_approved', true)->count();
@@ -379,11 +393,15 @@ class DraftController extends Controller
                 $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
             }
             foreach ($fcm_tokens as $token) {
-                $messaging = app('firebase.messaging');
-                $notification = Notification::create('Ada Komentar ditambahkan', $draft->title . ' silahkan di lakukan pengecekan');
-                $message = CloudMessage::withTarget('token', $token)
-                    ->withNotification($notification);
-                $messaging->send($message);
+                try {
+                    $messaging = app('firebase.messaging');
+                    $notification = Notification::create('Ada Komentar ditambahkan', $draft->title . ' silahkan di lakukan pengecekan');
+                    $message = CloudMessage::withTarget('token', $token)
+                        ->withNotification($notification);
+                    $messaging->send($message);
+                } catch (MessagingException $ex) {
+                    error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                }
             }
 
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Menambahkan komen pada draft: ' . $comment->draft_id);
