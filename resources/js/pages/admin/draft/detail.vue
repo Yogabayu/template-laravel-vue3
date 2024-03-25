@@ -531,6 +531,7 @@
                                             size="20"
                                             icon="bx-edit"
                                             color="blue"
+                                            @click="openModal(2, comment)"
                                           />
                                         </button>
                                       </div>
