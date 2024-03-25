@@ -12,6 +12,7 @@ use App\Models\DraftComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
@@ -86,7 +87,7 @@ class DraftController extends Controller
                     $message = CloudMessage::withTarget('token', $token)
                         ->withNotification($notification);
                     $messaging->send($message);
-                } catch (\Exception $ex) {
+                } catch (MessagingException $ex) {
                     error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
                 }
             }
