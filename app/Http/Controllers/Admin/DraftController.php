@@ -123,6 +123,27 @@ class DraftController extends Controller
                     $count = DraftApprovalMapping::where('draft_id', $draft->id)->where('is_approved', true)->count();
                     if ($count == $draft->required_approvals) {
                         $draft->status = $request->status;
+
+                        $fcm_tokens = [];
+                        $draftPositions = DraftApprovalMapping::where('draft_id', $draft->id)->select('position_id')->get();
+
+                        foreach ($draftPositions as $position) {
+                            $users = User::where('position_id', $position->position_id)
+                                ->whereNotNull('fcm_token')
+                                ->pluck('fcm_token');
+                            $fcm_tokens = array_merge($fcm_tokens, $users->toArray());
+                        }
+                        foreach ($fcm_tokens as $token) {
+                            try {
+                                $messaging = app('firebase.messaging');
+                                $notification = Notification::create('Status Draft diubah :' . $request->status, 'silahkan di lakukan pengecekan :' . $draft->title);
+                                $message = CloudMessage::withTarget('token', $token)
+                                    ->withNotification($notification);
+                                $messaging->send($message);
+                            } catch (MessagingException $ex) {
+                                error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
+                            }
+                        }
                     } else {
                         return ResponseHelper::errorRes('Belum semua Approval Disetujui');
                     }
