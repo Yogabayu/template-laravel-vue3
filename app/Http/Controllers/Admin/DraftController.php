@@ -21,7 +21,7 @@ class DraftController extends Controller
     public function index(Request $request)
     {
         try {
-            $drafts = Draft::with('user', 'positions')
+            $drafts = Draft::with('user')
                 ->get();
 
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user mendapatkan data draft');
