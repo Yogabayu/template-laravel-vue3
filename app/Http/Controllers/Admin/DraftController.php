@@ -141,7 +141,7 @@ class DraftController extends Controller
                 foreach ($fcm_tokens as $token) {
                     try {
                         $messaging = app('firebase.messaging');
-                        $notification = Notification::create('Status Draft diubah menjadi ' . $request->status, 'silahkan di lakukan pengecekan pada draft' . $draft->title);
+                        $notification = Notification::create('Status Draft diubah menjadi ' . $request->status, 'silahkan di lakukan pengecekan pada draft ' . $draft->title);
                         $message = CloudMessage::withTarget('token', $token)
                             ->withNotification($notification);
                         $messaging->send($message);

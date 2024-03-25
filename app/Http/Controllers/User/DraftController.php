@@ -172,7 +172,7 @@ class DraftController extends Controller
                 foreach ($fcm_tokens as $token) {
                     try {
                         $messaging = app('firebase.messaging');
-                        $notification = Notification::create('Status Draft diubah menjadi ' . $request->status, 'silahkan di lakukan pengecekan pada draft' . $draft->title);
+                        $notification = Notification::create('Status Draft diubah menjadi ' . $request->status, 'silahkan di lakukan pengecekan pada draft ' . $draft->title);
                         $message = CloudMessage::withTarget('token', $token)
                             ->withNotification($notification);
                         $messaging->send($message);
@@ -209,7 +209,7 @@ class DraftController extends Controller
             }
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Edit Draft :' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user merubah draft ' . $draft->title);
-            return ResponseHelper::successRes('Berchapai Mendapatkan data', $draft);
+            return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Draft : ' . $request->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah draft ' . $request->title);
