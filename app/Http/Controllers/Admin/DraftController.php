@@ -389,7 +389,7 @@ class DraftController extends Controller
             }
 
 
-            DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Menambahkan komen pada draft: ' . $comment->draft_id);
+            DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Menambahkan komen pada draft: ' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user manambahkan komen pada draft: ' . $comment->draft_id);
             return ResponseHelper::successRes('Berhasil menambahkan komentar', $comment);
         } catch (\Exception $e) {
@@ -428,7 +428,6 @@ class DraftController extends Controller
 
             $comment->save();
 
-            DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Mengubah komentar pada draft: ' . $comment->draft_id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user mengubah komentar pada draft: ' . $comment->draft_id);
             return ResponseHelper::successRes('Berhasil update komentar', $comment);
         } catch (\Exception $e) {
@@ -449,7 +448,6 @@ class DraftController extends Controller
             }
             $comment->delete();
 
-            DraftActivityHelper::draftActivity(auth()->user()->uuid, $comment->draft_id, 'Menghapus komentar pada draft: ' . $comment->draft_id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user menghapus komentar pada draft: ' . $comment->draft_id);
             return ResponseHelper::successRes('Komentar dihapus', $comment);
         } catch (\Exception $e) {
