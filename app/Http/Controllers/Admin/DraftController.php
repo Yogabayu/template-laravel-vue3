@@ -173,7 +173,8 @@ class DraftController extends Controller
                 }
             }
             $draft->positions()->detach();
-
+            $draft->draftActivities()->delete();
+            $draft->comments()->delete();
             $draft->delete();
 
             return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
