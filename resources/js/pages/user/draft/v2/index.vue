@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <VCardTitle class="text-2xl font-weight-bold d-flex justify-left">
-      Document Approvals
+      Document Approval
     </VCardTitle>
     <v-tabs v-model="tab" class="v-tabs-pill" bg-color="secondary">
       <v-tab value="1">Semua</v-tab>

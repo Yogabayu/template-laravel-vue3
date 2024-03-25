@@ -9,7 +9,7 @@
   <VCard class="auth-card pa-2 pt-5"
     ><span color="primary" @click="goBack" style="cursor: pointer">
       <VIcon icon="bx-arrow-back" color="primary" tag="back" start />
-      Back
+      Backs
     </span>
     <VCardTitle
       class="text-2xl font-weight-bold d-flex justify-center overflow-auto"
@@ -902,7 +902,7 @@ export default {
     openModal(type, data = null) {
       if (type == 1) {
         this.dataPosProv.id = data.pivot.id;
-        this.dataPosProv.statusPosProv = data.pivot.is_approved;
+        this.dataPosProv.statusPosProv = parseInt(data.pivot.is_approved);
         this.updatePosProv = true;
       } else if (type == 2) {
         this.updateDataComment.id = data.id;

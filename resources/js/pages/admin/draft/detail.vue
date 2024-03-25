@@ -111,7 +111,7 @@
         <v-col cols="12" sm="12" class="pa-0">
           <v-chip
             v-for="(pos, index) in selectedPositions"
-            :color="pos?.pivot?.is_approved ? 'success' : 'error'"
+            :color="pos?.pivot?.is_approved==1 ? 'success' : 'error'"
             :key="index"
             class="ma-2"
             @click="openModal(1, pos)"
@@ -902,7 +902,7 @@ export default {
     openModal(type, data = null) {
       if (type == 1) {
         this.dataPosProv.id = data.pivot.id;
-        this.dataPosProv.statusPosProv = data.pivot.is_approved;
+        this.dataPosProv.statusPosProv = parseInt(data.pivot.is_approved);
         this.updatePosProv = true;
       } else if (type == 2) {
         this.updateDataComment.id = data.id;

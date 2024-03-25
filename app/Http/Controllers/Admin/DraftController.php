@@ -303,8 +303,6 @@ class DraftController extends Controller
 
             $draftId = $change->draft_id;
             $draft = Draft::findOrFail($draftId);
-            $draft->status = 'approved';
-            $draft->save();
 
             $fcm_tokens = [];
             $draftPositions = DraftApprovalMapping::where('draft_id', $draft->id)->select('position_id')->get();
@@ -326,8 +324,15 @@ class DraftController extends Controller
                     error_log('Failed to send notification to token: ' . $token . '. Error: ' . $ex->getMessage());
                 }
             }
-            DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
-            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft otomatis disetujui oleh sistem karena telah memenuhi syarat' . $draft->title);
+
+            $countApprove = DraftApprovalMapping::where('draft_id', $draftId)->where('is_approved', true)->count();
+            if ($countApprove == $draft->required_approvals) {
+                $draft->status = 'approved';
+                $draft->save();
+                DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Mengubah Status Draft menjadi disetujui : ' . $draft->title);
+                UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Draft otomatis disetujui oleh sistem karena telah memenuhi syarat' . $draft->title);
+            }
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengubah Status Draft' . $draft->title);
 
 
             return ResponseHelper::successRes('Berhasil', $change);
