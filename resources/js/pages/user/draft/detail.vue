@@ -111,7 +111,7 @@
         <v-col cols="12" sm="12" class="pa-0">
           <v-chip
             v-for="(pos, index) in selectedPositions"
-            :color="pos?.pivot?.is_approved ? 'success' : 'error'"
+            :color="pos?.pivot?.is_approved == 1 ? 'success' : 'error'"
             :key="index"
             class="ma-2"
             @click="openModal(1, pos)"
