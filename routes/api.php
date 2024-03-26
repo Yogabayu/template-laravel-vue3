@@ -171,6 +171,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
             Route::post('adddraftcomment', [DraftController::class, 'addDraftComment']);
             Route::delete('deletedraftcomment/{id}', [DraftController::class, 'deleteDraftComment']);
             Route::put('updatedraftcomment/{id}', [DraftController::class, 'updateDraftComment']);
+            Route::get('getdraftcomment/{id}', [DraftController::class, 'getDraftComment']);
         });
     });
 });

@@ -287,6 +287,15 @@ class DraftController extends Controller
             return ResponseHelper::errorRes($e->getMessage());
         }
     }
+    public function getDraftComment($id)
+    {
+        try {
+            $comments = DraftComment::with('user')->where('draft_id', $id)->orderBy('created_at', 'desc')->get();
+            return ResponseHelper::successRes('Berhasil mendapatkan data', $comments);
+        } catch (\Exception $e) {
+            return ResponseHelper::errorRes($e->getMessage());
+        }
+    }
 
     public function changePosApprove(Request $request)
     {
