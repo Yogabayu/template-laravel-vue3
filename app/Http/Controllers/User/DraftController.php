@@ -125,7 +125,7 @@ class DraftController extends Controller
 
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Membuat Draft Baru :' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user menambahkan draft ' . $draft->title);
-            return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
+            return ResponseHelper::successRes('Berhasil Menambahkan data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Membuat Draft : ' . $request->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'gagal user menambahkan draft ' . $request->title);
@@ -209,7 +209,7 @@ class DraftController extends Controller
             }
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Edit Draft :' . $draft->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user merubah draft ' . $draft->title);
-            return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
+            return ResponseHelper::successRes('Berhasil Mengupdate data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Merubah Draft : ' . $request->title);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'user gagal merubah draft ' . $request->title);
