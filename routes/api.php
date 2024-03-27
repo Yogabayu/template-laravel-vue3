@@ -161,6 +161,7 @@ Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
 
             //page:draft
             Route::get('draft', [DraftController::class, 'index']);
+            Route::get('draft/{id}', [DraftController::class, 'show']);
             Route::post('draft', [DraftController::class, 'store']);
             Route::put('draft/{id}', [DraftController::class, 'update']);
             Route::delete('draft/{id}', [DraftController::class, 'destroy']);

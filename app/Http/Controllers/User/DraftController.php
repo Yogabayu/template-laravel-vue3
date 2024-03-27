@@ -63,6 +63,19 @@ class DraftController extends Controller
         }
     }
 
+    public function show(string $id)
+    {
+        try {
+            $draft = Draft::findOrFail($id);
+
+            UserActivityHelper::logLoginActivity(auth()->user()->uuid, 'Mengakses data draft : ' . $draft->name);
+
+            return $this->successRes('Successfully get draft.', $draft);
+        } catch (\Exception $e) {
+            return $this->errorRes('Failed to create position. ' . $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         try {
