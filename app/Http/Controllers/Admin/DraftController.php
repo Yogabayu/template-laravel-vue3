@@ -203,7 +203,7 @@ class DraftController extends Controller
             $draft->comments()->delete();
             $draft->delete();
 
-            return ResponseHelper::successRes('Berhasil Mendapatkan data', $draft);
+            return ResponseHelper::successRes('Berhasil Menghapus data', $draft);
         } catch (\Exception $e) {
             DraftActivityHelper::draftActivity(auth()->user()->uuid, $draft->id, 'Gagal Menghapus Draft : ' . $id);
             UserActivityHelper::logLoginActivity(auth()->user()->uuid,  'user gagal menghapus draft ' . $id);
