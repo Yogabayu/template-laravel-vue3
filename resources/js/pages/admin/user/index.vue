@@ -536,7 +536,7 @@ export default defineComponent({
             formData.append(key, this.dataForm[key]);
           }
         }
-        formData.append("_method", "PUT");
+        formData.append("_method", "PUT");        
 
         const response = await mainURL.post("/updateUserProfile", formData, {
           headers: {

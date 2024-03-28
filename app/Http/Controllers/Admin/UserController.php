@@ -267,11 +267,12 @@ class UserController extends Controller
             if ($request->has('canComment')) {
                 $user->canComment = $request->canComment;
             }
-            // if ($request->division_id) {
-            //     $user->division_id = $request->division_id;
-            // }
-            if ($request->has('position_id')) {
+            if ($request->has('position_id') && $user->position_id != $request->position_id) {
                 $user->position_id = $request->position_id;
+
+                // Delete related activities when position is updated
+                $user->activity()->delete();
+                $user->fileviews()->delete();
             }
 
             $user->save();
