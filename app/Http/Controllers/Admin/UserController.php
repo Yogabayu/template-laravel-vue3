@@ -271,7 +271,8 @@ class UserController extends Controller
                 $user->position_id = $request->position_id;
 
                 // Delete related activities when position is updated
-                $user->activity()->delete();
+                // $user->activity()->delete();
+                $user->filefavorites()->delete();
                 $user->fileviews()->delete();
             }
 

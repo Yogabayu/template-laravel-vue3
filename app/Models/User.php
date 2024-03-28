@@ -77,6 +77,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(FileView::class, 'user_uuid', 'uuid');
     }
+    public function filefavorites()
+    {
+        return $this->hasMany(FileFavorite::class, 'user_uuid', 'uuid');
+    }
 
     public function devices()
     {
