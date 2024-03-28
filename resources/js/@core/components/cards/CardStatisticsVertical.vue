@@ -33,7 +33,7 @@ const handleButtonClick = (link) => {
 };
 </script>
 
-<template>
+<template @click="handleButtonClick(props.link)">
   <VCard>
     <VCardText class="d-flex align-center pb-4">
       <img
